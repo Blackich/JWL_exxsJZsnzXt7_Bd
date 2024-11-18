@@ -2,10 +2,11 @@ import { db } from "@src/main";
 import { NextFunction, Request, Response } from "express";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
 import { RowDataPacket } from "mysql2";
-import cookie from "cookie";
+import { serialize } from "cookie";
 
 export const authUser = tryCatch(async (req: Request, res: Response) => {
   const { token } = req.body;
+  console.log(token);
   db.query(
     `SELECT * FROM Users WHERE token = '${token}'`,
     async (err, result: RowDataPacket[]) => {
@@ -14,7 +15,7 @@ export const authUser = tryCatch(async (req: Request, res: Response) => {
 
       res.setHeader(
         "Set-Cookie",
-        cookie.serialize("session-Token", token, {
+        serialize("session-Token", token, {
           httpOnly: true,
           maxAge: 60 * 60 * 24 * 365,
         }),
@@ -30,7 +31,7 @@ export const authUser = tryCatch(async (req: Request, res: Response) => {
 export const logoutUser = tryCatch(async (req: Request, res: Response) => {
   res.setHeader(
     "Set-Cookie",
-    cookie.serialize("session-Token", "", {
+    serialize("session-Token", "", {
       httpOnly: true,
       maxAge: 0,
     }),

@@ -1,6 +1,6 @@
 import { db } from "@src/main";
 import bcrypt from "bcrypt";
-import cookie from "cookie";
+import { serialize } from "cookie";
 import { getTokens, refreshTokenExpiresIn } from "@src/utils/utils";
 import { Request, Response } from "express";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
@@ -28,7 +28,7 @@ export const authEmployees = tryCatch(async (req: Request, res: Response) => {
 
       res.setHeader(
         "Set-Cookie",
-        cookie.serialize("refreshToken", refreshToken, {
+        serialize("refreshToken", refreshToken, {
           httpOnly: true,
           maxAge: refreshTokenExpiresIn,
         }),
@@ -45,7 +45,7 @@ export const authEmployees = tryCatch(async (req: Request, res: Response) => {
 export const logoutEmployees = tryCatch(async (req: Request, res: Response) => {
   res.setHeader(
     "Set-Cookie",
-    cookie.serialize("refreshToken", "", {
+    serialize("refreshToken", "", {
       httpOnly: true,
       maxAge: 0,
     }),
@@ -83,7 +83,7 @@ export const authEmployeesRefresh = tryCatch(
 
     res.setHeader(
       "Set-Cookie",
-      cookie.serialize("refreshToken", refreshToken, {
+      serialize("refreshToken", refreshToken, {
         httpOnly: true,
         maxAge: refreshTokenExpiresIn,
       }),
