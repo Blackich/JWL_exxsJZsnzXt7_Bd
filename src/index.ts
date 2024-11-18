@@ -41,7 +41,7 @@ import {
   logoutUser,
   checkAuthUser,
   takeCredentialUser,
-} from "./controllers/User/Auth/UserAuth";
+} from "@controllers/User/Auth/UserAuth";
 
 import {
   addInstAccount,

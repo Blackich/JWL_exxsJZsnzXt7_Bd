@@ -40,7 +40,7 @@ const getPackageById = async (id: number) => {
     .then(([result]) => {
       return (result as RowDataPacket[])[0].likes;
     })
-    .catch((err) => logger.error(err));
+    .catch((err) => logger.error(err.stack));
   return data;
 };
 
@@ -51,6 +51,6 @@ const getSocialNicknameById = async (id: number) => {
     .then(([result]) => {
       return (result as RowDataPacket[])[0].nickname;
     })
-    .catch((err) => logger.error(err));
+    .catch((err) => logger.error(err.stack));
   return data;
 };

@@ -8,12 +8,12 @@ export const errorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  logger.error(err.message);
+  logger.error(err.stack);
   return res.status(500).json({ message: "Server error", error: err.message });
 };
 
 export const dbError = (err: QueryError, res: Response) => {
-  logger.error(err.message);
+  logger.error(err.stack);
   return res.status(404).json({ message: "Incorrect query", error: err });
 };
 

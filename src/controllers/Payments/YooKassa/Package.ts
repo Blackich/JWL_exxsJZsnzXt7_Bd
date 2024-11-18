@@ -32,7 +32,7 @@ export const paymentPackage = tryCatch(async (req: Request, res: Response) => {
     });
     res.status(200).json(data);
   } catch (err) {
-    logger.error(err);
+    logger.error((err as Error).stack);
     return res.status(404).json({
       message: "Payments error",
       error: err,
