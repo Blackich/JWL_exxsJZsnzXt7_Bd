@@ -43,13 +43,13 @@
 //   // const saves = await addServiceVR(url, 99, 500, 3, 50);
 //   // const profileVisits = await addServiceJP(url, 7447, 200, 250, 2);
 //   // const viewsVideo = await addServiceJP(url, 6, 500, 3, 50);
-//   // const shares = await addServiceJP(url, 6376, 30, 35, 2);
+//   // const reposts = await addServiceJP(url, 6376, 30, 35, 2);
 //   //   return {
 //   //     likes: likes,
 //   //     reach: reach,
 //   //     saves: saves,
 //   //     profileVisits: profileVisits,
-//   //     shares: shares,
+//   //     reposts: reposts,
 //   //     viewsVideo: viewsVideo
 //   //   };
 //   // } catch (err) {

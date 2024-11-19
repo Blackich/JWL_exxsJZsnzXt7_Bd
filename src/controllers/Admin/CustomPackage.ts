@@ -33,7 +33,7 @@ export const createCustomPackage = tryCatch(
 
     db.query(
       `INSERT INTO Custom_package (id, likes, reach,
-        saves, profileVisits, shares, videoViews,
+        saves, profileVisits, reposts, videoViews,
         countPosts, price_rub, price_usd, createdAt)
         VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
       [
