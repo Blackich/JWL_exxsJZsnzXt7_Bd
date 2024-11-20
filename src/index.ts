@@ -28,6 +28,7 @@ import {
   createCustomPackage,
   getCustomPackageById,
   getCustomPackageList,
+  addCustomPackToUser,
 } from "@controllers/Admin/CustomPackage";
 import {
   getPackageDetailsWithPrice,
@@ -54,7 +55,6 @@ import { getActiveServiceUser } from "@controllers/User/Services";
 
 import { paymenStatusCatch } from "@src/controllers/Payments/YooKassa/_webhook";
 import { paymentPackage } from "@src/controllers/Payments/YooKassa/Package";
-
 
 export default {
   // Admin Auth
@@ -84,6 +84,7 @@ export default {
   createCustomPackage,
   getCustomPackageById,
   getCustomPackageList,
+  addCustomPackToUser,
 
   // Admin Purchase
   getUsersPurchasedServices,

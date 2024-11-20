@@ -29,6 +29,7 @@ router.get("/api/package/details", i.checkAuth, i.getPackageDetailsWithPrice);
 router.get("/api/package/custom", i.checkAuth, i.getCustomPackageList);
 router.get("/api/package/custom/:id", i.checkAuth, i.getCustomPackageById);
 router.post("/api/package/custom", i.checkAuth, i.createCustomPackage);
+router.post("/api/package/add-user", i.addCustomPackToUser);
 
 // Admin Purchase
 router.get("/api/services", i.checkAuth, i.getUsersPurchasedServices);
