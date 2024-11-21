@@ -1,7 +1,7 @@
 import express, { Application, NextFunction, Request, Response } from "express";
 import { errorHandler } from "@src/middleware/errorHandler";
 import cookieParser from "cookie-parser";
-import { router } from "@src/routes";
+import { r as router } from "@src/routes";
 import mysql from "mysql2";
 import cors from "cors";
 

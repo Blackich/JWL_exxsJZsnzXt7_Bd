@@ -114,6 +114,41 @@ export const getUserSocialAccounts = tryCatch(
   },
 );
 
+export const getCustomPackageByUserId = tryCatch(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    db.query(
+      `SELECT cp.likes, cp.reach, cp.saves, cp.profileVisits,
+      cp.reposts, cp.videoViews, cp.countPosts,
+      cp.price_rub, cp.price_usd
+        FROM Custom_package_user cpu, Custom_package cp
+        WHERE cpu.customPackageId = cp.id
+        AND cpu.userId = ${id}`,
+      (err, result) => {
+        if (err) return dbError(err, res);
+        const data = result;
+        return res.status(200).json(data);
+      },
+    );
+  },
+);
+
+export const deleteCustomPackageByUserId = tryCatch(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    db.query(
+      `DELETE FROM Custom_package_user 
+        WHERE userId = ${id}`,
+      (err, _) => {
+        if (err) return dbError(err, res);
+        return res.status(200).json({
+          message: "Custom package has been deleted",
+        });
+      },
+    );
+  },
+);
+
 // export const getUserPurchasedServices = (req, res) => {
 //   const { id } = req.params;
 //   try {

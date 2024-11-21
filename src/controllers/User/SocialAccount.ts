@@ -25,7 +25,7 @@ export const addInstAccount = tryCatch(async (req: Request, res: Response) => {
       VALUES (null, ${id}, 1, '${username}')`,
     (err, _) => {
       if (err) return dbError(err, res);
-      return res.status(200).json({ message: "Account has been added" });
+      return res.status(201).json({ message: "Account has been added" });
     },
   );
 });

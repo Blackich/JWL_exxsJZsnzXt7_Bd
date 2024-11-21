@@ -16,6 +16,8 @@ import {
   updateUserStatus,
   updateUserRemark,
   getUserSocialAccounts,
+  getCustomPackageByUserId,
+  deleteCustomPackageByUserId,
 } from "@controllers/Admin/UsersCRUD";
 
 import {
@@ -72,6 +74,8 @@ export default {
   updateUserStatus,
   updateUserRemark,
   getUserSocialAccounts,
+  getCustomPackageByUserId,
+  deleteCustomPackageByUserId,
 
   // Admin Overview
   getBalanceJustPanel,
