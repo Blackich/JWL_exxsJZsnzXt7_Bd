@@ -6,7 +6,6 @@ import { serialize } from "cookie";
 
 export const authUser = tryCatch(async (req: Request, res: Response) => {
   const { token } = req.body;
-  console.log(token);
   db.query(
     `SELECT * FROM Users WHERE token = '${token}'`,
     async (err, result: RowDataPacket[]) => {

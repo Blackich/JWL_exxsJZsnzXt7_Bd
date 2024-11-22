@@ -11,14 +11,20 @@ export const sendTelegramMessage = async (
   user_id: number,
   soc_nickname_id: number,
   package_id: number,
+  custom_package: number,
   count_posts: number,
   cost: number,
   currency: string,
   service: string,
 ) => {
-  const pack = await getPackageById(package_id);
+  const pack =
+    Number(custom_package) === 0
+      ? await getPackageById(package_id)
+      : await getCustomPackageById(package_id);
   const nickname = await getSocialNicknameById(soc_nickname_id);
-  const message = `Куплен пакет: <b>${pack}</b> ❤️
+  const message = `Куплен пакет: <b>${pack}</b> ❤️ ${
+    Number(custom_package) === 0 ? "" : "(custom)"
+  }
   📄 Постов: <b>${count_posts}</b>
   🆔 UserId: <b>${user_id}</b>
   👤 Nickname: <b>${nickname}</b>
@@ -50,6 +56,17 @@ const getSocialNicknameById = async (id: number) => {
     .query(`SELECT nickname FROM Social_nickname WHERE id = ${id}`)
     .then(([result]) => {
       return (result as RowDataPacket[])[0].nickname;
+    })
+    .catch((err) => logger.error(err.stack));
+  return data;
+};
+
+const getCustomPackageById = async (id: number) => {
+  const data = await db
+    .promise()
+    .query(`SELECT * FROM Custom_package WHERE id = ${id}`)
+    .then(([result]) => {
+      return (result as RowDataPacket[])[0].likes;
     })
     .catch((err) => logger.error(err.stack));
   return data;

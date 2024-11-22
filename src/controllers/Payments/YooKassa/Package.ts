@@ -11,6 +11,7 @@ const paymentRequestSchema = z.object({
   packageId: z.number(),
   countPosts: z.number(),
   socialNicknameId: z.number(),
+  customPackage: z.number(),
   currency: z.union([z.literal("RUB"), z.literal("USD")]),
   type: z.union([z.literal("bank_card"), z.literal("sbp")]),
 });
@@ -26,6 +27,7 @@ export const paymentPackage = tryCatch(async (req: Request, res: Response) => {
       currency: paymentData.currency,
       userId: paymentData.userId,
       socialNicknameId: paymentData.socialNicknameId,
+      customPackage: paymentData.customPackage,
       packageId: paymentData.packageId,
       countPosts: paymentData.countPosts,
       type: paymentData.type,
@@ -45,6 +47,7 @@ const fetchYooKassaPaymentPackage = async ({
   currency,
   userId,
   socialNicknameId,
+  customPackage,
   packageId,
   countPosts,
   type,
@@ -64,6 +67,7 @@ const fetchYooKassaPaymentPackage = async ({
         soc_nickname_id: socialNicknameId,
         package_id: packageId,
         count_posts: countPosts,
+        custom_package: customPackage,
       },
       capture: true,
       payment_method_data: {
