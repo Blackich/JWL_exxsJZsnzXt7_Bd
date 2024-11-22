@@ -8,9 +8,10 @@ export const getActiveServiceUser = tryCatch(
 
     db.query(
       `SELECT socialNicknameId, packageId,
-        countPosts, createdAt FROM Service
-        WHERE status = 1
-        AND userId = ${id}`,
+        customPackageId, countPosts, createdAt
+        FROM Service
+          WHERE status = 1
+          AND userId = ${id}`,
       (err, result) => {
         if (err) return dbError(err, res);
         const data = result;

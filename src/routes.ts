@@ -48,6 +48,7 @@ r.delete("/social", i.checkAuthUser, i.deleteInstAccount);
 
 // User Package and Services
 r.get("/package", i.checkAuthUser, i.getPackagesUser);
+r.get("/custom/:id", i.checkAuthUser, i.getCustomPackByUserId);
 r.get("/services/:id", i.checkAuthUser, i.getActiveServiceUser);
 
 // Payments

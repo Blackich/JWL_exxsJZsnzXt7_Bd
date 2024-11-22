@@ -52,7 +52,10 @@ import {
   getSocialList,
 } from "@controllers/User/SocialAccount";
 
-import { getPackagesUser } from "@controllers/User/Package";
+import {
+  getPackagesUser,
+  getCustomPackByUserId,
+} from "@controllers/User/Package";
 import { getActiveServiceUser } from "@controllers/User/Services";
 
 import { paymenStatusCatch } from "@src/controllers/Payments/YooKassa/_webhook";
@@ -106,6 +109,7 @@ export default {
 
   // User Package and Services
   getPackagesUser,
+  getCustomPackByUserId,
   getActiveServiceUser,
 
   // Payments
