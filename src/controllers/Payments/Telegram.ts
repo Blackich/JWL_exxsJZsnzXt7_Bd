@@ -22,6 +22,7 @@ export const sendTelegramMessage = async (
       ? await getPackageById(package_id)
       : await getCustomPackageById(package_id);
   const nickname = await getSocialNicknameById(soc_nickname_id);
+
   const message = `Куплен пакет: <b>${pack}</b> ❤️ ${
     Number(custom_package) === 0 ? "" : "(custom)"
   }
@@ -32,6 +33,7 @@ export const sendTelegramMessage = async (
     0,
   )} ${currency}</b>
   🏦 Сервис: <b>${service}</b>`;
+
   await axios.post(url, {
     chat_id: chat_id,
     parse_mode: "HTML",

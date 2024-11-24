@@ -32,8 +32,9 @@ app.use(
 );
 app.use(router);
 
-app.post("/", async (req: Request, res: Response) => {
+app.get("/", async (req: Request, res: Response) => {
   res.status(200).json({ data: "Hello World!" });
+  // res.status(200).json(data);
 });
 
 app.all("*", (req: Request, res: Response) => {
@@ -43,8 +44,6 @@ app.all("*", (req: Request, res: Response) => {
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   errorHandler(err, req, res, next);
 });
-
-// app.use(router);
 
 app.listen(4444, () => {
   try {
