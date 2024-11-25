@@ -24,7 +24,11 @@ export const authEmployees = tryCatch(async (req: Request, res: Response) => {
           message: "Incorrect login/password",
         });
 
-      const { accessToken, refreshToken } = getTokens(login, result[0].role);
+      const { accessToken, refreshToken } = getTokens(
+        result[0].id,
+        login,
+        result[0].role,
+      );
 
       res.setHeader(
         "Set-Cookie",
@@ -35,7 +39,9 @@ export const authEmployees = tryCatch(async (req: Request, res: Response) => {
       );
 
       return res.status(200).json({
+        employeeId: result[0].id,
         login,
+        role: result[0].role,
         token: accessToken,
       });
     },
@@ -63,7 +69,9 @@ export const authEmployeesCheck = tryCatch(
     return res.status(200).json({
       message: "Authorized",
       data: {
+        employeeId: decodedPayload.employeeId,
         login: decodedPayload.login,
+        role: decodedPayload.role,
         token: token,
       },
     });
@@ -77,6 +85,7 @@ export const authEmployeesRefresh = tryCatch(
     const decodedPayload = JSON.parse(atob(tokenParts[1]));
 
     const { accessToken, refreshToken } = getTokens(
+      decodedPayload.employeeId,
       decodedPayload.login,
       decodedPayload.role,
     );
@@ -89,7 +98,9 @@ export const authEmployeesRefresh = tryCatch(
       }),
     );
     res.status(200).json({
+      employeeId: decodedPayload.employeeId,
       login: decodedPayload.login,
+      role: decodedPayload.role,
       token: accessToken,
     });
   },

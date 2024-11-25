@@ -6,14 +6,14 @@ export const siteVenro = "https://venro.ru/api/orders";
 export const accessTokenExpiresIn = "4h";
 export const refreshTokenExpiresIn = 60 * 60 * 24 * 7; // 7 day;
 
-export const getTokens = (login: string, role: string) => ({
+export const getTokens = (employeeId: number, login: string, role: string) => ({
   accessToken: jwt.sign(
-    { login, role },
+    { employeeId, login, role },
     process.env.JWT_SECRET_ACCESS_KEY || "",
     { expiresIn: accessTokenExpiresIn },
   ),
   refreshToken: jwt.sign(
-    { login, role },
+    { employeeId, login, role },
     process.env.JWT_SECRET_REFRESH_KEY || "",
     { expiresIn: refreshTokenExpiresIn },
   ),
