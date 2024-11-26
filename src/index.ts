@@ -37,7 +37,13 @@ import {
   getPackages,
 } from "@controllers/Admin/Package";
 
-import { getUsersPurchasedServices } from "@controllers/Admin/Services";
+import {
+  getServiceList,
+  getServiceById,
+  updateSeviceStatus,
+  getPurchasedServiceById,
+} from "@controllers/Admin/Services";
+import { checkStatusAllSubs } from "@controllers/Purchase/Entity/CheckStatusSubs";
 
 import {
   authUser,
@@ -58,8 +64,8 @@ import {
 } from "@controllers/User/Package";
 import { getActiveServiceUser } from "@controllers/User/Services";
 
-import { paymenStatusCatch } from "@src/controllers/Payments/YooKassa/_webhook";
-import { paymentPackage } from "@src/controllers/Payments/YooKassa/Package";
+import { paymenStatusCatch } from "@controllers/Payments/YooKassa/_webhook";
+import { paymentPackage } from "@controllers/Payments/YooKassa/Package";
 
 export default {
   // Admin Auth
@@ -93,8 +99,12 @@ export default {
   getCustomPackageList,
   addCustomPackToUser,
 
-  // Admin Purchase
-  getUsersPurchasedServices,
+  // Admin Services and Purchases
+  getServiceList,
+  getServiceById,
+  updateSeviceStatus,
+  getPurchasedServiceById,
+  checkStatusAllSubs,
 
   // User Auth
   authUser,

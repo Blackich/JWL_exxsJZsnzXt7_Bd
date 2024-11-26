@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import { r as router } from "@src/routes";
 import mysql from "mysql2";
 import cors from "cors";
+import { purchasePackage } from "./controllers/Purchase/Purchase";
+import { cancelAllSubs } from "./controllers/Purchase/Entity/CancelSubs";
 
 export const db = mysql.createConnection({
   host: process.env.MYSQL_HOST,
@@ -32,9 +34,14 @@ app.use(
 );
 app.use(router);
 
+// app.get("/test", cancelAllSubs());
+// app.get("/test", checkStatusAllSubs());
+
 app.get("/", async (req: Request, res: Response) => {
-  res.status(200).json({ data: "Hello World!" });
-  // res.status(200).json(data);
+  const data = await purchasePackage(30, 120, 1, 5);
+  // const data = await checkStatusAllSubs();
+  console.log(data);
+  res.status(200).json(data);
 });
 
 app.all("*", (req: Request, res: Response) => {

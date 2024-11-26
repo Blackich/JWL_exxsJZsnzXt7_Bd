@@ -33,8 +33,12 @@ r.get("/api/package/custom/:id", i.checkAuth, i.getCustomPackageById);
 r.post("/api/package/custom", i.checkAuth, i.createCustomPackage);
 r.post("/api/package/add-user", i.addCustomPackToUser);
 
-// Admin Purchase
-r.get("/api/services", i.checkAuth, i.getUsersPurchasedServices);
+// Admin Services and Purchases
+r.get("/api/services", i.checkAuth, i.getServiceList);
+r.get("/api/services/:id", i.checkAuth, i.getServiceById);
+r.patch("/api/services/:id/status", i.checkAuth, i.updateSeviceStatus);
+r.get("/api/services/:id/purchase", i.checkAuth, i.getPurchasedServiceById);
+r.get("/api/services/:id/check", i.checkAuth, i.checkStatusAllSubs);
 
 // User Auth
 r.post("/login", i.authUser);
