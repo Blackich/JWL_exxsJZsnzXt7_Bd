@@ -1,6 +1,6 @@
 import { db } from "@src/main";
 import { getServicesVR } from "@controllers/Services/Venro";
-import { getServicesJP } from "controllers/Services/JustPanel";
+import { getServicesJP } from "@controllers/Services/JustPanel";
 import { Request, Response } from "express";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
 import { RowDataPacket } from "mysql2";

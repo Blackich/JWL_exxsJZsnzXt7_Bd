@@ -11,7 +11,8 @@ export const paymenStatusCatch = tryCatch(
     const isCustPack = Number(meta.custom_package) === 0 ? false : true;
     const orderId = responseYooKassaPay.object.id;
     const amount = responseYooKassaPay.object.amount;
-    sendTelegramMessage(
+    
+    await sendTelegramMessage(
       meta.user_id,
       meta.soc_nickname_id,
       meta.package_id,
