@@ -4,17 +4,18 @@ import { formatDatePlus30Days, siteJP } from "@src/utils/utils";
 const apiKeyJP = process.env.API_KEY_JP;
 
 export const addServiceJP = async (
-  url: string,
+  nickname: string,
   id: number,
   min: number,
   max: number,
   posts: number,
 ) => {
+  const url = `https://www.instagram.com/${nickname}`;
   const response = await axios.post(`${siteJP}?action=add&
     key=${apiKeyJP}&username=${url}&
     service=${id}&min=${min}&max=${max}&
     posts=${posts}&expiry=${formatDatePlus30Days()}`);
-  return response.data;
+  return { data: response.data, siteId: 2, siteServiceId: id };
 };
 
 export const checkServiceJP = async (orderId: number) => {
