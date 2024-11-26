@@ -1,7 +1,9 @@
 import axios from "axios";
-import { db } from "@src/main";
-import { RowDataPacket } from "mysql2";
-import { logger } from "@src/utils/logger/logger";
+import {
+  getCustomPackageById,
+  getPackageById,
+  getSocialNicknameById,
+} from "@src/utils/intermediateReq";
 
 const token = process.env.TG_BOT_TOKEN;
 const chat_id = process.env.TG_CHAT_ID;
@@ -21,55 +23,23 @@ export const sendTelegramMessage = async (
     Number(custom_package) === 0
       ? await getPackageById(package_id)
       : await getCustomPackageById(package_id);
-  const nickname = await getSocialNicknameById(soc_nickname_id);
+  const soc = await getSocialNicknameById(soc_nickname_id);
+  if (!("likes" in pack) || !("nickname" in soc)) return;
 
-  const message = `Куплен пакет: <b>${pack}</b> ❤️ ${
+  const message = `Куплен пакет: <b>${pack.likes}</b> ❤️ ${
     Number(custom_package) === 0 ? "" : "(custom)"
   }
-  📄 Постов: <b>${count_posts}</b>
-  🆔 UserId: <b>${user_id}</b>
-  👤 Nickname: <b>${nickname}</b>
-  ${currency === "RUB" ? "🇷🇺" : "💵"} Сумма: <b>${Number(cost).toFixed(
+    📄 Постов: <b>${count_posts}</b>
+    🆔 UserId: <b>${user_id}</b>
+    👤 Nickname: <b>${soc.nickname}</b>
+    ${currency === "RUB" ? "🇷🇺" : "💵"} Сумма: <b>${Number(cost).toFixed(
     0,
   )} ${currency}</b>
-  🏦 Сервис: <b>${service}</b>`;
+    🏦 Сервис: <b>${service}</b>`;
 
   await axios.post(url, {
     chat_id: chat_id,
     parse_mode: "HTML",
     text: message,
   });
-};
-
-const getPackageById = async (id: number) => {
-  const data = await db
-    .promise()
-    .query(`SELECT likes FROM Package WHERE id = ${id}`)
-    .then(([result]) => {
-      return (result as RowDataPacket[])[0].likes;
-    })
-    .catch((err) => logger.error(err.stack));
-  return data;
-};
-
-const getSocialNicknameById = async (id: number) => {
-  const data = await db
-    .promise()
-    .query(`SELECT nickname FROM Social_nickname WHERE id = ${id}`)
-    .then(([result]) => {
-      return (result as RowDataPacket[])[0].nickname;
-    })
-    .catch((err) => logger.error(err.stack));
-  return data;
-};
-
-const getCustomPackageById = async (id: number) => {
-  const data = await db
-    .promise()
-    .query(`SELECT * FROM Custom_package WHERE id = ${id}`)
-    .then(([result]) => {
-      return (result as RowDataPacket[])[0].likes;
-    })
-    .catch((err) => logger.error(err.stack));
-  return data;
 };
