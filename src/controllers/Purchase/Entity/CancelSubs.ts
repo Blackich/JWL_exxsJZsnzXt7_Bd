@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { logger } from "@src/utils/logger/logger";
 import { PurchasePackage } from "@src/utils/types";
 import { tryCatch } from "@src/middleware/errorHandler";
 import { cancelServiceVR } from "@src/controllers/Services/Venro";
@@ -11,7 +12,7 @@ export const cancelAllSubs = tryCatch(async (req: Request, res: Response) => {
   if (Array.isArray(allSubsByServiceId) && allSubsByServiceId.length === 0)
     return;
 
-  const result = await Promise.allSettled(
+  return await Promise.allSettled(
     allSubsByServiceId.map(async (subscription: PurchasePackage) => {
       if (subscription.siteId === 1) {
         return cancelServiceVR(subscription.orderId);
@@ -20,7 +21,17 @@ export const cancelAllSubs = tryCatch(async (req: Request, res: Response) => {
         return cancelServiceJP(subscription.orderId);
       }
     }),
-  );
-
-  return res.status(200).json(result);
+  )
+    .then(() => {
+      return res.status(200).json({
+        message: "All subscriptions have been canceled",
+      });
+    })
+    .catch((err) => {
+      logger.error(err.stack);
+      return res.status(400).json({
+        message: "Something went wrong",
+        error: err.message,
+      });
+    });
 });

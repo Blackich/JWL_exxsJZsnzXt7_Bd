@@ -39,6 +39,7 @@ r.get("/api/services/:id", i.checkAuth, i.getServiceById);
 r.patch("/api/services/:id/status", i.checkAuth, i.updateSeviceStatus);
 r.get("/api/services/:id/purchase", i.checkAuth, i.getPurchasedServiceById);
 r.get("/api/services/:id/check", i.checkAuth, i.checkStatusAllSubs);
+r.get("/api/services/:id/cancel", i.checkAuth, i.cancelAllSubs);
 
 // User Auth
 r.post("/login", i.authUser);

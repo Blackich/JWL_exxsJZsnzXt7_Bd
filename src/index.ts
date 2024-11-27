@@ -44,6 +44,7 @@ import {
   getPurchasedServiceById,
 } from "@controllers/Admin/Services";
 import { checkStatusAllSubs } from "@controllers/Purchase/Entity/CheckStatusSubs";
+import { cancelAllSubs } from "@controllers/Purchase/Entity/CancelSubs";
 
 import {
   authUser,
@@ -105,6 +106,7 @@ export default {
   updateSeviceStatus,
   getPurchasedServiceById,
   checkStatusAllSubs,
+  cancelAllSubs,
 
   // User Auth
   authUser,
