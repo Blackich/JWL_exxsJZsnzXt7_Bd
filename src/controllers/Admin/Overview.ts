@@ -33,10 +33,30 @@ export const getUsersCount = tryCatch(async (req: Request, res: Response) => {
   );
 });
 
-// export const getTotalSpent = tryCatch(async (req: Request, res: Response) => {
-//   db.query("SELECT SUM(spent) as spent FROM Users", (err, result) => {
-//     if (err) dbError(err, res);
-//     const data = Number((result as any)[0].spent);
-//     return res.status(200).json(data);
-//   });
-// });
+export const getPurchasedPackagesCount = tryCatch(
+  async (req: Request, res: Response) => {
+    db.query(
+      "SELECT COUNT(*) as count FROM Service",
+      (err, result: RowDataPacket[]) => {
+        if (err) return dbError(err, res);
+        const data = result[0].count;
+        return res.status(200).json(data);
+      },
+    );
+  },
+);
+
+export const getTotalSpent = tryCatch(async (req: Request, res: Response) => {
+  db.query(
+    "SELECT cost, currency FROM Service",
+    (err, result: RowDataPacket[]) => {
+      if (err) dbError(err, res);
+      const data = result.reduce(
+        (acc, { cost, currency }) =>
+          acc + (currency === "RUB" ? Number(cost) : Number(cost) * 100),
+        0,
+      );
+      return res.status(200).json(data);
+    },
+  );
+});

@@ -21,9 +21,11 @@ import {
 } from "@controllers/Admin/UsersCRUD";
 
 import {
-  getBalanceJustPanel,
-  getBalanceVenro,
+  getTotalSpent,
   getUsersCount,
+  getBalanceVenro,
+  getBalanceJustPanel,
+  getPurchasedPackagesCount,
 } from "@controllers/Admin/Overview";
 
 import {
@@ -88,9 +90,11 @@ export default {
   deleteCustomPackageByUserId,
 
   // Admin Overview
-  getBalanceJustPanel,
-  getBalanceVenro,
+  getTotalSpent,
   getUsersCount,
+  getBalanceVenro,
+  getBalanceJustPanel,
+  getPurchasedPackagesCount,
 
   // Admin Package and Custom Package
   getPackages,

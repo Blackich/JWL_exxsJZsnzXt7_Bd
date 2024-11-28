@@ -24,6 +24,8 @@ r.delete("/api/users/:id/custom", i.checkAuth, i.deleteCustomPackageByUserId);
 r.get("/api/info/balance/vr", i.checkAuth, i.getBalanceVenro);
 r.get("/api/info/balance/jp", i.checkAuth, i.getBalanceJustPanel);
 r.get("/api/info/users/count", i.checkAuth, i.getUsersCount);
+r.get("/api/info/service/spent", i.checkAuth, i.getTotalSpent);
+r.get("/api/info/service/count", i.checkAuth, i.getPurchasedPackagesCount);
 
 // Admin Package and Custom Package
 r.get("/api/package", i.checkAuth, i.getPackages);
