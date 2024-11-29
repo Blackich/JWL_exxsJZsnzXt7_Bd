@@ -18,6 +18,17 @@ export const addServiceJP = async (
   return { data: response.data, siteId: 2, siteServiceId: id };
 };
 
+export const addTestServiceJP = async (
+  url: string,
+  id: number,
+  count: number,
+) => {
+  const response = await axios.post(`${siteJP}?action=add&
+    key=${apiKeyJP}&link=${url}&
+    service=${id}&quantity=${count}`);
+  return response.data;
+};
+
 export const checkServiceJP = async (orderId: number) => {
   const response = await axios.post(`${siteJP}?action=status&
     key=${apiKeyJP}&order=${orderId}`);

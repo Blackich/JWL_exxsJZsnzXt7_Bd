@@ -34,6 +34,7 @@ r.get("/api/package/custom", i.checkAuth, i.getCustomPackageList);
 r.get("/api/package/custom/:id", i.checkAuth, i.getCustomPackageById);
 r.post("/api/package/custom", i.checkAuth, i.createCustomPackage);
 r.post("/api/package/add-user", i.addCustomPackToUser);
+r.post("/api/package/test", i.sendTestPackage);
 
 // Admin Services and Purchases
 r.get("/api/services", i.checkAuth, i.getServiceList);

@@ -38,6 +38,7 @@ import {
   getPackageDetailsWithPrice,
   getPackages,
 } from "@controllers/Admin/Package";
+import { sendTestPackage } from "@controllers/Admin/TestPackage";
 
 import {
   getServiceList,
@@ -103,6 +104,7 @@ export default {
   getCustomPackageById,
   getCustomPackageList,
   addCustomPackToUser,
+  sendTestPackage,
 
   // Admin Services and Purchases
   getServiceList,

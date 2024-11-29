@@ -17,6 +17,18 @@ export const addServiceVR = async (
   return { data: response.data, siteId: 1, siteServiceId: id };
 };
 
+export const addTestServiceVR = async (
+  url: string,
+  id: number,
+  count: number,
+  speed: number,
+) => {
+  const response = await axios.get(`${siteVenro}?action=add&
+    key=${apiKeyVR}&url=${url}&type=${id}&
+    count=${count}&speed=${speed}`);
+  return response.data;
+};
+
 export const checkServiceVR = async (id: number) => {
   const response = await axios.get(`${siteVenro}?action=check&
     key=${apiKeyVR}&id=${id}`);
