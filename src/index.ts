@@ -66,7 +66,10 @@ import {
   getPackagesUser,
   getCustomPackByUserId,
 } from "@controllers/User/Package";
-import { getActiveServiceUser } from "@controllers/User/Services";
+import {
+  getActiveServiceUser,
+  checkStatusServices,
+} from "@controllers/User/Services";
 
 import { paymenStatusCatch } from "@controllers/Payments/YooKassa/_webhook";
 import { paymentPackage } from "@controllers/Payments/YooKassa/Package";
@@ -129,6 +132,7 @@ export default {
   getPackagesUser,
   getCustomPackByUserId,
   getActiveServiceUser,
+  checkStatusServices,
 
   // Payments
   paymenStatusCatch,

@@ -47,3 +47,12 @@ export const getServicesVR = async () => {
   );
   return response.data;
 };
+
+export const checkStatusSites = async () => {
+  const respVR = await axios.get("https://venro.ru/").catch((res) => res);
+  const respJP = await axios
+    .get("https://justanotherpanel.com/")
+    .catch((res) => res);
+  const status = [respVR.status, respJP.status];
+  return status;
+};

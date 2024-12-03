@@ -1,6 +1,7 @@
 import { db } from "@src/main";
 import { Request, Response } from "express";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
+import { checkStatusSites } from "@controllers/Services/Venro";
 
 export const getActiveServiceUser = tryCatch(
   async (req: Request, res: Response) => {
@@ -18,5 +19,16 @@ export const getActiveServiceUser = tryCatch(
         return res.status(200).json(data);
       },
     );
+  },
+);
+
+export const checkStatusServices = tryCatch(
+  async (req: Request, res: Response) => {
+    const statuses = await checkStatusSites();
+    if (statuses.every((status) => status === 200)) {
+      res.status(200).json({ message: "All services are active" });
+    } else {
+      res.status(400).json({ message: "Some services are unavailable" });
+    }
   },
 );
