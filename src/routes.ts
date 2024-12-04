@@ -18,7 +18,7 @@ r.patch("/api/users/:id/remark", i.checkAuth, i.updateUserRemark);
 r.get("/api/users/:id/social", i.checkAuth, i.getUserSocialAccounts);
 r.get("/api/users/:id/custom", i.checkAuth, i.getCustomPackageByUserId);
 r.delete("/api/users/:id/custom", i.checkAuth, i.deleteCustomPackageByUserId);
-// router.get("/api/users/:id/services", i.checkAuth, i.getUserPurchasedServices);
+r.get("/api/users/:id/services", i.checkAuth, i.getServicesByUserId);
 
 // Admin Overview
 r.get("/api/info/balance/vr", i.checkAuth, i.getBalanceVenro);

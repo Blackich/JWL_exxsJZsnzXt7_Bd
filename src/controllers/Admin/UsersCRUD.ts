@@ -119,11 +119,11 @@ export const getCustomPackageByUserId = tryCatch(
     const { id } = req.params;
     db.query(
       `SELECT cp.likes, cp.reach, cp.saves, cp.profileVisits,
-      cp.reposts, cp.videoViews, cp.countPosts,
-      cp.price_rub, cp.price_usd
-        FROM Custom_package_user cpu, Custom_package cp
-        WHERE cpu.customPackageId = cp.id
-        AND cpu.userId = ${id}`,
+        cp.reposts, cp.videoViews, cp.countPosts,
+        cp.price_rub, cp.price_usd
+          FROM Custom_package_user cpu, Custom_package cp
+          WHERE cpu.customPackageId = cp.id
+          AND cpu.userId = ${id}`,
       (err, result) => {
         if (err) return dbError(err, res);
         const data = result;
@@ -149,23 +149,20 @@ export const deleteCustomPackageByUserId = tryCatch(
   },
 );
 
-// export const getUserPurchasedServices = (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     db.query(`SELECT s.id, sn.nickname, p.likes, s.customPackage,
-//               s.countPosts, s.status, s.createdAt, s.cost, s.currency
-//               FROM Service s, Social_nickname sn, Package p
-//               WHERE s.socialNicknameId = sn.id
-//                 AND s.packageId = p.id
-//                 AND s.userId = ${id}`, (err, result) => {
-//       if (err) return res.status(404).json({ message: 'Incorrect query', error: err });
-//       const data = result;
-//       return res.status(200).json(data);
-//     });
-//   } catch (err) {
-//     return res.status(500).json({
-//       message: 'Server error',
-//       error: err.message
-//     });
-//   }
-// };
+export const getServicesByUserId = tryCatch(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    db.query(
+      `SELECT s.id, sn.nickname,
+        s.status, s.createdAt
+          FROM Service s, Social_nickname sn
+          WHERE s.socialNicknameId = sn.id
+          AND s.userId = ${id}`,
+      (err, result) => {
+        if (err) return dbError(err, res);
+        const data = result;
+        return res.status(200).json(data);
+      },
+    );
+  },
+);
