@@ -5,6 +5,7 @@ import { purchaseTestPackage } from "../Purchase/PurchaseTestPack";
 
 export const sendTestPackage = tryCatch(async (req: Request, res: Response) => {
   const { testServiceId, employeeId, link } = req.body;
+  if (!employeeId || !link || !testServiceId) return;
   // const boughtPack = await purchaseTestPackage(testServiceId, link);
   db.query(
     `INSERT INTO Test_package_list (id,

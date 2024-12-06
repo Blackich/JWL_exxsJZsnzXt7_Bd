@@ -29,7 +29,7 @@ export const purchasePackage = async (
   const purchaseSettings = details.map((detail) => {
     const quantity = detail.ratio * pack.likes;
     if (detail.siteId === 1) {
-      const speed = 20;
+      const speed = Math.round(quantity / 24);
       const count =
         quantity < 100
           ? Math.round(100 + getRandomPercentage(pack.likes, 0, 0.02))

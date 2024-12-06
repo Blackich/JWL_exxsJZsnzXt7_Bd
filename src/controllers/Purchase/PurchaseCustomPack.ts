@@ -36,7 +36,7 @@ export const purchaseCustomPackage = async (
   const purchaseSettings = correlationPack.map((detail) => {
     const quantity = detail.count;
     if (detail.siteId === 1) {
-      const speed = 20;
+      const speed = Math.round(quantity / 24);
       const count =
         quantity < 100
           ? Math.round(100 + getRandomPercentage(quantity, 0, 0.02))
