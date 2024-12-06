@@ -30,25 +30,15 @@ export const getUsers = tryCatch(async (req: Request, res: Response) => {
 });
 
 export const createUser = tryCatch(async (req: Request, res: Response) => {
+  const { employeeId } = req.body;
   const token = fastRandString(16);
 
   db.query(
-    `INSERT INTO Users (id, token) 
-      VALUES (null, '${token}')`,
-    async (err, result) => {
-      if (err) dbError(err, res);
-      const newId = (result as OkPacketParams).insertId;
-
-      db.query(
-        `SELECT * FROM Users WHERE id = ${newId}`,
-        async (err, result: RowDataPacket[]) => {
-          if (err) return dbError(err, res);
-          return res.status(201).json({
-            message: "User has been created",
-            data: result[0],
-          });
-        },
-      );
+    `INSERT INTO Users (id, token, invitedEmployeeId) 
+      VALUES (null, '${token}', ${Number(employeeId)})`,
+    async (err, _) => {
+      if (err) return dbError(err, res);
+      return res.status(200).json({ message: "User has been created" });
     },
   );
 });

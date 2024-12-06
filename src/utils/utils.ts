@@ -22,6 +22,7 @@ export const getTokens = (employeeId: number, login: string, role: string) => ({
 export const fastRandString = (n: number) => {
   return [...Array(n)]
     .map(() => (~~(Math.random() * 36)).toString(36))
+    .map((im) => (typeof im === "string" ? im.toUpperCase() : im))
     .join("");
 };
 
