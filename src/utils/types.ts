@@ -47,3 +47,18 @@ export type PurchasePackage = {
   siteServiceId: number;
   orderId: number;
 };
+
+export type Service = {
+  id: number;
+  userId: number;
+  socialNicknameId: number;
+  packageId: number | null;
+  customPackageId: number | null;
+  customPackage: number;
+  countPosts: number;
+  orderId: string;
+  status: number;
+  createdAt: string;
+  cost: number;
+  currency: string;
+};
