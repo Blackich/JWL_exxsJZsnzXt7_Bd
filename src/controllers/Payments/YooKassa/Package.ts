@@ -63,11 +63,12 @@ const fetchYooKassaPaymentPackage = async ({
         currency: currency,
       },
       metadata: {
-        user_id: userId,
-        soc_nickname_id: socialNicknameId,
-        package_id: packageId,
-        count_posts: countPosts,
-        custom_package: customPackage,
+        userId,
+        packageId,
+        countPosts,
+        customPackage,
+        socialNicknameId,
+        serviceName: "package",
       },
       capture: true,
       payment_method_data: {

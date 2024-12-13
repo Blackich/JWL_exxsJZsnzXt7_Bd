@@ -39,7 +39,7 @@ r.post("/api/package/test", i.sendTestPackage);
 // Admin Services and Purchases
 r.get("/api/services", i.checkAuth, i.getServiceList);
 r.get("/api/services/:id", i.checkAuth, i.getServiceById);
-r.patch("/api/services/:id/status", i.checkAuth, i.updateSeviceStatus);
+r.patch("/api/services/:id/status", i.checkAuth, i.updateServiceStatus);
 r.get("/api/services/:id/purchase", i.checkAuth, i.getPurchasedServiceById);
 r.get("/api/services/:id/check", i.checkAuth, i.checkStatusAllSubs);
 r.get("/api/services/:id/cancel", i.checkAuth, i.cancelAllSubs);
@@ -63,3 +63,4 @@ r.get("/services/:id", i.checkAuthUser, i.getActiveServiceUser);
 // Payments
 r.post("/payment/yookassa/webhook", i.paymenStatusCatch);
 r.post("/payment/yookassa/package", i.paymentPackage);
+r.post("/payment/yookassa/extra", i.paymentExtra);

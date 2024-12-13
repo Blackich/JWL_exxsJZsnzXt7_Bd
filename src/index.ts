@@ -44,7 +44,7 @@ import { sendTestPackage } from "@controllers/Admin/TestPackage";
 import {
   getServiceList,
   getServiceById,
-  updateSeviceStatus,
+  updateServiceStatus,
   getPurchasedServiceById,
 } from "@controllers/Admin/Services";
 import { checkStatusAllSubs } from "@controllers/Purchase/Entity/CheckStatusSubs";
@@ -74,6 +74,7 @@ import {
 
 import { paymenStatusCatch } from "@controllers/Payments/YooKassa/_webhook";
 import { paymentPackage } from "@controllers/Payments/YooKassa/Package";
+import { paymentExtra } from "@controllers/Payments/YooKassa/Extra";
 
 export default {
   // Admin Auth
@@ -114,7 +115,7 @@ export default {
   // Admin Services and Purchases
   getServiceList,
   getServiceById,
-  updateSeviceStatus,
+  updateServiceStatus,
   getPurchasedServiceById,
   checkStatusAllSubs,
   cancelAllSubs,
@@ -139,4 +140,5 @@ export default {
   // Payments
   paymenStatusCatch,
   paymentPackage,
+  paymentExtra,
 };

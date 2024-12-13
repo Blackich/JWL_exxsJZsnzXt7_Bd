@@ -47,7 +47,7 @@ export const getServiceById = tryCatch(async (req: Request, res: Response) => {
   );
 });
 
-export const updateSeviceStatus = tryCatch(
+export const updateServiceStatus = tryCatch(
   async (req: Request, res: Response) => {
     const { id } = req.params;
 
