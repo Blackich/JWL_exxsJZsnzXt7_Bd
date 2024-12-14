@@ -22,10 +22,11 @@ export const addTestServiceJP = async (
   url: string,
   id: number,
   count: number,
+  runs: number,
 ) => {
   const response = await axios.post(`${siteJP}?action=add&
-    key=${apiKeyJP}&link=${url}&
-    service=${id}&quantity=${count}`);
+    key=${apiKeyJP}&link=${url}&service=${id}&
+    quantity=${count}&runs=${runs}&interval=10`);
   return response.data;
 };
 
