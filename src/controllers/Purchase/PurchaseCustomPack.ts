@@ -29,18 +29,18 @@ export const purchaseCustomPackage = async (
     const nameService = detail.typeService;
     return {
       ...detail,
-      count: pack[nameService as keyof typeof pack],
+      count: pack[nameService as keyof typeof pack] || 100,
     };
   });
 
   const purchaseSettings = correlationPack.map((detail) => {
     const quantity = detail.count;
     if (detail.siteId === 1) {
-      const speed = Math.round(quantity / 24);
       const count =
         quantity < 100
           ? Math.round(100 + getRandomPercentage(quantity, 0, 0.02))
           : Math.round(quantity + getRandomPercentage(quantity, 0, 0.02));
+      const speed = Math.round(count / 24);
       return {
         siteId: detail.siteId,
         serviceId: detail.serviceId,
@@ -49,8 +49,9 @@ export const purchaseCustomPackage = async (
       };
     }
     if (detail.siteId === 2) {
-      const min = quantity < 100 ? 100 : quantity;
-      const max = quantity < 100 ? 115 : Math.round(quantity + quantity * 0.02);
+      const min = quantity <= 100 ? 100 : quantity;
+      const max =
+        quantity <= 100 ? 115 : Math.round(quantity + quantity * 0.02);
       return {
         siteId: detail.siteId,
         serviceId: detail.serviceId,
@@ -61,9 +62,9 @@ export const purchaseCustomPackage = async (
   });
 
   return await Promise.allSettled(
-    purchaseSettings.map((setting) => {
+    purchaseSettings.map(async (setting) => {
       if (setting && setting.siteId === 1) {
-        return addServiceVR(
+        return await addServiceVR(
           socNickname.nickname,
           setting.serviceId,
           setting.count as number,
@@ -72,7 +73,7 @@ export const purchaseCustomPackage = async (
         );
       }
       if (setting && setting.siteId === 2) {
-        return addServiceJP(
+        return await addServiceJP(
           socNickname.nickname,
           setting.serviceId,
           setting.min as number,
@@ -83,9 +84,9 @@ export const purchaseCustomPackage = async (
     }),
   )
     .then((response) => {
-      return response.map((res) => {
+      return response.map(async (res) => {
         if (res.status === "fulfilled" && res.value?.siteId === 1) {
-          return addServicesOrder(
+          return await addServicesOrder(
             serviceId,
             res.value?.siteId,
             res.value?.siteServiceId,
@@ -93,7 +94,7 @@ export const purchaseCustomPackage = async (
           );
         }
         if (res.status === "fulfilled" && res.value?.siteId === 2) {
-          return addServicesOrder(
+          return await addServicesOrder(
             serviceId,
             res.value?.siteId,
             res.value?.siteServiceId,

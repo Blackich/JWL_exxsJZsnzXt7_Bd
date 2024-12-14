@@ -29,11 +29,11 @@ export const purchasePackage = async (
   const purchaseSettings = details.map((detail) => {
     const quantity = detail.ratio * pack.likes;
     if (detail.siteId === 1) {
-      const speed = Math.round(quantity / 24);
       const count =
         quantity < 100
           ? Math.round(100 + getRandomPercentage(pack.likes, 0, 0.02))
           : Math.round(quantity + getRandomPercentage(quantity, 0, 0.02));
+      const speed = Math.round(count / 24);
       return {
         siteId: detail.siteId,
         serviceId: detail.serviceId,
@@ -54,9 +54,9 @@ export const purchasePackage = async (
   });
 
   return await Promise.allSettled(
-    purchaseSettings.map((setting) => {
+    purchaseSettings.map(async (setting) => {
       if (setting && setting.siteId === 1) {
-        return addServiceVR(
+        return await addServiceVR(
           socNickname.nickname,
           setting.serviceId,
           setting.count as number,
@@ -65,7 +65,7 @@ export const purchasePackage = async (
         );
       }
       if (setting && setting.siteId === 2) {
-        return addServiceJP(
+        return await addServiceJP(
           socNickname.nickname,
           setting.serviceId,
           setting.min as number,
@@ -76,9 +76,9 @@ export const purchasePackage = async (
     }),
   )
     .then((response) => {
-      return response.map((res) => {
+      return response.map(async (res) => {
         if (res.status === "fulfilled" && res.value?.siteId === 1) {
-          return addServicesOrder(
+          return await addServicesOrder(
             serviceId,
             res.value?.siteId,
             res.value?.siteServiceId,
@@ -86,7 +86,7 @@ export const purchasePackage = async (
           );
         }
         if (res.status === "fulfilled" && res.value?.siteId === 2) {
-          return addServicesOrder(
+          return await addServicesOrder(
             serviceId,
             res.value?.siteId,
             res.value?.siteServiceId,
