@@ -24,6 +24,7 @@ import {
 import {
   getTotalSpent,
   getUsersCount,
+  getBalanceWiq,
   getBalanceVenro,
   getBalanceJustPanel,
   getPurchasedPackagesCount,
@@ -99,6 +100,7 @@ export default {
   // Admin Overview
   getTotalSpent,
   getUsersCount,
+  getBalanceWiq,
   getBalanceVenro,
   getBalanceJustPanel,
   getPurchasedPackagesCount,

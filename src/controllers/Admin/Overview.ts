@@ -1,9 +1,9 @@
 import axios from "axios";
 import { db } from "@src/main";
-import { siteJP, siteVenro } from "@src/utils/utils";
+import { RowDataPacket } from "mysql2";
 import { Request, Response } from "express";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
-import { RowDataPacket } from "mysql2";
+import { siteJP, siteVenro, siteWiq } from "@src/utils/utils";
 
 export const getBalanceService = async (url: string, API_KEY: string) => {
   const { data } = await axios.get(`${url}?key=${API_KEY}&action=balance`);
@@ -21,6 +21,11 @@ export const getBalanceJustPanel = tryCatch(
     return res.status(200).json(data);
   },
 );
+
+export const getBalanceWiq = tryCatch(async (req: Request, res: Response) => {
+  const data = await getBalanceService(siteWiq, process.env.API_KEY_WQ || "");
+  return res.status(200).json(data);
+});
 
 export const getUsersCount = tryCatch(async (req: Request, res: Response) => {
   db.query(

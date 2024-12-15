@@ -23,6 +23,7 @@ r.get("/api/users/:id/services", i.checkAuth, i.getServicesByUserId);
 // Admin Overview
 r.get("/api/info/balance/vr", i.checkAuth, i.getBalanceVenro);
 r.get("/api/info/balance/jp", i.checkAuth, i.getBalanceJustPanel);
+r.get("/api/info/balance/wq", i.checkAuth, i.getBalanceWiq);
 r.get("/api/info/users/count", i.checkAuth, i.getUsersCount);
 r.get("/api/info/service/spent", i.checkAuth, i.getTotalSpent);
 r.get("/api/info/service/count", i.checkAuth, i.getPurchasedPackagesCount);

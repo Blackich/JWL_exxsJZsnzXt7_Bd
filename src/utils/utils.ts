@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 
 export const siteJP = "https://justanotherpanel.com/api/v2";
 export const siteVenro = "https://venro.ru/api/orders";
+export const siteWiq = "https://wiq.ru/api/";
 
 export const accessTokenExpiresIn = "4h";
 export const refreshTokenExpiresIn = 60 * 60 * 24 * 7; // 7 day;
