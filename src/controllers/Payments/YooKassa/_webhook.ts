@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { logger } from "@src/utils/logger/logger";
 import { tryCatch } from "@src/middleware/errorHandler";
 import { AddServiceExtra, AddServicePack, Metadata } from "./type";
+import { purchaseExtra } from "@src/controllers/Purchase/PurchaseExtra";
 import { purchasePackage } from "@src/controllers/Purchase/PurchasePack";
 import { sendTelegramMessagePack } from "@src/controllers/Payments/YooKassa/Telegram";
 import { purchaseCustomPackage } from "@src/controllers/Purchase/PurchaseCustomPack";
@@ -18,7 +19,13 @@ export const paymenStatusCatch = tryCatch(
 
     if (meta.serviceName === "package") {
       const isCustPack = Number(meta.customPackage) === 0 ? false : true;
-      await addInfoAboutBoughtPack({ meta, isCustPack, amount, orderId });
+      await addInfoAboutBoughtPack({
+        meta,
+        amount,
+        orderId,
+        isCustPack,
+        paymentServiceName: "YooKassa",
+      });
       await sendTelegramMessagePack({
         userId: meta.userId,
         socialNicknameId: meta.socialNicknameId,
@@ -27,12 +34,16 @@ export const paymenStatusCatch = tryCatch(
         countPosts: meta.countPosts,
         cost: amount.value,
         currency: "RUB",
-        service: "YooKassa",
+        paymentServiceName: "YooKassa",
       });
     }
 
     if (meta.serviceName === "extra") {
-      addInfoAboutBoughtExtra({ meta, amount, orderId });
+      await addInfoAboutBoughtExtra({
+        meta,
+        orderId,
+        paymentServiceName: "YooKassa",
+      });
     }
 
     return res.status(200).json(meta);
@@ -46,18 +57,19 @@ export const addInfoAboutBoughtPack = async ({
   amount,
   orderId,
   isCustPack,
+  paymentServiceName,
 }: AddServicePack) => {
   await db
     .promise()
     .query(
       `INSERT INTO Service (id, userId, socialNicknameId, 
         packageId, customPackageId, customPackage, countPosts,
-        orderId, cost, currency) 
+        orderId, cost, currency, paymentServiceName) 
           VALUES (null, ${meta.userId}, ${meta.socialNicknameId}, 
         ${isCustPack ? null : meta.packageId}, 
         ${isCustPack ? meta.packageId : null},
         ${meta.customPackage}, ${meta.countPosts}, '${orderId}',
-        ${amount.value}, '${amount.currency}')`,
+        ${amount.value}, '${amount.currency}', '${paymentServiceName}')`,
     )
     .then(async ([result]) => {
       if (!isCustPack) {
@@ -81,19 +93,26 @@ export const addInfoAboutBoughtPack = async ({
 
 export const addInfoAboutBoughtExtra = async ({
   meta,
-  amount,
   orderId,
+  paymentServiceName,
 }: AddServiceExtra) => {
   await db
     .promise()
     .query(
-      `INSERT INTO Service (id, userId, socialNicknameId, 
-        packageId, customPackageId, customPackage, countPosts,
-        orderId, cost, currency) 
-          VALUES (null, ....)`,
+      `INSERT INTO Extra (id, userId, socialNicknameId, 
+        extraServiceId, count, priceRUB, priceUSD,
+        paymentOrderId, paymentServiceName) 
+          VALUES (null, ${meta.userId}, ${meta.socialNicknameId}, 
+          ${meta.serviceId}, ${meta.count}, ${meta.priceRUB}, 
+          ${meta.priceUSD}, '${orderId}', '${paymentServiceName}')`,
     )
-    .then(([result]) => {
-      return result;
+    .then(async ([result]) => {
+      await purchaseExtra(
+        (result as ResultSetHeader).insertId,
+        meta.socialNicknameId,
+        meta.serviceId,
+        meta.count,
+      );
     })
     .catch((err) => logger.error(err.stack));
 };

@@ -1,11 +1,10 @@
+import cors from "cors";
+import mysql from "mysql2";
+import { r as router } from "@src/routes";
 import express, { Application, NextFunction, Request, Response } from "express";
+import { expServices } from "./utils/cron/ExpiredServices";
 import { errorHandler } from "@src/middleware/errorHandler";
 import cookieParser from "cookie-parser";
-import { r as router } from "@src/routes";
-import mysql from "mysql2";
-import cors from "cors";
-import { purchasePackage } from "./controllers/Purchase/Purchase";
-import { cancelAllSubs } from "./controllers/Purchase/Entity/CancelSubs";
 
 export const db = mysql.createConnection({
   host: process.env.MYSQL_HOST,
@@ -32,16 +31,12 @@ app.use(
     credentials: true,
   }),
 );
-app.use(router);
 
-// app.get("/test", cancelAllSubs());
-// app.get("/test", checkStatusAllSubs());
+app.use(router);
+expServices.start();
 
 app.get("/", async (req: Request, res: Response) => {
-  const data = await purchasePackage(30, 120, 1, 5);
-  // const data = await checkStatusAllSubs();
-  console.log(data);
-  res.status(200).json(data);
+  res.status(200).json({ message: "OK" });
 });
 
 app.all("*", (req: Request, res: Response) => {
@@ -51,6 +46,8 @@ app.all("*", (req: Request, res: Response) => {
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   errorHandler(err, req, res, next);
 });
+
+db.addListener("error", () => console.log("error"));
 
 app.listen(4444, () => {
   try {

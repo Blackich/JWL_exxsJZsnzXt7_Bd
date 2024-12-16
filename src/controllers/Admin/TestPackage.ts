@@ -9,7 +9,7 @@ export const sendTestPackage = tryCatch(async (req: Request, res: Response) => {
   const boughtPack = await purchaseTestPackage(testServiceId, speed, link);
   console.log(boughtPack);
   // db.query(
-  //   `INSERT INTO Test_package_list (id,
+  //   `INSERT INTO Test (id,
   //     testServiceId, employeeId, link)
   //     VALUES(null, ${testServiceId},
   //       ${employeeId}, '${link}')`,

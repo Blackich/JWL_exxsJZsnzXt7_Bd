@@ -4,13 +4,14 @@ export type AddServicePack = {
   orderId: string;
   meta: MetadataPack;
   isCustPack: boolean;
+  paymentServiceName: string;
   amount: { value: number; currency: string };
 };
 
 export type AddServiceExtra = {
   orderId: string;
   meta: MetadataExtra;
-  amount: { value: number; currency: string };
+  paymentServiceName: string;
 };
 
 export type TGSenderPackInfo = {
@@ -21,7 +22,7 @@ export type TGSenderPackInfo = {
   countPosts: number;
   cost: number;
   currency: string;
-  service: string;
+  paymentServiceName: string;
 };
 
 export type TGSenderExtraInfo = {

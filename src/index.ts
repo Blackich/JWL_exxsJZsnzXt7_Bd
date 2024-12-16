@@ -48,8 +48,12 @@ import {
   updateServiceStatus,
   getPurchasedServiceById,
 } from "@controllers/Admin/Services";
-import { checkStatusAllSubs } from "@controllers/Purchase/Entity/CheckStatusSubs";
+import {
+  checkStatusAllSubs,
+  checkStatusForExtra,
+} from "@controllers/Purchase/Entity/CheckStatusSubs";
 import { cancelAllSubs } from "@controllers/Purchase/Entity/CancelSubs";
+import { getExtraList, getExtraById } from "@controllers/Admin/Extra";
 
 import {
   authUser,
@@ -114,13 +118,17 @@ export default {
   addCustomPackToUser,
   sendTestPackage,
 
-  // Admin Services and Purchases
+  // Admin Services, Extra, Purchases
   getServiceList,
   getServiceById,
   updateServiceStatus,
   getPurchasedServiceById,
   checkStatusAllSubs,
   cancelAllSubs,
+
+  getExtraList,
+  getExtraById,
+  checkStatusForExtra,
 
   // User Auth
   authUser,

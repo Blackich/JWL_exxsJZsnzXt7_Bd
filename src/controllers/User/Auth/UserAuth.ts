@@ -15,6 +15,8 @@ export const authUser = tryCatch(async (req: Request, res: Response) => {
       res.setHeader(
         "Set-Cookie",
         serialize("session-Token", token, {
+          sameSite: "none",
+          secure: true,
           httpOnly: true,
           maxAge: 60 * 60 * 24 * 365,
         }),

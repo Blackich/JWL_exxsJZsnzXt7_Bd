@@ -37,13 +37,17 @@ r.post("/api/package/custom", i.checkAuth, i.createCustomPackage);
 r.post("/api/package/add-user", i.addCustomPackToUser);
 r.post("/api/package/test", i.sendTestPackage);
 
-// Admin Services and Purchases
+// Admin Services, Extra, Purchases
 r.get("/api/services", i.checkAuth, i.getServiceList);
 r.get("/api/services/:id", i.checkAuth, i.getServiceById);
 r.patch("/api/services/:id/status", i.checkAuth, i.updateServiceStatus);
 r.get("/api/services/:id/purchase", i.checkAuth, i.getPurchasedServiceById);
 r.get("/api/services/:id/check", i.checkAuth, i.checkStatusAllSubs);
 r.get("/api/services/:id/cancel", i.checkAuth, i.cancelAllSubs);
+
+r.get("/api/extra", i.checkAuth, i.getExtraList);
+r.get("/api/extra/:id", i.checkAuth, i.getExtraById);
+r.get("/api/extra/:id/check", i.checkAuth, i.checkStatusForExtra);
 
 // User Auth
 r.post("/login", i.authUser);

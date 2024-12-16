@@ -9,7 +9,7 @@ export const getServiceList = tryCatch(async (req: Request, res: Response) => {
 		    s.packageId, p.likes as packageLikes,
         s.customPackageId, cp.likes as customLikes,
 		    s.countPosts, s.orderId, s.status, s.createdAt,
-        s.cost, s.currency
+        s.cost, s.currency, s.paymentServiceName
           FROM Service s
           LEFT JOIN Package p ON p.id = s.packageId
           LEFT JOIN Custom_package cp ON cp.id = s.customPackageId
@@ -31,7 +31,7 @@ export const getServiceById = tryCatch(async (req: Request, res: Response) => {
 		    s.packageId, p.likes as packageLikes,
         s.customPackageId, cp.likes as customLikes,
 		    s.countPosts, s.orderId, s.status, s.createdAt,
-        s.cost, s.currency
+        s.cost, s.currency, s.paymentServiceName
           FROM Service s
           LEFT JOIN Package p ON p.id = s.packageId
           LEFT JOIN Custom_package cp ON cp.id = s.customPackageId

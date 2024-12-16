@@ -18,6 +18,18 @@ export const addServiceJP = async (
   return { data: response.data, siteId: 2, siteServiceId: id };
 };
 
+export const addExtraServiceJP = async (
+  nickname: string,
+  id: number,
+  quantity: number,
+) => {
+  const url = `https://www.instagram.com/${nickname}`;
+  const response = await axios.post(`${siteJP}?action=add&
+    key=${apiKeyJP}&link=${url}&service=${id}&
+    quantity=${quantity}&runs=48&interval=30`);
+  return response.data;
+};
+
 export const addTestServiceJP = async (
   url: string,
   id: number,

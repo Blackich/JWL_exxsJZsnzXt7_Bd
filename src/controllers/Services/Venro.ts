@@ -2,6 +2,7 @@ import axios from "axios";
 import { siteVenro } from "@src/utils/utils";
 
 const apiKeyVR = process.env.API_KEY_VR;
+
 export const addServiceVR = async (
   nickname: string,
   id: number,
@@ -15,6 +16,19 @@ export const addServiceVR = async (
     type=${id}&count=${count}&
     posts=${posts}&speed=${speed}`);
   return { data: response.data, siteId: 1, siteServiceId: id };
+};
+
+export const addExtraServiceVR = async (
+  nickname: string,
+  id: number,
+  count: number,
+  speed: number,
+) => {
+  const url = `https://www.instagram.com/${nickname}`;
+  const response = await axios.get(`${siteVenro}?action=add&
+    key=${apiKeyVR}&url=${url}&type=${id}&
+    count=${count}&speed=${speed}`);
+  return response.data;
 };
 
 export const addTestServiceVR = async (

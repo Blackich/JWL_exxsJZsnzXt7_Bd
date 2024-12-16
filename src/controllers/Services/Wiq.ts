@@ -15,7 +15,7 @@ export const addExtraServiceWQ = async (
   return response.data;
 };
 
-export const checkOrderStatus = async (orderId: number) => {
+export const checkServiceWQ = async (orderId: number) => {
   const response = await axios.get(`${siteWiq}?action=status&
     key=${apiKeyWQ}&order=${orderId}`);
   return response.data;

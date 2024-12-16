@@ -4,3 +4,12 @@ export type TestSettings = {
   siteId: number;
   count: number;
 };
+
+export type ExtraSettings = {
+  serviceId: number;
+  siteId: number;
+};
+
+export type TGSenderCommentInfo = {
+  message: string;
+};
