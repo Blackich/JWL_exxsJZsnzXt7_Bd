@@ -1,8 +1,9 @@
 export type TestSettings = {
-  typeService: number;
+  typeService: string;
   serviceId: number;
   siteId: number;
   count: number;
+  drip: number;
 };
 
 export type ExtraSettings = {
@@ -11,5 +12,10 @@ export type ExtraSettings = {
 };
 
 export type TGSenderCommentInfo = {
-  message: string;
+  extraId: number;
+  userId: number;
+  socialNicknameId: number;
+  countComments: number;
+  commentServiceName: string;
+  extraServiceId: number;
 };

@@ -8,6 +8,7 @@ import { purchaseExtra } from "@src/controllers/Purchase/PurchaseExtra";
 import { purchasePackage } from "@src/controllers/Purchase/PurchasePack";
 import { sendTelegramMessagePack } from "@src/controllers/Payments/YooKassa/Telegram";
 import { purchaseCustomPackage } from "@src/controllers/Purchase/PurchaseCustomPack";
+import { sendTGMessageComment } from "@src/controllers/Purchase/Telegram";
 
 export const paymenStatusCatch = tryCatch(
   async (req: Request, res: Response) => {
@@ -107,8 +108,30 @@ export const addInfoAboutBoughtExtra = async ({
           ${meta.priceUSD}, '${orderId}', '${paymentServiceName}')`,
     )
     .then(async ([result]) => {
+      const insertId = (result as ResultSetHeader).insertId;
+      //comments
+      if (meta.serviceId === 3) {
+        return await sendTGMessageComment({
+          extraId: insertId,
+          userId: meta.userId,
+          countComments: meta.count,
+          extraServiceId: meta.serviceId,
+          socialNicknameId: meta.socialNicknameId,
+          commentServiceName: "Комментарии AI",
+        });
+      }
+      if (meta.serviceId === 4) {
+        return await sendTGMessageComment({
+          extraId: insertId,
+          userId: meta.userId,
+          countComments: meta.count,
+          extraServiceId: meta.serviceId,
+          socialNicknameId: meta.socialNicknameId,
+          commentServiceName: "Комментарии собственные",
+        });
+      }
       await purchaseExtra(
-        (result as ResultSetHeader).insertId,
+        insertId,
         meta.socialNicknameId,
         meta.serviceId,
         meta.count,

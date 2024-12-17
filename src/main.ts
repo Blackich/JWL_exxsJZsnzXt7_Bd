@@ -1,6 +1,7 @@
 import cors from "cors";
 import mysql from "mysql2";
 import { r as router } from "@src/routes";
+import { testRouter } from "./testRouter";
 import express, { Application, NextFunction, Request, Response } from "express";
 import { expServices } from "./utils/cron/ExpiredServices";
 import { errorHandler } from "@src/middleware/errorHandler";
@@ -33,6 +34,7 @@ app.use(
 );
 
 app.use(router);
+app.use(testRouter);
 expServices.start();
 
 app.get("/", async (req: Request, res: Response) => {

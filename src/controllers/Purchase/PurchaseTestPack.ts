@@ -18,8 +18,17 @@ export const purchaseTestPackage = async (
   if (!isSettingsArray(settings)) return;
 
   return settings.map((setting) => {
+    if (setting.typeService === "comments") {
+      return {
+        //Comments
+        url: link,
+        id: setting.serviceId,
+      };
+    }
+
     if (setting.siteId === 1) {
       const speedForVR = setSpeedForVR(speed, setting.count);
+      //Venro
       return {
         url: link,
         id: setting.serviceId,
@@ -28,12 +37,30 @@ export const purchaseTestPackage = async (
       };
     }
     if (setting.siteId === 2) {
-      const speedForJP = setSpeedForJP(speed, setting.count);
+      //Just Drip
+      if (setting.drip === 1) {
+        const speedForJP = setSpeedForJP(speed, setting.count);
+        return {
+          url: link,
+          id: setting.serviceId,
+          count: speedForJP.quantity,
+          runs: speedForJP.runs,
+        };
+      } else {
+        //Just NO Drip
+        return {
+          url: link,
+          id: setting.serviceId,
+          count: setting.count,
+        };
+      }
+    }
+    //Wiq
+    if (setting.siteId === 3) {
       return {
         url: link,
         id: setting.serviceId,
-        count: speedForJP.quantity,
-        runs: speedForJP.runs,
+        count: setting.count,
       };
     }
   });
@@ -61,7 +88,8 @@ export const getTestSettingsByServiceId = async (testServiceId: number) => {
   const data = await db
     .promise()
     .query(
-      `SELECT typeService, serviceId, siteId, count
+      `SELECT typeService, serviceId,
+        siteId, count, drip
         FROM Test_service_setting
         WHERE testServiceId  = ${testServiceId}`,
     )
@@ -90,11 +118,11 @@ const setSpeedForVR = (speed: number, count: number) => {
 const setSpeedForJP = (speed: number, count: number) => {
   switch (speed) {
     case 1:
-      return { runs: 6, quantity: Math.round(count / 6) };
+      return { runs: 2, quantity: Math.round(count / 2) };
     case 2:
-      return { runs: 12, quantity: Math.round(count / 12) };
+      return { runs: 4, quantity: Math.round(count / 4) };
     case 3:
-      return { runs: 18, quantity: Math.round(count / 18) };
+      return { runs: 6, quantity: Math.round(count / 6) };
     case 4:
       return { runs: 1, quantity: count };
     default:

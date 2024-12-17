@@ -24,7 +24,6 @@ export const purchaseExtra = async (
     nicknameId,
   )) as SocialNickname;
   const settings = await getSettingsByExtraServiceId(extraServiceId);
-  //ts-ignore-next-line
   if (!isSettingsArray(settings) || !nickname) return;
   const setting = settings[0];
   const speedVR = Math.round(count / 24);

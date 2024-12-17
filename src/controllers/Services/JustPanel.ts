@@ -38,7 +38,18 @@ export const addTestServiceJP = async (
 ) => {
   const response = await axios.post(`${siteJP}?action=add&
     key=${apiKeyJP}&link=${url}&service=${id}&
-    quantity=${count}&runs=${runs}&interval=10`);
+    quantity=${count}&runs=${runs}&interval=30`);
+  return response.data;
+};
+
+export const addTestServiceJPNoDrip = async (
+  url: string,
+  id: number,
+  count: number,
+) => {
+  const response = await axios.post(`${siteJP}?action=add&
+    key=${apiKeyJP}&link=${url}&service=${id}&
+    quantity=${count}`);
   return response.data;
 };
 

@@ -15,6 +15,17 @@ export const addExtraServiceWQ = async (
   return response.data;
 };
 
+export const addTestServiceWQ = async (
+  url: string,
+  id: number,
+  count: number,
+) => {
+  const response = await axios.get(`${siteWiq}?action=create&
+    key=${apiKeyWQ}&link=${url}&service=${id}&
+    quantity=${count}`);
+  return response.data;
+};
+
 export const checkServiceWQ = async (orderId: number) => {
   const response = await axios.get(`${siteWiq}?action=status&
     key=${apiKeyWQ}&order=${orderId}`);

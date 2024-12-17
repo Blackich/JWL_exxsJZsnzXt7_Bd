@@ -76,6 +76,7 @@ import {
   getActiveServiceUser,
   checkStatusServices,
 } from "@controllers/User/Services";
+import { saveCommentsBeforePayment } from "@controllers/User/Extra";
 
 import { paymenStatusCatch } from "@controllers/Payments/YooKassa/_webhook";
 import { paymentPackage } from "@controllers/Payments/YooKassa/Package";
@@ -141,11 +142,12 @@ export default {
   addInstAccount,
   deleteInstAccount,
 
-  // User Package and Services
+  // User Package, Services, Extra
   getPackagesUser,
   getCustomPackByUserId,
   getActiveServiceUser,
   checkStatusServices,
+  saveCommentsBeforePayment,
 
   // Payments
   paymenStatusCatch,
