@@ -27,10 +27,7 @@ export const purchaseExtra = async (
   if (!isSettingsArray(settings) || !nickname) return;
   const setting = settings[0];
   const speedVR = Math.round(count / 24);
-  const quantityJP = Math.round(count / 48);
-
-  if (extraServiceId === 3) {
-  }
+  const quantityJP = Math.round(count / 20);
 
   if (setting.siteId === 1) {
     await addExtraServiceVR(nickname, setting.serviceId, count, speedVR)

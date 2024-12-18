@@ -53,3 +53,17 @@ export const packageDetails = async () => {
     .catch((err) => logger.error(err.stack));
   return data;
 };
+
+export const getExtraServiceNameByExtraId = async (extraServiceId: number) => {
+  const data = await db
+    .promise()
+    .query(
+      `SELECT serviceName FROM Extra_service
+        WHERE id = ${extraServiceId}`,
+    )
+    .then(([result]) => {
+      return (result as { serviceName: string }[])[0].serviceName;
+    })
+    .catch((err) => logger.error(err.stack));
+  return data;
+};

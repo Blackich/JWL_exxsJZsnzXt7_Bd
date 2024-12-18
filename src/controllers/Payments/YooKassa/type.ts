@@ -26,13 +26,13 @@ export type TGSenderPackInfo = {
 };
 
 export type TGSenderExtraInfo = {
+  extraId: number;
   userId: number;
   socialNicknameId: number;
-  serviceId: number;
+  extraServiceId: number;
   count: number;
   cost: number;
-  currency: string;
-  service: string;
+  paymentServiceName: string;
 };
 
 type MetadataPack = {

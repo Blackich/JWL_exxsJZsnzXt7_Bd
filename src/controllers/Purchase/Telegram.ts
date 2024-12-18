@@ -1,8 +1,11 @@
 import axios from "axios";
 import { db } from "@src/main";
-import { logger } from "@src/utils/logger/logger";
 import { TGSenderCommentInfo } from "./type";
-import { getSocialNicknameById } from "@src/utils/intermediateReq";
+import { logger } from "@src/utils/logger/logger";
+import {
+  getExtraServiceNameByExtraId,
+  getSocialNicknameById,
+} from "@src/utils/intermediateReq";
 
 const token = process.env.TG_BOT_TOKEN_COMMENT;
 const chat_id = process.env.TG_CHAT_ID_COMMENT;
@@ -14,25 +17,25 @@ export const sendTGMessageComment = async ({
   countComments,
   extraServiceId,
   socialNicknameId,
-  commentServiceName,
 }: TGSenderCommentInfo) => {
   try {
     const soc = await getSocialNicknameById(socialNicknameId);
-    const { comments } = (await getLastCommentsByUserId(
-      userId,
-      socialNicknameId,
-    )) as { comments: string };
-    if (!("nickname" in soc)) return;
+    const serviceName = await getExtraServiceNameByExtraId(extraServiceId);
+    const comments = await getLastCommentsByUserId(userId, socialNicknameId);
+    if (!("nickname" in soc) || typeof comments !== "string") return;
 
-    const message = `${commentServiceName} 💬
+    const commentsColumn =
+      extraServiceId === 4 && comments
+        ? comments.split("x1Ejf7\n").join("\n")
+        : "";
+
+    const message = `${serviceName} 💬
       🔢 Кол-во: <b>${countComments}</b>
       🆔 UserId: <b>${userId}</b>
-      📑 ExtraId: <a href="https://www.gram.top/panel/extra/${extraId}"><b>${extraId}</b></a>
-      👤 Nickname: <a href="https://www.instagram.com/${soc.nickname}"><b>${
-      soc.nickname
-    }</b></a>
+      📋 ExtraId: <a href="https://www.gram.top/panel/extra/${extraId}"><b>${extraId}</b></a>
+      👤 Nickname: <a href="https://www.instagram.com/${soc.nickname}"><b>${soc.nickname}</b></a>
 
-${extraServiceId === 4 && comments ? comments.split(",").join("\n") : ""}`;
+${commentsColumn}`;
 
     await axios.post(url, {
       chat_id: chat_id,
@@ -59,7 +62,7 @@ export const getLastCommentsByUserId = async (
     )
     .then(([result]) => {
       const res = result as { comments: string }[];
-      return res[res.length - 1];
+      return res[res.length - 1].comments;
     })
     .catch((err) => logger.error(err.stack));
   return data;

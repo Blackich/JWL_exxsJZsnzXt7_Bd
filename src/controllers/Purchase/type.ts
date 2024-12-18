@@ -16,6 +16,5 @@ export type TGSenderCommentInfo = {
   userId: number;
   socialNicknameId: number;
   countComments: number;
-  commentServiceName: string;
   extraServiceId: number;
 };

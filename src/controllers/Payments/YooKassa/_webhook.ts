@@ -6,7 +6,10 @@ import { tryCatch } from "@src/middleware/errorHandler";
 import { AddServiceExtra, AddServicePack, Metadata } from "./type";
 import { purchaseExtra } from "@src/controllers/Purchase/PurchaseExtra";
 import { purchasePackage } from "@src/controllers/Purchase/PurchasePack";
-import { sendTelegramMessagePack } from "@src/controllers/Payments/YooKassa/Telegram";
+import {
+  sendTelegramMessageExtra,
+  sendTelegramMessagePack,
+} from "@src/controllers/Payments/YooKassa/Telegram";
 import { purchaseCustomPackage } from "@src/controllers/Purchase/PurchaseCustomPack";
 import { sendTGMessageComment } from "@src/controllers/Purchase/Telegram";
 
@@ -109,33 +112,43 @@ export const addInfoAboutBoughtExtra = async ({
     )
     .then(async ([result]) => {
       const insertId = (result as ResultSetHeader).insertId;
-      //comments
-      if (meta.serviceId === 3) {
-        return await sendTGMessageComment({
+      //Comments
+      if (meta.serviceId === 3 || meta.serviceId === 4) {
+        await sendTGMessageComment({
           extraId: insertId,
           userId: meta.userId,
           countComments: meta.count,
           extraServiceId: meta.serviceId,
           socialNicknameId: meta.socialNicknameId,
-          commentServiceName: "Комментарии AI",
         });
-      }
-      if (meta.serviceId === 4) {
-        return await sendTGMessageComment({
+        await sendTelegramMessageExtra({
           extraId: insertId,
           userId: meta.userId,
-          countComments: meta.count,
-          extraServiceId: meta.serviceId,
           socialNicknameId: meta.socialNicknameId,
-          commentServiceName: "Комментарии собственные",
+          extraServiceId: meta.serviceId,
+          count: meta.count,
+          cost: meta.priceRUB,
+          paymentServiceName,
+        });
+        return;
+      } else {
+        //Other
+        await purchaseExtra(
+          insertId,
+          meta.socialNicknameId,
+          meta.serviceId,
+          meta.count,
+        );
+        await sendTelegramMessageExtra({
+          extraId: insertId,
+          userId: meta.userId,
+          socialNicknameId: meta.socialNicknameId,
+          extraServiceId: meta.serviceId,
+          count: meta.count,
+          cost: meta.priceRUB,
+          paymentServiceName,
         });
       }
-      await purchaseExtra(
-        insertId,
-        meta.socialNicknameId,
-        meta.serviceId,
-        meta.count,
-      );
     })
     .catch((err) => logger.error(err.stack));
 };
