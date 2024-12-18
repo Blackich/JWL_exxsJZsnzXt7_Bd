@@ -1,11 +1,12 @@
 import cors from "cors";
 import mysql from "mysql2";
+import cookieParser from "cookie-parser";
 import { r as router } from "@src/routes";
 import { testRouter } from "./testRouter";
-import express, { Application, NextFunction, Request, Response } from "express";
 import { expServices } from "./utils/cron/ExpiredServices";
 import { errorHandler } from "@src/middleware/errorHandler";
-import cookieParser from "cookie-parser";
+import { expExtraComments } from "./utils/cron/ExpiredExtraComments";
+import express, { Application, NextFunction, Request, Response } from "express";
 
 export const db = mysql.createConnection({
   host: process.env.MYSQL_HOST,
@@ -36,6 +37,7 @@ app.use(
 app.use(router);
 app.use(testRouter);
 expServices.start();
+expExtraComments.start();
 
 app.get("/", async (req: Request, res: Response) => {
   res.status(200).json({ message: "OK" });
