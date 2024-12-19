@@ -1,18 +1,11 @@
 import { db } from "@src/main";
-import { getSocialNicknameById } from "@src/utils/intermediateReq";
-import { logger } from "@src/utils/logger/logger";
 import { ExtraSettings } from "./type";
-import { Logger } from "winston";
-import { addExtraServiceVR } from "../Services/Venro";
 import { SocialNickname } from "@src/utils/types";
-import { addExtraServiceJP } from "../Services/JustPanel";
-import { addExtraServiceWQ } from "../Services/Wiq";
-
-const isSettingsArray = (
-  arg: ExtraSettings[] | Logger,
-): arg is ExtraSettings[] => {
-  return Array.isArray(arg) && arg.every((item) => "serviceId" in item);
-};
+import { logger } from "@src/utils/logger/logger";
+import { addExtraServiceWQ } from "@controllers/Services/Wiq";
+import { addExtraServiceVR } from "@controllers/Services/Venro";
+import { getSocialNicknameById } from "@src/utils/intermediateReq";
+import { addExtraServiceJP } from "@controllers/Services/JustPanel";
 
 export const purchaseExtra = async (
   extraId: number,
@@ -23,9 +16,8 @@ export const purchaseExtra = async (
   const { nickname } = (await getSocialNicknameById(
     nicknameId,
   )) as SocialNickname;
-  const settings = await getSettingsByExtraServiceId(extraServiceId);
-  if (!isSettingsArray(settings) || !nickname) return;
-  const setting = settings[0];
+  const setting = await getSettingsByExtraServiceId(extraServiceId);
+  if (!("serviceId" in setting) || !nickname) return;
   const speedVR = Math.round(count / 24);
   const quantityJP = Math.round(count / 20);
 
@@ -79,7 +71,7 @@ export const getSettingsByExtraServiceId = async (extraServiceId: number) => {
         AND status = 1`,
     )
     .then(([result]) => {
-      return result as ExtraSettings[];
+      return (result as ExtraSettings[])[0];
     })
     .catch((err) => logger.error(err.stack));
   return data;

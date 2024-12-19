@@ -53,6 +53,17 @@ export const addTestServiceJPNoDrip = async (
   return response.data;
 };
 
+export const sendCommentsServiceJP = async (
+  url: string,
+  id: number,
+  comments: string[],
+) => {
+  const response = await axios.post(`${siteJP}?action=add&
+    key=${apiKeyJP}&link=${url}&service=${id}&
+    comments=${comments.map((comm) => comm.concat("\\n")).join("")}`);
+  return response.data;
+};
+
 export const checkServiceJP = async (orderId: number) => {
   const response = await axios.post(`${siteJP}?action=status&
     key=${apiKeyJP}&order=${orderId}`);

@@ -12,7 +12,6 @@ const isCommentsArray = (
 export const expExtraComments = cron.schedule("0 * * * *", async () => {
   try {
     const expComments = await expiredExtraCommentsCheck();
-    console.log("Cron job is running");
     if (Array.isArray(expComments) && expComments.length === 0) return;
     if (!isCommentsArray(expComments)) return;
     return expComments.map(async (expComm) => {

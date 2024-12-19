@@ -48,6 +48,7 @@ r.get("/api/services/:id/cancel", i.checkAuth, i.cancelAllSubs);
 r.get("/api/extra", i.checkAuth, i.getExtraList);
 r.get("/api/extra/:id", i.checkAuth, i.getExtraById);
 r.get("/api/extra/:id/check", i.checkAuth, i.checkStatusForExtra);
+r.post("/api/extra/:id/send-comment", i.checkAuth, i.sendExtraComments);
 
 // User Auth
 r.post("/login", i.authUser);
