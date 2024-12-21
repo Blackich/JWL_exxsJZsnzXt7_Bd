@@ -30,7 +30,7 @@ export type CustomPackage = {
   createdAt: number;
 };
 
-export type PackageDetails = {
+export type PackageSettings = {
   id: number;
   siteId: number;
   typeService: string;

@@ -78,9 +78,9 @@ export const getPurchasedServiceById = tryCatch(
   async (req: Request, res: Response) => {
     const { id } = req.params;
     db.query(
-      `SELECT pp.*, pd.typeService
-        FROM Purchase_package pp, Package_detail pd
-        WHERE pp.siteServiceId = pd.serviceId
+      `SELECT pp.*, ps.typeService
+        FROM Purchase_package pp, Package_setting ps
+        WHERE pp.siteServiceId = ps.serviceId
           AND pp.serviceId = ${id}`,
       (err, result) => {
         if (err) return dbError(err, res);

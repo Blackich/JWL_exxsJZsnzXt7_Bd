@@ -4,7 +4,7 @@ import {
   CustomPackage,
   Package,
   SocialNickname,
-  PackageDetails,
+  PackageSettings,
 } from "./types";
 
 export const getPackageById = async (id: number) => {
@@ -40,15 +40,15 @@ export const getCustomPackageById = async (id: number) => {
   return data;
 };
 
-export const packageDetails = async () => {
+export const packageSettings = async () => {
   const data = await db
     .promise()
     .query(
-      `SELECT * FROM Package_detail
+      `SELECT * FROM Package_setting
         WHERE status = 1`,
     )
     .then(([result]) => {
-      return result as PackageDetails[];
+      return result as PackageSettings[];
     })
     .catch((err) => logger.error(err.stack));
   return data;

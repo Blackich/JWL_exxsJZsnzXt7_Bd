@@ -37,7 +37,7 @@ import {
   addCustomPackToUser,
 } from "@controllers/Admin/CustomPackage";
 import {
-  getPackageDetailsWithPrice,
+  getPackageSettingsWithPrice,
   getPackages,
 } from "@controllers/Admin/Package";
 import { sendTestPackage } from "@controllers/Admin/TestPackage";
@@ -116,7 +116,7 @@ export default {
 
   // Admin Package and Custom Package
   getPackages,
-  getPackageDetailsWithPrice,
+  getPackageSettingsWithPrice,
   createCustomPackage,
   getCustomPackageById,
   getCustomPackageList,

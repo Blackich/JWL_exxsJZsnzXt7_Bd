@@ -30,7 +30,7 @@ r.get("/api/info/service/count", i.checkAuth, i.getPurchasedPackagesCount);
 
 // Admin Package and Custom Package
 r.get("/api/package", i.checkAuth, i.getPackages);
-r.get("/api/package/details", i.checkAuth, i.getPackageDetailsWithPrice);
+r.get("/api/package/settings", i.checkAuth, i.getPackageSettingsWithPrice);
 r.get("/api/package/custom", i.checkAuth, i.getCustomPackageList);
 r.get("/api/package/custom/:id", i.checkAuth, i.getCustomPackageById);
 r.post("/api/package/custom", i.checkAuth, i.createCustomPackage);

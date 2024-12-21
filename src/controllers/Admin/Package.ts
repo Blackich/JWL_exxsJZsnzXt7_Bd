@@ -13,13 +13,13 @@ export const getPackages = tryCatch(async (req: Request, res: Response) => {
   });
 });
 
-export const getPackageDetailsWithPrice = tryCatch(
+export const getPackageSettingsWithPrice = tryCatch(
   async (req: Request, res: Response) => {
     const servicesVR = await getServicesVR();
     const servicesJP = await getServicesJP();
 
     db.query(
-      `SELECT * FROM Package_detail
+      `SELECT * FROM Package_setting
         WHERE status = 1`,
       (err, result: RowDataPacket[]) => {
         if (err) return dbError(err, res);

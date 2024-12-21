@@ -5,7 +5,7 @@ import { getRandomPercentage } from "@src/utils/utils";
 import {
   getPackageById,
   getSocialNicknameById,
-  packageDetails,
+  packageSettings,
 } from "@src/utils/intermediateReq";
 import { RowDataPacket } from "mysql2";
 import { logger } from "@src/utils/logger/logger";
@@ -16,37 +16,37 @@ export const purchasePackage = async (
   packageId: number,
   countPosts: number,
 ) => {
-  const details = await packageDetails();
+  const settings = await packageSettings();
   const socNickname = await getSocialNicknameById(nicknameId);
   const pack = await getPackageById(packageId);
   if (
-    !Array.isArray(details) ||
+    !Array.isArray(settings) ||
     !("nickname" in socNickname) ||
     !("likes" in pack)
   )
     return;
 
-  const purchaseSettings = details.map((detail) => {
-    const quantity = detail.ratio * pack.likes;
-    if (detail.siteId === 1) {
+  const purchaseSettings = settings.map((setting) => {
+    const quantity = setting.ratio * pack.likes;
+    if (setting.siteId === 1) {
       const count =
         quantity < 100
           ? Math.round(100 + getRandomPercentage(pack.likes, 0, 0.02))
           : Math.round(quantity + getRandomPercentage(quantity, 0, 0.02));
       const speed = Math.round(count / 24);
       return {
-        siteId: detail.siteId,
-        serviceId: detail.serviceId,
+        siteId: setting.siteId,
+        serviceId: setting.serviceId,
         count: count,
         speed,
       };
     }
-    if (detail.siteId === 2) {
+    if (setting.siteId === 2) {
       const min = quantity < 100 ? 100 : quantity;
       const max = quantity < 100 ? 115 : Math.round(quantity + quantity * 0.02);
       return {
-        siteId: detail.siteId,
-        serviceId: detail.serviceId,
+        siteId: setting.siteId,
+        serviceId: setting.serviceId,
         min,
         max,
       };
