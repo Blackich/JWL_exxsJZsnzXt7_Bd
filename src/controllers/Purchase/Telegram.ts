@@ -22,10 +22,10 @@ export const sendTGMessageComment = async ({
     const soc = await getSocialNicknameById(socialNicknameId);
     const serviceName = await getExtraServiceNameByExtraId(extraServiceId);
     const comments = await getLastCommentsByUserId(userId, socialNicknameId);
-    if (!("nickname" in soc) || typeof comments !== "string") return;
+    if (!("nickname" in soc)) return;
 
     const commentsColumn =
-      extraServiceId === 4 && comments
+      extraServiceId === 4 && typeof comments === "string"
         ? comments.split("x1Ejf7\n").join("\n")
         : "";
 

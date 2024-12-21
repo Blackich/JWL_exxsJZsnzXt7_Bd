@@ -66,6 +66,7 @@ r.get("/custom/:id", i.checkAuthUser, i.getCustomPackByUserId);
 r.get("/services/check-status", i.checkAuthUser, i.checkStatusServices);
 r.get("/services/:id", i.checkAuthUser, i.getActiveServiceUser);
 r.post("/extra/comment", i.checkAuthUser, i.saveCommentsBeforePayment);
+r.get("/extra/:id", i.checkAuthUser, i.getPurchasedExtraByUserId);
 
 // Payments
 r.post("/payment/yookassa/webhook", i.paymenStatusCatch);

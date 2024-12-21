@@ -22,3 +22,23 @@ export const saveCommentsBeforePayment = tryCatch(
     );
   },
 );
+
+export const getPurchasedExtraByUserId = tryCatch(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    db.query(
+      `SELECT ex.id, sn.nickname, exs.serviceName as extraServiceName,
+        ex.count, ex.priceRUB, ex.priceUSD, ex.createdAt  
+        FROM Extra ex, Social_nickname sn, Extra_service exs
+          WHERE ex.socialNicknameId = sn.id
+          AND ex.extraServiceId = exs.id
+          AND ex.userId = ${id}`,
+      (err, result) => {
+        if (err) return dbError(err, res);
+        const data = result;
+        return res.status(200).json(data);
+      },
+    );
+  },
+);

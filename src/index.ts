@@ -76,7 +76,10 @@ import {
   getActiveServiceUser,
   checkStatusServices,
 } from "@controllers/User/Services";
-import { saveCommentsBeforePayment } from "@controllers/User/Extra";
+import {
+  saveCommentsBeforePayment,
+  getPurchasedExtraByUserId,
+} from "@controllers/User/Extra";
 import { sendExtraComments } from "@controllers/Purchase/PurchaseExtraComments";
 
 import { paymenStatusCatch } from "@controllers/Payments/YooKassa/_webhook";
@@ -150,6 +153,7 @@ export default {
   checkStatusServices,
   saveCommentsBeforePayment,
   sendExtraComments,
+  getPurchasedExtraByUserId,
 
   // Payments
   paymenStatusCatch,
