@@ -2,7 +2,7 @@ import { addServiceJP } from "@controllers/Services/JustPanel";
 import { addServiceVR } from "@controllers/Services/Venro";
 import { getRandomPercentage } from "@src/utils/utils";
 import {
-  getCustomPackageById,
+  getCustomPackageDetailsById,
   getSocialNicknameById,
   packageSettings,
 } from "@src/utils/intermediateReq";
@@ -15,21 +15,22 @@ export const purchaseCustomPackage = async (
   customPackageId: number,
   countPosts: number,
 ) => {
-  const settings = await packageSettings();
+  const packSettings = await packageSettings();
   const socNickname = await getSocialNicknameById(nicknameId);
-  const pack = await getCustomPackageById(customPackageId);
+  const customPackDeatils = await getCustomPackageDetailsById(customPackageId);
   if (
-    !Array.isArray(settings) ||
+    !Array.isArray(packSettings) ||
     !("nickname" in socNickname) ||
-    !("likes" in pack)
+    !("likes" in customPackDeatils)
   )
     return;
 
-  const correlationPack = settings.map((setting) => {
+  const correlationPack = packSettings.map((setting) => {
     const nameService = setting.typeService;
     return {
       ...setting,
-      count: pack[nameService as keyof typeof pack] || 100,
+      count:
+        customPackDeatils[nameService as keyof typeof customPackDeatils] || 100,
     };
   });
 

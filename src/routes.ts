@@ -28,14 +28,14 @@ r.get("/api/info/users/count", i.checkAuth, i.getUsersCount);
 r.get("/api/info/service/spent", i.checkAuth, i.getTotalSpent);
 r.get("/api/info/service/count", i.checkAuth, i.getPurchasedPackagesCount);
 
-// Admin Package and Custom Package
-r.get("/api/package", i.checkAuth, i.getPackages);
+// Admin Details, Settings of Package, Custom Package, Test
+r.get("/api/package/details", i.checkAuth, i.getPackageDetails);
 r.get("/api/package/settings", i.checkAuth, i.getPackageSettingsWithPrice);
-r.get("/api/package/custom", i.checkAuth, i.getCustomPackageList);
-r.get("/api/package/custom/:id", i.checkAuth, i.getCustomPackageById);
-r.post("/api/package/custom", i.checkAuth, i.createCustomPackage);
-r.post("/api/package/add-user", i.addCustomPackToUser);
-r.post("/api/package/test", i.sendTestPackage);
+r.get("/api/custom-package/details", i.checkAuth, i.getCustomPackageDetails);
+r.post("/api/custom-package", i.checkAuth, i.createCustomPackage);
+r.post("/api/custom-package/add-user", i.addCustomPackToUser);
+r.get("/api/custom-package/:id", i.checkAuth, i.getCustomPackageDetailsById);
+r.post("/api/test", i.checkAuth, i.sendTestServices);
 
 // Admin Services, Extra, Purchases
 r.get("/api/services", i.checkAuth, i.getServiceList);
@@ -61,8 +61,8 @@ r.post("/social", i.checkAuthUser, i.addInstAccount);
 r.delete("/social", i.checkAuthUser, i.deleteInstAccount);
 
 // User Package, Services, Extra
-r.get("/package", i.checkAuthUser, i.getPackagesUser);
-r.get("/custom/:id", i.checkAuthUser, i.getCustomPackByUserId);
+r.get("/package/details", i.checkAuthUser, i.getPackageDetailsUser);
+r.get("/custom-package/details/:id", i.checkAuthUser, i.getCustomPackByUserId);
 r.get("/services/check-status", i.checkAuthUser, i.checkStatusServices);
 r.get("/services/:id", i.checkAuthUser, i.getActiveServiceUser);
 r.post("/extra/comment", i.checkAuthUser, i.saveCommentsBeforePayment);

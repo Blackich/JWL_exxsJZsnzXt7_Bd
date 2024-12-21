@@ -108,11 +108,11 @@ export const getCustomPackageByUserId = tryCatch(
   async (req: Request, res: Response) => {
     const { id } = req.params;
     db.query(
-      `SELECT cp.likes, cp.reach, cp.saves, cp.profileVisits,
-        cp.reposts, cp.videoViews, cp.countPosts,
-        cp.price_rub, cp.price_usd
-          FROM Custom_package_user cpu, Custom_package cp
-          WHERE cpu.customPackageId = cp.id
+      `SELECT cpd.likes, cpd.reach, cpd.saves, cpd.profileVisits,
+        cpd.reposts, cpd.videoViews, cpd.countPosts,
+        cpd.price_rub, cpd.price_usd
+          FROM Custom_package_user cpu, Custom_package_detail cpd
+          WHERE cpu.customPackageId = cpd.id
           AND cpu.userId = ${id}`,
       (err, result) => {
         if (err) return dbError(err, res);

@@ -1,18 +1,18 @@
 import { db } from "@src/main";
 import { logger } from "./logger/logger";
 import {
-  CustomPackage,
-  Package,
+  CustomPackageDetails,
+  PackageDetails,
   SocialNickname,
   PackageSettings,
 } from "./types";
 
-export const getPackageById = async (id: number) => {
+export const getPackageDetailsById = async (id: number) => {
   const data = await db
     .promise()
-    .query(`SELECT * FROM Package WHERE id = ${id}`)
+    .query(`SELECT * FROM Package_detail WHERE id = ${id}`)
     .then(([result]) => {
-      return (result as Package[])[0];
+      return (result as PackageDetails[])[0];
     })
     .catch((err) => logger.error(err.stack));
   return data;
@@ -29,12 +29,12 @@ export const getSocialNicknameById = async (id: number) => {
   return data;
 };
 
-export const getCustomPackageById = async (id: number) => {
+export const getCustomPackageDetailsById = async (id: number) => {
   const data = await db
     .promise()
-    .query(`SELECT * FROM Custom_package WHERE id = ${id}`)
+    .query(`SELECT * FROM Custom_package_detail WHERE id = ${id}`)
     .then(([result]) => {
-      return (result as CustomPackage[])[0];
+      return (result as CustomPackageDetails[])[0];
     })
     .catch((err) => logger.error(err.stack));
   return data;

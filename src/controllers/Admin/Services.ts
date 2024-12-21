@@ -6,13 +6,13 @@ import { RowDataPacket } from "mysql2";
 export const getServiceList = tryCatch(async (req: Request, res: Response) => {
   db.query(
     `SELECT s.id, s.userId, em.fullName, sn.nickname, 
-		    s.packageId, p.likes as packageLikes,
-        s.customPackageId, cp.likes as customLikes,
+		    s.packageId, pd.likes as packageLikes,
+        s.customPackageId, cpd.likes as customLikes,
 		    s.countPosts, s.orderId, s.status, s.createdAt,
         s.cost, s.currency, s.paymentServiceName
           FROM Service s
-          LEFT JOIN Package p ON p.id = s.packageId
-          LEFT JOIN Custom_package cp ON cp.id = s.customPackageId
+          LEFT JOIN Package_detail pd ON pd.id = s.packageId
+          LEFT JOIN Custom_package_detail cpd ON cpd.id = s.customPackageId
           LEFT JOIN Social_nickname sn ON sn.id = s.socialNicknameId
           LEFT JOIN Users u ON u.id = s.userId
           LEFT JOIN Employees em ON em.id = u.invitedEmployeeId`,
@@ -28,13 +28,13 @@ export const getServiceById = tryCatch(async (req: Request, res: Response) => {
   const { id } = req.params;
   db.query(
     `SELECT s.id, s.userId, em.fullName, sn.nickname, 
-		    s.packageId, p.likes as packageLikes,
-        s.customPackageId, cp.likes as customLikes,
+		    s.packageId, pd.likes as packageLikes,
+        s.customPackageId, cpd.likes as customLikes,
 		    s.countPosts, s.orderId, s.status, s.createdAt,
         s.cost, s.currency, s.paymentServiceName
           FROM Service s
-          LEFT JOIN Package p ON p.id = s.packageId
-          LEFT JOIN Custom_package cp ON cp.id = s.customPackageId
+          LEFT JOIN Package_detail pd ON pd.id = s.packageId
+          LEFT JOIN Custom_package_detail cpd ON cpd.id = s.customPackageId
           LEFT JOIN Social_nickname sn ON sn.id = s.socialNicknameId
           LEFT JOIN Users u ON u.id = s.userId
           LEFT JOIN Employees em ON em.id = u.invitedEmployeeId

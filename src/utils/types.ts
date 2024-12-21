@@ -1,4 +1,4 @@
-export type Package = {
+export type PackageDetails = {
   id: number;
   likes: number;
   price_rub_15: number;
@@ -16,7 +16,7 @@ export type SocialNickname = {
   createdAt: string;
 };
 
-export type CustomPackage = {
+export type CustomPackageDetails = {
   id: number;
   likes: number;
   reach: number;

@@ -2,9 +2,9 @@ import axios from "axios";
 import { logger } from "@src/utils/logger/logger";
 import { TGSenderExtraInfo, TGSenderPackInfo } from "./type";
 import {
-  getCustomPackageById,
+  getCustomPackageDetailsById,
   getExtraServiceNameByExtraId,
-  getPackageById,
+  getPackageDetailsById,
   getSocialNicknameById,
 } from "@src/utils/intermediateReq";
 
@@ -25,8 +25,8 @@ export const sendTelegramMessagePack = async ({
   try {
     const pack =
       Number(customPackage) === 0
-        ? await getPackageById(packageId)
-        : await getCustomPackageById(packageId);
+        ? await getPackageDetailsById(packageId)
+        : await getCustomPackageDetailsById(packageId);
     const soc = await getSocialNicknameById(socialNicknameId);
     if (!("likes" in pack) || !("nickname" in soc)) return;
 

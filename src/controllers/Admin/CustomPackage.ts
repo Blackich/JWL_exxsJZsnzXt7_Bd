@@ -1,14 +1,14 @@
 import { db } from "@src/main";
-import { Request, Response } from "express";
-import { dbError, tryCatch } from "@src/middleware/errorHandler";
-import { logger } from "@src/utils/logger/logger";
 import { RowDataPacket } from "mysql2";
+import { Request, Response } from "express";
+import { logger } from "@src/utils/logger/logger";
+import { dbError, tryCatch } from "@src/middleware/errorHandler";
 
-export const getCustomPackageById = tryCatch(
+export const getCustomPackageDetailsById = tryCatch(
   async (req: Request, res: Response) => {
     const { id } = req.params;
     db.query(
-      `SELECT * FROM Custom_package
+      `SELECT * FROM Custom_package_detail
         WHERE id = ${id}`,
       (err, result) => {
         if (err) return dbError(err, res);
@@ -19,9 +19,9 @@ export const getCustomPackageById = tryCatch(
   },
 );
 
-export const getCustomPackageList = tryCatch(
+export const getCustomPackageDetails = tryCatch(
   async (req: Request, res: Response) => {
-    db.query(`SELECT * FROM Custom_package`, (err, result) => {
+    db.query(`SELECT * FROM Custom_package_detail`, (err, result) => {
       if (err) return dbError(err, res);
       const data = result;
       return res.status(200).json(data);
@@ -34,7 +34,7 @@ export const createCustomPackage = tryCatch(
     const cpData = req.body;
 
     db.query(
-      `INSERT INTO Custom_package (id, likes, reach,
+      `INSERT INTO Custom_package_detail (id, likes, reach,
         saves, profileVisits, reposts, videoViews,
         countPosts, price_rub, price_usd, createdAt)
         VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
@@ -61,14 +61,14 @@ export const createCustomPackage = tryCatch(
 
 export const addCustomPackToUser = tryCatch(
   async (req: Request, res: Response) => {
-    const { userId, packageId } = req.body;
+    const { userId, customPackageId } = req.body;
     const status = await checkUserId(userId);
 
     if (!status) {
       db.query(
         `INSERT INTO Custom_package_user (userId,
           customPackageId, createdAt)
-          VALUES (${userId}, ${packageId}, NOW())`,
+          VALUES (${userId}, ${customPackageId}, NOW())`,
         (err, result) => {
           if (err) return dbError(err, res);
           const data = result;

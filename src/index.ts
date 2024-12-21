@@ -32,15 +32,15 @@ import {
 
 import {
   createCustomPackage,
-  getCustomPackageById,
-  getCustomPackageList,
+  getCustomPackageDetailsById,
+  getCustomPackageDetails,
   addCustomPackToUser,
 } from "@controllers/Admin/CustomPackage";
 import {
   getPackageSettingsWithPrice,
-  getPackages,
-} from "@controllers/Admin/Package";
-import { sendTestPackage } from "@controllers/Admin/TestPackage";
+  getPackageDetails,
+} from "@src/controllers/Admin/PackageDetails";
+import { sendTestServices } from "@src/controllers/Admin/TestServices";
 
 import {
   getServiceList,
@@ -69,7 +69,7 @@ import {
 } from "@controllers/User/SocialAccount";
 
 import {
-  getPackagesUser,
+  getPackageDetailsUser,
   getCustomPackByUserId,
 } from "@controllers/User/Package";
 import {
@@ -114,14 +114,14 @@ export default {
   getBalanceJustPanel,
   getPurchasedPackagesCount,
 
-  // Admin Package and Custom Package
-  getPackages,
+  // Admin Details, Settings of Package, Custom Package, Test
+  getPackageDetails,
   getPackageSettingsWithPrice,
   createCustomPackage,
-  getCustomPackageById,
-  getCustomPackageList,
+  getCustomPackageDetailsById,
+  getCustomPackageDetails,
   addCustomPackToUser,
-  sendTestPackage,
+  sendTestServices,
 
   // Admin Services, Extra, Purchases
   getServiceList,
@@ -147,7 +147,7 @@ export default {
   deleteInstAccount,
 
   // User Package, Services, Extra
-  getPackagesUser,
+  getPackageDetailsUser,
   getCustomPackByUserId,
   getActiveServiceUser,
   checkStatusServices,

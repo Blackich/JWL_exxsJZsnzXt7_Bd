@@ -3,7 +3,7 @@ import { addServiceJP } from "@controllers/Services/JustPanel";
 import { addServiceVR } from "@controllers/Services/Venro";
 import { getRandomPercentage } from "@src/utils/utils";
 import {
-  getPackageById,
+  getPackageDetailsById,
   getSocialNicknameById,
   packageSettings,
 } from "@src/utils/intermediateReq";
@@ -16,22 +16,22 @@ export const purchasePackage = async (
   packageId: number,
   countPosts: number,
 ) => {
-  const settings = await packageSettings();
+  const packSettings = await packageSettings();
   const socNickname = await getSocialNicknameById(nicknameId);
-  const pack = await getPackageById(packageId);
+  const packDetails = await getPackageDetailsById(packageId);
   if (
-    !Array.isArray(settings) ||
+    !Array.isArray(packSettings) ||
     !("nickname" in socNickname) ||
-    !("likes" in pack)
+    !("likes" in packDetails)
   )
     return;
 
-  const purchaseSettings = settings.map((setting) => {
-    const quantity = setting.ratio * pack.likes;
+  const purchaseSettings = packSettings.map((setting) => {
+    const quantity = setting.ratio * packDetails.likes;
     if (setting.siteId === 1) {
       const count =
         quantity < 100
-          ? Math.round(100 + getRandomPercentage(pack.likes, 0, 0.02))
+          ? Math.round(100 + getRandomPercentage(packDetails.likes, 0, 0.02))
           : Math.round(quantity + getRandomPercentage(quantity, 0, 0.02));
       const speed = Math.round(count / 24);
       return {
