@@ -63,10 +63,13 @@ r.delete("/social", i.checkAuthUser, i.deleteInstAccount);
 // User Package, Services, Extra
 r.get("/package/details", i.checkAuthUser, i.getPackageDetailsUser);
 r.get("/custom-package/details/:id", i.checkAuthUser, i.getCustomPackByUserId);
-r.get("/services/check-status", i.checkAuthUser, i.checkStatusServices);
 r.get("/services/:id", i.checkAuthUser, i.getActiveServiceUser);
 r.post("/extra/comment", i.checkAuthUser, i.saveCommentsBeforePayment);
 r.get("/extra/:id", i.checkAuthUser, i.getPurchasedExtraByUserId);
+
+//User Checks
+r.get("/check/external-status", i.checkAuthUser, i.checkStatusExternalServices);
+r.post("/check/remaining-posts", i.checkAuthUser, i.checkPostsRemaining);
 
 // Payments
 r.post("/payment/yookassa/webhook", i.paymenStatusCatch);

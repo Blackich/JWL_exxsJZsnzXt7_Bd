@@ -72,15 +72,17 @@ import {
   getPackageDetailsUser,
   getCustomPackByUserId,
 } from "@controllers/User/Package";
-import {
-  getActiveServiceUser,
-  checkStatusServices,
-} from "@controllers/User/Services";
+import { getActiveServiceUser } from "@controllers/User/Services";
 import {
   saveCommentsBeforePayment,
   getPurchasedExtraByUserId,
 } from "@controllers/User/Extra";
 import { sendExtraComments } from "@controllers/Purchase/PurchaseExtraComments";
+
+import {
+  checkPostsRemaining,
+  checkStatusExternalServices,
+} from "@src/controllers/User/Checks";
 
 import { paymenStatusCatch } from "@controllers/Payments/YooKassa/_webhook";
 import { paymentPackage } from "@controllers/Payments/YooKassa/Package";
@@ -150,10 +152,13 @@ export default {
   getPackageDetailsUser,
   getCustomPackByUserId,
   getActiveServiceUser,
-  checkStatusServices,
   saveCommentsBeforePayment,
   sendExtraComments,
   getPurchasedExtraByUserId,
+
+  //User Check
+  checkPostsRemaining,
+  checkStatusExternalServices,
 
   // Payments
   paymenStatusCatch,

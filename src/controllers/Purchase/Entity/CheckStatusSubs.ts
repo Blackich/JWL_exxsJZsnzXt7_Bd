@@ -52,25 +52,9 @@ export const checkStatusForExtra = tryCatch(
       return res.status(200).json(result);
     }
 
-    return res.status(200).json({message: "Extra not Id"});
+    return res.status(200).json({ message: "Extra not Id" });
   },
 );
-
-export const checkStatusVRLikes = () =>
-  tryCatch(async (req: Request, res: Response) => {
-    const allSubsByServiceId = await getAllPackageSubsByServiceId(30);
-    if (Array.isArray(allSubsByServiceId) && allSubsByServiceId.length === 0)
-      return;
-
-    const subVRLike = allSubsByServiceId.find(
-      (subscription: PurchasePackage) =>
-        subscription.siteId === 1 && subscription.siteServiceId === 13,
-    );
-    if (!subVRLike) return;
-    const result = await checkServiceVR(subVRLike.orderId);
-
-    res.status(200).json(result);
-  });
 
 //--------------------------------------------------
 
