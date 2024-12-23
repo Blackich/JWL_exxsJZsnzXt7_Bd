@@ -1,22 +1,24 @@
 import { db } from "@src/main";
-import { getServicesVR } from "@controllers/Services/Venro";
-import { getServicesJP } from "@controllers/Services/JustPanel";
+import { RowDataPacket } from "mysql2";
 import { Request, Response } from "express";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
-import { RowDataPacket } from "mysql2";
+import { getServiceDetailsVR } from "@controllers/Services/Venro";
+import { getServiceDetailsJP } from "@controllers/Services/JustPanel";
 
-export const getPackageDetails = tryCatch(async (req: Request, res: Response) => {
-  db.query(`SELECT * FROM Package_detail`, (err, result) => {
-    if (err) return dbError(err, res);
-    const data = result;
-    return res.status(200).json(data);
-  });
-});
+export const getPackageDetails = tryCatch(
+  async (req: Request, res: Response) => {
+    db.query(`SELECT * FROM Package_detail`, (err, result) => {
+      if (err) return dbError(err, res);
+      const data = result;
+      return res.status(200).json(data);
+    });
+  },
+);
 
 export const getPackageSettingsWithPrice = tryCatch(
   async (req: Request, res: Response) => {
-    const servicesVR = await getServicesVR();
-    const servicesJP = await getServicesJP();
+    const servicesVR = await getServiceDetailsVR();
+    const servicesJP = await getServiceDetailsJP();
 
     db.query(
       `SELECT * FROM Package_setting

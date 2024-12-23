@@ -31,3 +31,10 @@ export const checkServiceWQ = async (orderId: number) => {
     key=${apiKeyWQ}&order=${orderId}`);
   return response.data;
 };
+
+export const getServiceDetailsWQ = async () => {
+  const response = await axios.get(
+    `${siteWiq}?action=services&key=${apiKeyWQ}`,
+  );
+  return response.data;
+};

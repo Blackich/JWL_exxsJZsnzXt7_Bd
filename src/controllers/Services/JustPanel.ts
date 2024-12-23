@@ -76,7 +76,7 @@ export const cancelServiceJP = async (orderIds: number) => {
   return response.data;
 };
 
-export const getServicesJP = async () => {
+export const getServiceDetailsJP = async () => {
   const response = await axios.get(`${siteJP}?action=services&key=${apiKeyJP}`);
   return response.data;
 };

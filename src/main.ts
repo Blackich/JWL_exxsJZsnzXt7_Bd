@@ -6,6 +6,7 @@ import { testRouter } from "./testRouter";
 import { expServices } from "./utils/cron/ExpiredServices";
 import { errorHandler } from "@src/middleware/errorHandler";
 import { expExtraComments } from "./utils/cron/ExpiredExtraComments";
+import { adjustPrimeCost } from "./utils/cron/PrimeCost/AdjustPrimeCost";
 import express, { Application, NextFunction, Request, Response } from "express";
 
 export const db = mysql.createConnection({
@@ -36,8 +37,10 @@ app.use(
 
 app.use(router);
 app.use(testRouter);
+
 expServices.start();
 expExtraComments.start();
+adjustPrimeCost.start();
 
 app.get("/", async (req: Request, res: Response) => {
   res.status(200).json({ message: "OK" });

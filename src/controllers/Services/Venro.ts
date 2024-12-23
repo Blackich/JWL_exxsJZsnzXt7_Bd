@@ -55,7 +55,7 @@ export const cancelServiceVR = async (id: number) => {
   return response.data;
 };
 
-export const getServicesVR = async () => {
+export const getServiceDetailsVR = async () => {
   const response = await axios.get(
     `${siteVenro}?action=services&key=${apiKeyVR}`,
   );

@@ -67,3 +67,16 @@ export const getExtraServiceNameByExtraId = async (extraServiceId: number) => {
     .catch((err) => logger.error(err.stack));
   return data;
 };
+
+export const getSiteResNameById = async (id: number) => {
+  return await db
+    .promise()
+    .query(
+      `SELECT siteName FROM Site_res
+        WHERE id = ${id}`,
+    )
+    .then(([result]) => {
+      return (result as { siteName: string }[])[0].siteName;
+    })
+    .catch((err) => logger.error(err.stack));
+};
