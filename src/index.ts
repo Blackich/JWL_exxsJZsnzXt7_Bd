@@ -36,11 +36,14 @@ import {
   getCustomPackageDetails,
   addCustomPackToUser,
 } from "@controllers/Admin/CustomPackage";
-import {
-  getPackageSettingsWithPrice,
-  getPackageDetails,
-} from "@src/controllers/Admin/PackageDetails";
+import { getPackageDetails } from "@src/controllers/Admin/PackageDetails";
 import { sendTestServices } from "@src/controllers/Admin/TestServices";
+
+import {
+  getExtraServiceSettings,
+  getPackageSettings,
+  getTestServiceSettings,
+} from "@controllers/Admin/Settings";
 
 import {
   getServiceList,
@@ -116,14 +119,18 @@ export default {
   getBalanceJustPanel,
   getPurchasedPackagesCount,
 
-  // Admin Details, Settings of Package, Custom Package, Test
+  // Admin Details of Package, Custom Package, Test
   getPackageDetails,
-  getPackageSettingsWithPrice,
   createCustomPackage,
   getCustomPackageDetailsById,
   getCustomPackageDetails,
   addCustomPackToUser,
   sendTestServices,
+
+  //Admin Settings for Package, Extra, Test
+  getPackageSettings,
+  getExtraServiceSettings,
+  getTestServiceSettings,
 
   // Admin Services, Extra, Purchases
   getServiceList,

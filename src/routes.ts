@@ -28,14 +28,18 @@ r.get("/api/info/users/count", i.checkAuth, i.getUsersCount);
 r.get("/api/info/service/spent", i.checkAuth, i.getTotalSpent);
 r.get("/api/info/service/count", i.checkAuth, i.getPurchasedPackagesCount);
 
-// Admin Details, Settings of Package, Custom Package, Test
+// Admin Details of Package, Custom Package, Test
 r.get("/api/package/details", i.checkAuth, i.getPackageDetails);
-r.get("/api/package/settings", i.checkAuth, i.getPackageSettingsWithPrice);
 r.get("/api/custom-package/details", i.checkAuth, i.getCustomPackageDetails);
 r.post("/api/custom-package", i.checkAuth, i.createCustomPackage);
 r.post("/api/custom-package/add-user", i.addCustomPackToUser);
 r.get("/api/custom-package/:id", i.checkAuth, i.getCustomPackageDetailsById);
 r.post("/api/test", i.checkAuth, i.sendTestServices);
+
+//Admin Settings for Package, Extra, Test
+r.get("/api/settings/package", i.checkAuth, i.getPackageSettings);
+r.get("/api/settings/extra", i.checkAuth, i.getExtraServiceSettings);
+r.get("/api/settings/test", i.checkAuth, i.getTestServiceSettings);
 
 // Admin Services, Extra, Purchases
 r.get("/api/services", i.checkAuth, i.getServiceList);
