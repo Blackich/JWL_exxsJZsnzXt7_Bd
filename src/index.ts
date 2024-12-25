@@ -43,6 +43,7 @@ import {
   getExtraServiceSettings,
   getPackageSettings,
   getTestServiceSettings,
+  getExternalExchangeRate,
 } from "@controllers/Admin/Settings";
 
 import {
@@ -131,6 +132,7 @@ export default {
   getPackageSettings,
   getExtraServiceSettings,
   getTestServiceSettings,
+  getExternalExchangeRate,
 
   // Admin Services, Extra, Purchases
   getServiceList,

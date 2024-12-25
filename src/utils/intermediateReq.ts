@@ -5,6 +5,7 @@ import {
   PackageDetails,
   SocialNickname,
   PackageSettings,
+  ExchangeRate,
 } from "./types";
 
 export const getPackageDetailsById = async (id: number) => {
@@ -77,6 +78,20 @@ export const getSiteResNameById = async (id: number) => {
     )
     .then(([result]) => {
       return (result as { siteName: string }[])[0].siteName;
+    })
+    .catch((err) => logger.error(err.stack));
+};
+
+export const getExchangeRate = async () => {
+  return await db
+    .promise()
+    .query(
+      `SELECT * FROM Exchange_rate
+        WHERE typeRate = 'external'`,
+    )
+    .then(([result]) => {
+      const data = Number((result as ExchangeRate[])[0].value);
+      return data;
     })
     .catch((err) => logger.error(err.stack));
 };

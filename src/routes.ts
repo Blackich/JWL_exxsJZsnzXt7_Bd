@@ -40,6 +40,7 @@ r.post("/api/test", i.checkAuth, i.sendTestServices);
 r.get("/api/settings/package", i.checkAuth, i.getPackageSettings);
 r.get("/api/settings/extra", i.checkAuth, i.getExtraServiceSettings);
 r.get("/api/settings/test", i.checkAuth, i.getTestServiceSettings);
+r.get("/api/settings/exchange-rate", i.checkAuth, i.getExternalExchangeRate);
 
 // Admin Services, Extra, Purchases
 r.get("/api/services", i.checkAuth, i.getServiceList);

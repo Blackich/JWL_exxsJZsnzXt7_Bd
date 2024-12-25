@@ -5,6 +5,7 @@ import { r as router } from "@src/routes";
 import { testRouter } from "./testRouter";
 import { expServices } from "./utils/cron/ExpiredServices";
 import { errorHandler } from "@src/middleware/errorHandler";
+import { updExchangeRate } from "./utils/cron/UpdateExchangeRate";
 import { expExtraComments } from "./utils/cron/ExpiredExtraComments";
 import { adjustPrimeCost } from "./utils/cron/PrimeCost/AdjustPrimeCost";
 import express, { Application, NextFunction, Request, Response } from "express";
@@ -41,6 +42,7 @@ app.use(testRouter);
 expServices.start();
 expExtraComments.start();
 adjustPrimeCost.start();
+updExchangeRate.start();
 
 app.get("/", async (req: Request, res: Response) => {
   res.status(200).json({ message: "OK" });

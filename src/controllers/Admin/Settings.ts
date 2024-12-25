@@ -1,6 +1,8 @@
 import { db } from "@src/main";
 import { Request, Response } from "express";
+import { ExchangeRate } from "@src/utils/types";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
+import { getExchangeRate } from "@src/utils/intermediateReq";
 
 export const getPackageSettings = tryCatch(
   async (req: Request, res: Response) => {
@@ -37,6 +39,17 @@ export const getTestServiceSettings = tryCatch(
       const data = result;
       res.status(200).json(data);
     });
+  },
+);
+
+export const getExternalExchangeRate = tryCatch(
+  async (req: Request, res: Response) => {
+    const rate = await getExchangeRate();
+
+    if (typeof rate !== "number")
+      return res.status(404).json({ message: "Rate not found" });
+
+    return res.status(200).json(rate);
   },
 );
 

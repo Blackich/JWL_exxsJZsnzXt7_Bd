@@ -62,3 +62,9 @@ export type Service = {
   cost: number;
   currency: string;
 };
+
+export type ExchangeRate = {
+  id: number;
+  typeRate: string;
+  value: string | null;
+};
