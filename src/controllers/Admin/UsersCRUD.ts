@@ -156,3 +156,23 @@ export const getServicesByUserId = tryCatch(
     );
   },
 );
+
+export const getExtraByUserId = tryCatch(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    db.query(
+      `SELECT ex.id, sn.nickname, ex.count, ex.createdAt,
+        exs.serviceName as extraServiceName
+        FROM Extra ex
+        LEFT JOIN Users u ON u.id = ex.userId
+        LEFT JOIN Extra_service exs ON exs.id = ex.extraServiceId
+        LEFT JOIN Social_nickname sn ON sn.id = ex.socialNicknameId
+          WHERE ex.userId = ${id}`,
+      (err, result) => {
+        if (err) return dbError(err, res);
+        const data = result;
+        return res.status(200).json(data);
+      },
+    );
+  },
+);

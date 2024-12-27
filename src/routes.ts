@@ -19,6 +19,7 @@ r.get("/api/users/:id/social", i.checkAuth, i.getUserSocialAccounts);
 r.get("/api/users/:id/custom", i.checkAuth, i.getCustomPackageByUserId);
 r.delete("/api/users/:id/custom", i.checkAuth, i.deleteCustomPackageByUserId);
 r.get("/api/users/:id/services", i.checkAuth, i.getServicesByUserId);
+r.get("/api/users/:id/extra", i.checkAuth, i.getExtraByUserId);
 
 // Admin Overview
 r.get("/api/info/balance/vr", i.checkAuth, i.getBalanceVenro);

@@ -10,10 +10,11 @@ import {
 } from "@controllers/Admin/Auth/AdminAuth";
 
 import {
-  createUser,
   getUsers,
+  createUser,
   getUserById,
   updateUserStatus,
+  getExtraByUserId,
   updateUserRemark,
   getServicesByUserId,
   getUserSocialAccounts,
@@ -102,9 +103,10 @@ export default {
   authEmployeesRefresh,
 
   // Admin Users CRUD
-  createUser,
   getUsers,
+  createUser,
   getUserById,
+  getExtraByUserId,
   updateUserStatus,
   updateUserRemark,
   getServicesByUserId,
