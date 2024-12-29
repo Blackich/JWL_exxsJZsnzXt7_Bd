@@ -35,6 +35,7 @@ r.get("/api/custom-package/details", i.checkAuth, i.getCustomPackageDetails);
 r.post("/api/custom-package", i.checkAuth, i.createCustomPackage);
 r.post("/api/custom-package/add-user", i.addCustomPackToUser);
 r.get("/api/custom-package/:id", i.checkAuth, i.getCustomPackageDetailsById);
+r.get("/api/test", i.checkAuth, i.getTestServicesSent);
 r.post("/api/test", i.checkAuth, i.sendTestServices);
 
 //Admin Settings for Package, Extra, Test

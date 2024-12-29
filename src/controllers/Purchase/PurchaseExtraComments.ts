@@ -18,7 +18,6 @@ export const sendExtraComments = tryCatch(
 
       return await sendCommentsServiceJP(link, setting.serviceId, comments)
         .then(async (response) => {
-          console.log(response);
           if (response?.error)
             return res
               .status(400)

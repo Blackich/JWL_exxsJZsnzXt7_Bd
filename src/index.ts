@@ -38,7 +38,10 @@ import {
   addCustomPackToUser,
 } from "@controllers/Admin/CustomPackage";
 import { getPackageDetails } from "@src/controllers/Admin/PackageDetails";
-import { sendTestServices } from "@src/controllers/Admin/TestServices";
+import {
+  sendTestServices,
+  getTestServicesSent,
+} from "@src/controllers/Admin/TestServices";
 
 import {
   getExtraServiceSettings,
@@ -128,6 +131,7 @@ export default {
   getCustomPackageDetailsById,
   getCustomPackageDetails,
   addCustomPackToUser,
+  getTestServicesSent,
   sendTestServices,
 
   //Admin Settings for Package, Extra, Test

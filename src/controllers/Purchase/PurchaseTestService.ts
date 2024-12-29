@@ -2,6 +2,13 @@ import { db } from "@src/main";
 import { Logger } from "winston";
 import { TestSettings } from "./type";
 import { logger } from "@src/utils/logger/logger";
+import { addTestServiceVR } from "@controllers/Services/Venro";
+import { addTestServiceWQ } from "@controllers/Services/Wiq";
+import {
+  addTestServiceJP,
+  addTestServiceJPNoDrip,
+  sendCommentsServiceJP,
+} from "@controllers/Services/JustPanel";
 
 const isSettingsArray = (
   arg: TestSettings[] | Logger,
@@ -9,77 +16,56 @@ const isSettingsArray = (
   return Array.isArray(arg) && arg.every((item) => "serviceId" in item);
 };
 
-export const purchaseTestPackage = async (
+export const purchaseTestService = async (
   testServiceId: number,
   speed: number,
   link: string,
+  comments: string[],
 ) => {
   const settings = await getTestSettingsByServiceId(testServiceId);
   if (!isSettingsArray(settings)) return;
 
-  return settings.map((setting) => {
-    if (setting.typeService === "comments") {
-      return {
-        //Comments
-        url: link,
-        id: setting.serviceId,
-      };
-    }
-
-    if (setting.siteId === 1) {
-      const speedForVR = setSpeedForVR(speed, setting.count);
-      //Venro
-      return {
-        url: link,
-        id: setting.serviceId,
-        count: setting.count,
-        speed: speedForVR,
-      };
-    }
-    if (setting.siteId === 2) {
-      //Just Drip
-      if (setting.drip === 1) {
-        const speedForJP = setSpeedForJP(speed, setting.count);
-        return {
-          url: link,
-          id: setting.serviceId,
-          count: speedForJP.quantity,
-          runs: speedForJP.runs,
-        };
-      } else {
-        //Just NO Drip
-        return {
-          url: link,
-          id: setting.serviceId,
-          count: setting.count,
-        };
+  return await Promise.allSettled(
+    settings.map(async (setting) => {
+      if (setting.typeService === "comments") {
+        if (Array.isArray(comments) && comments && comments.length === 0)
+          return;
+        return await sendCommentsServiceJP(link, setting.serviceId, comments);
       }
-    }
-    //Wiq
-    if (setting.siteId === 3) {
-      return {
-        url: link,
-        id: setting.serviceId,
-        count: setting.count,
-      };
-    }
-  });
 
-  // return await Promise.allSettled(
-  //   settings.map((setting) => {
-  //     if (setting.siteId === 1) {
-  //       return addTestServiceVR(
-  //         link,
-  //         setting.serviceId,
-  //         setting.count,
-  //         // testpack.speed as number,
-  //       );
-  //     }
-  //     if (setting.siteId === 2) {
-  //       return addTestServiceJP(link, setting.serviceId, setting.count);
-  //     }
-  //   }),
-  // ).catch((err) => logger.error(err.stack));
+      if (setting.siteId === 1) {
+        const speedForVR = setSpeedForVR(speed, setting.count);
+        return await addTestServiceVR(
+          link,
+          setting.serviceId,
+          setting.count,
+          speedForVR,
+        );
+      }
+
+      if (setting.siteId === 2) {
+        if (setting.drip === 1) {
+          const speedForJP = setSpeedForJP(speed, setting.count);
+          return await addTestServiceJP(
+            link,
+            setting.serviceId,
+            speedForJP.quantity,
+            speedForJP.runs,
+          );
+        } else {
+          return await addTestServiceJPNoDrip(
+            link,
+            setting.serviceId,
+            setting.count,
+          );
+        }
+      }
+
+      if (setting.siteId === 3) {
+        return await addTestServiceWQ(link, setting.serviceId, setting.count);
+      }
+    }),
+  ).catch((err) => logger.error(err.stack));
 };
 
 //--------------------------------------------------
