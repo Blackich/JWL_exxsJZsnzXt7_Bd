@@ -1,8 +1,8 @@
 import { db } from "@src/main";
+import { RowDataPacket } from "mysql2";
 import { Request, Response } from "express";
-import { dbError, tryCatch } from "@src/middleware/errorHandler";
-import { OkPacketParams, RowDataPacket } from "mysql2";
 import { fastRandString } from "@src/utils/utils";
+import { dbError, tryCatch } from "@src/middleware/errorHandler";
 
 export const getUserById = tryCatch(async (req: Request, res: Response) => {
   const { id } = req.params;

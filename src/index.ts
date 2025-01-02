@@ -61,7 +61,11 @@ import {
   checkStatusForExtra,
 } from "@controllers/Purchase/Entity/CheckStatusSubs";
 import { cancelAllSubs } from "@controllers/Purchase/Entity/CancelSubs";
-import { getExtraList, getExtraById } from "@controllers/Admin/Extra";
+import {
+  getExtraList,
+  getExtraById,
+  getExtraDetails,
+} from "@controllers/Admin/Extra";
 
 import {
   authUser,
@@ -151,6 +155,7 @@ export default {
   getExtraList,
   getExtraById,
   checkStatusForExtra,
+  getExtraDetails,
 
   // User Auth
   authUser,

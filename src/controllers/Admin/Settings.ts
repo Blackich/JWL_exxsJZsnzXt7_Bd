@@ -1,6 +1,5 @@
 import { db } from "@src/main";
 import { Request, Response } from "express";
-import { ExchangeRate } from "@src/utils/types";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
 import { getExchangeRate } from "@src/utils/intermediateReq";
 
