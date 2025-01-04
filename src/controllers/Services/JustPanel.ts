@@ -26,7 +26,7 @@ export const addExtraServiceJP = async (
   const url = `https://www.instagram.com/${nickname}`;
   const response = await axios.post(`${siteJP}?action=add&
     key=${apiKeyJP}&link=${url}&service=${id}&
-    quantity=${quantity}&runs=20&interval=30`);
+    quantity=${quantity}&runs=10&interval=60`);
   return response.data;
 };
 

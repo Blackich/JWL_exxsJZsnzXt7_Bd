@@ -2,7 +2,6 @@ import { db } from "@src/main";
 import { RowDataPacket } from "mysql2";
 import { Request, Response } from "express";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
-import { getExtraServiceSettings } from "./Settings";
 
 export const getExtraList = tryCatch(async (req: Request, res: Response) => {
   db.query(
