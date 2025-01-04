@@ -73,6 +73,7 @@ r.get("/package/details", i.checkAuthUser, i.getPackageDetailsUser);
 r.get("/custom-package/details/:id", i.checkAuthUser, i.getCustomPackByUserId);
 r.get("/services/:id", i.checkAuthUser, i.getActiveServiceUser);
 r.post("/extra/comment", i.checkAuthUser, i.saveCommentsBeforePayment);
+r.get("/extra-details", i.checkAuthUser, i.getExtraDetailsUser);
 r.get("/extra/:id", i.checkAuthUser, i.getPurchasedExtraByUserId);
 
 //User Checks

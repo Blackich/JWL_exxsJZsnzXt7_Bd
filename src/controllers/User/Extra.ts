@@ -2,6 +2,22 @@ import { db } from "@src/main";
 import { Request, Response } from "express";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
 
+export const getExtraDetailsUser = tryCatch(
+  async (req: Request, res: Response) => {
+    db.query(
+      `SELECT extraServiceId, price_usd_1k,
+        price_rub_1k, minQuantity
+          FROM Extra_service_detail
+          WHERE status = 1`,
+      (err, result) => {
+        if (err) return dbError(err, res);
+        const data = result;
+        return res.status(200).json(data);
+      },
+    );
+  },
+);
+
 export const saveCommentsBeforePayment = tryCatch(
   async (req: Request, res: Response) => {
     const { userId, socialNicknameId, comments, countComments } = req.body;

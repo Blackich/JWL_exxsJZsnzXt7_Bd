@@ -88,6 +88,7 @@ import { getActiveServiceUser } from "@controllers/User/Services";
 import {
   saveCommentsBeforePayment,
   getPurchasedExtraByUserId,
+  getExtraDetailsUser,
 } from "@controllers/User/Extra";
 import { sendExtraComments } from "@controllers/Purchase/PurchaseExtraComments";
 
@@ -173,6 +174,7 @@ export default {
   getCustomPackByUserId,
   getActiveServiceUser,
   saveCommentsBeforePayment,
+  getExtraDetailsUser,
   sendExtraComments,
   getPurchasedExtraByUserId,
 
