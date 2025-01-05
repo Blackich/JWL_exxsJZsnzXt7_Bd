@@ -1,7 +1,7 @@
 import { db } from "@src/main";
 import { Request, Response } from "express";
 import { logger } from "@src/utils/logger/logger";
-import { tryCatch } from "@src/middleware/errorHandler";
+import { dbError, tryCatch } from "@src/middleware/errorHandler";
 import { checkServiceVR, checkStatusSites } from "@controllers/Services/Venro";
 
 export const checkStatusExternalServices = tryCatch(
@@ -45,6 +45,46 @@ export const checkPostsRemaining = tryCatch(
         .json({ message: "Service not active", count: remains });
 
     return res.status(200).json({ count: remains });
+  },
+);
+
+export const checkPackPurchaseOption = tryCatch(
+  async (req: Request, res: Response) => {
+    db.query(
+      `SELECT status
+        FROM General_setting
+        WHERE id = 1`,
+      (err, result) => {
+        if (err) return dbError(err, res);
+        const status = (result as { status: number }[])[0].status;
+        if (status === 1)
+          return res.status(200).json({ message: "Package Ok", status: true });
+        return res.status(200).json({
+          message: "The option to purchase service Packages is unavailable",
+          status: false,
+        });
+      },
+    );
+  },
+);
+
+export const checkExtraPurchaseOption = tryCatch(
+  async (req: Request, res: Response) => {
+    db.query(
+      `SELECT status
+        FROM General_setting
+        WHERE id = 2`,
+      (err, result) => {
+        if (err) return dbError(err, res);
+        const status = (result as { status: number }[])[0].status;
+        if (status === 1)
+          return res.status(200).json({ message: "Extra Ok", status: true });
+        return res.status(200).json({
+          message: "The option to purchase Extra service is unavailable",
+          status: false,
+        });
+      },
+    );
   },
 );
 
