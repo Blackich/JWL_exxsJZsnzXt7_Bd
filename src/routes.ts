@@ -76,11 +76,19 @@ r.post("/extra/comment", i.checkAuthUser, i.saveCommentsBeforePayment);
 r.get("/extra-details", i.checkAuthUser, i.getExtraDetailsUser);
 r.get("/extra/:id", i.checkAuthUser, i.getPurchasedExtraByUserId);
 
-//User Checks
+// User Checks
 r.get("/check/external-status", i.checkAuthUser, i.checkStatusExternalServices);
 r.post("/check/remaining-posts", i.checkAuthUser, i.checkPostsRemaining);
+r.get("/check/available/package", i.checkAuthUser, i.checkPackPurchaseOption);
+r.get("/check/available/extra", i.checkAuthUser, i.checkExtraPurchaseOption);
 
 // Payments
 r.post("/payment/yookassa/webhook", i.paymenStatusCatch);
 r.post("/payment/yookassa/package", i.paymentPackage);
 r.post("/payment/yookassa/extra", i.paymentExtra);
+
+// GeneralSettings
+r.get("/api/general-settings", i.getGeneralSettings);
+r.post("/api/general-settings", i.changeStatusGenSettingById);
+r.get("/api/general-settings/extra", i.getExtraServicesStatus);
+r.post("/api/general-settings/extra", i.changeStatusExtraServiceById);

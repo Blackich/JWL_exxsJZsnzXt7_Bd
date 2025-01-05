@@ -95,11 +95,20 @@ import { sendExtraComments } from "@controllers/Purchase/PurchaseExtraComments";
 import {
   checkPostsRemaining,
   checkStatusExternalServices,
+  checkPackPurchaseOption,
+  checkExtraPurchaseOption,
 } from "@src/controllers/User/Checks";
 
 import { paymenStatusCatch } from "@controllers/Payments/YooKassa/_webhook";
 import { paymentPackage } from "@controllers/Payments/YooKassa/Package";
 import { paymentExtra } from "@controllers/Payments/YooKassa/Extra";
+
+import {
+  getExtraServicesStatus,
+  getGeneralSettings,
+  changeStatusGenSettingById,
+  changeStatusExtraServiceById,
+} from "@controllers/Admin/GeneralSettings";
 
 export default {
   // Admin Auth
@@ -178,12 +187,20 @@ export default {
   sendExtraComments,
   getPurchasedExtraByUserId,
 
-  //User Check
+  // User Check
   checkPostsRemaining,
   checkStatusExternalServices,
+  checkPackPurchaseOption,
+  checkExtraPurchaseOption,
 
   // Payments
   paymenStatusCatch,
   paymentPackage,
   paymentExtra,
+
+  // GeneralSettings
+  getGeneralSettings,
+  changeStatusGenSettingById,
+  getExtraServicesStatus,
+  changeStatusExtraServiceById,
 };
