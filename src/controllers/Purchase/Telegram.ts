@@ -19,10 +19,10 @@ export const sendTGMessageComment = async ({
   socialNicknameId,
 }: TGSenderCommentInfo) => {
   try {
-    const soc = await getSocialNicknameById(socialNicknameId);
+    const socNick = await getSocialNicknameById(socialNicknameId);
     const serviceName = await getExtraServiceNameByExtraId(extraServiceId);
     const comments = await getLastCommentsByUserId(userId, socialNicknameId);
-    if (!("nickname" in soc)) return;
+    if (typeof socNick !== "string") return;
 
     const commentsColumn =
       extraServiceId === 4 && typeof comments === "string"
@@ -33,7 +33,7 @@ export const sendTGMessageComment = async ({
       🔢 Кол-во: <b>${countComments}</b>
       🆔 UserId: <b>${userId}</b>
       📋 ExtraId: <a href="https://www.gram.top/panel/extra/${extraId}"><b>${extraId}</b></a>
-      👤 Nickname: <a href="https://www.instagram.com/${soc.nickname}"><b>${soc.nickname}</b></a>
+      👤 Nickname: <a href="https://www.instagram.com/${socNick}"><b>${socNick}</b></a>
 
 ${commentsColumn}`;
 

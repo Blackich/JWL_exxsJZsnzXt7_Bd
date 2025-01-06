@@ -15,7 +15,7 @@ export const addServiceJP = async (
     key=${apiKeyJP}&username=${url}&
     service=${id}&min=${min}&max=${max}&
     posts=${posts}&expiry=${formatDatePlus30Days()}`);
-  return { data: response.data, siteId: 2, siteServiceId: id };
+  return response.data;
 };
 
 export const addExtraServiceJP = async (

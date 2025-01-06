@@ -1,17 +1,17 @@
 import { db } from "@src/main";
-import { addServiceJP } from "@controllers/Services/JustPanel";
-import { addServiceVR } from "@controllers/Services/Venro";
+import { logger } from "@src/utils/logger/logger";
 import { getRandomPercentage } from "@src/utils/utils";
+import { addServiceVR } from "@controllers/Services/Venro";
+import { addServiceJP } from "@controllers/Services/JustPanel";
+import { saveRejectedService } from "./Entity/SaveRejectExternal";
 import {
   getPackageDetailsById,
   getSocialNicknameById,
   packageSettings,
 } from "@src/utils/intermediateReq";
-import { RowDataPacket } from "mysql2";
-import { logger } from "@src/utils/logger/logger";
 
 export const purchasePackage = async (
-  serviceId: number,
+  insertId: number,
   nicknameId: number,
   packageId: number,
   countPosts: number,
@@ -21,7 +21,7 @@ export const purchasePackage = async (
   const packDetails = await getPackageDetailsById(packageId);
   if (
     !Array.isArray(packSettings) ||
-    !("nickname" in socNickname) ||
+    !(typeof socNickname === "string") ||
     !("likes" in packDetails)
   )
     return;
@@ -53,49 +53,71 @@ export const purchasePackage = async (
     }
   });
 
-  return await Promise.allSettled(
-    purchaseSettings.map(async (setting) => {
-      if (setting && setting.siteId === 1) {
-        return await addServiceVR(
-          socNickname.nickname,
-          setting.serviceId,
-          setting.count as number,
-          countPosts,
-          setting.speed as number,
-        );
-      }
-      if (setting && setting.siteId === 2) {
-        return await addServiceJP(
-          socNickname.nickname,
-          setting.serviceId,
-          setting.min as number,
-          setting.max as number,
-          countPosts,
-        );
-      }
-    }),
-  )
-    .then((response) => {
-      return response.map(async (res) => {
-        if (res.status === "fulfilled" && res.value?.siteId === 1) {
+  return purchaseSettings.map(async (setting) => {
+    if (setting && setting.siteId === 1) {
+      return await addServiceVR(
+        socNickname,
+        setting.serviceId,
+        setting.count as number,
+        countPosts,
+        setting.speed as number,
+      )
+        .then(async (res) => {
+          console.log(res, "resp VR Pack");
+          if (!res.id) throw new Error("No id");
           return await addServicesOrder(
-            serviceId,
-            res.value?.siteId,
-            res.value?.siteServiceId,
-            res.value?.data.id,
+            insertId,
+            setting.siteId,
+            setting.serviceId,
+            res.id,
           );
-        }
-        if (res.status === "fulfilled" && res.value?.siteId === 2) {
+        })
+        .catch(async () => {
+          const extSettPackVR = {
+            serviceName: "Pack",
+            siteId: setting.siteId,
+            siteServiceId: setting.serviceId,
+            nickname: socNickname,
+            countPosts: countPosts,
+            count: setting.count as number,
+            speed: setting.speed as number,
+          };
+          return await saveRejectedService(extSettPackVR);
+        });
+    }
+
+    if (setting && setting.siteId === 2) {
+      return await addServiceJP(
+        socNickname,
+        setting.serviceId,
+        setting.min as number,
+        setting.max as number,
+        countPosts,
+      )
+        .then(async (res) => {
+          console.log(res, "resp JP Pack");
+          if (!res.order) throw new Error("No order");
           return await addServicesOrder(
-            serviceId,
-            res.value?.siteId,
-            res.value?.siteServiceId,
-            res.value?.data.order,
+            insertId,
+            setting.siteId,
+            setting.serviceId,
+            res.order,
           );
-        }
-      });
-    })
-    .catch((err) => logger.error(err.stack));
+        })
+        .catch(async () => {
+          const extSettPackJP = {
+            serviceName: "Pack",
+            siteId: setting.siteId,
+            siteServiceId: setting.serviceId,
+            nickname: socNickname,
+            countPosts: countPosts,
+            min: setting.min as number,
+            max: setting.max as number,
+          };
+          return await saveRejectedService(extSettPackJP);
+        });
+    }
+  });
 };
 
 //--------------------------------------------------
@@ -106,17 +128,13 @@ export const addServicesOrder = async (
   siteServiceId: number,
   orderId: number,
 ) => {
-  const data = await db
+  return await db
     .promise()
     .query(
-      `INSERT INTO Purchase_package (id, serviceId, siteId,
+      `INSERT INTO Purchase_package (serviceId, siteId,
         siteServiceId, orderId) 
-        VALUES(null, ${serviceId}, ${siteId},
+        VALUES(${serviceId}, ${siteId},
           ${siteServiceId}, ${orderId})`,
     )
-    .then(([result]) => {
-      return result as RowDataPacket[];
-    })
     .catch((err) => logger.error(err.stack));
-  return data;
 };

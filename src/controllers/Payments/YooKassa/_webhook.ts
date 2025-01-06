@@ -76,16 +76,17 @@ export const addInfoAboutBoughtPack = async ({
         ${amount.value}, '${amount.currency}', '${paymentServiceName}')`,
     )
     .then(async ([result]) => {
+      const insertId = (result as ResultSetHeader).insertId;
       if (!isCustPack) {
         await purchasePackage(
-          (result as ResultSetHeader).insertId,
+          insertId,
           meta.socialNicknameId,
           meta.packageId,
           meta.countPosts,
         );
       } else {
         await purchaseCustomPackage(
-          (result as ResultSetHeader).insertId,
+          insertId,
           meta.socialNicknameId,
           meta.packageId,
           meta.countPosts,

@@ -24,7 +24,7 @@ export const getSocialNicknameById = async (id: number) => {
     .promise()
     .query(`SELECT * FROM Social_nickname WHERE id = ${id}`)
     .then(([result]) => {
-      return (result as SocialNickname[])[0];
+      return (result as SocialNickname[])[0].nickname;
     })
     .catch((err) => logger.error(err.stack));
   return data;

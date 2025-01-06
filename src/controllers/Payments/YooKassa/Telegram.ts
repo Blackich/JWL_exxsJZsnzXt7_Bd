@@ -27,15 +27,15 @@ export const sendTelegramMessagePack = async ({
       Number(customPackage) === 0
         ? await getPackageDetailsById(packageId)
         : await getCustomPackageDetailsById(packageId);
-    const soc = await getSocialNicknameById(socialNicknameId);
-    if (!("likes" in pack) || !("nickname" in soc)) return;
+    const socNick = await getSocialNicknameById(socialNicknameId);
+    if (!("likes" in pack) || !(typeof socNick === "string")) return;
 
     const message = `Куплен пакет: <b>${pack.likes}</b> ❤️ ${
       Number(customPackage) === 0 ? "" : "(custom)"
     }
       📄 Постов: <b>${countPosts}</b>
       🆔 UserId: <b>${userId}</b>
-      👤 Nickname: <b>${soc.nickname}</b>
+      👤 Nickname: <b>${socNick}</b>
       ${currency === "RUB" ? "🇷🇺" : "💵"} Сумма: <b>${Number(cost).toFixed(
       0,
     )} ${currency}</b>
@@ -60,15 +60,15 @@ export const sendTelegramMessageExtra = async ({
   socialNicknameId,
   paymentServiceName,
 }: TGSenderExtraInfo) => {
-  const soc = await getSocialNicknameById(socialNicknameId);
+  const socNick = await getSocialNicknameById(socialNicknameId);
   const serviceName = await getExtraServiceNameByExtraId(extraServiceId);
 
-  if (!("nickname" in soc)) return;
+  if (typeof socNick !== "string") return;
 
   const message = `Куплены: <b>${serviceName}</b> 🤑
     🔢 Кол-во: <b>${count}</b>
     🆔 UserId: <b>${userId}</b>
-    👤 Nickname: <b>${soc.nickname}</b>
+    👤 Nickname: <b>${socNick}</b>
     📋 ExtraId: <a href="https://www.gram.top/panel/extra/${extraId}"><b>${extraId}</b></a>
     🇷🇺 Сумма: <b>${Number(cost).toFixed(0)} RUB</b>
     🏦 Сервис: <b>${paymentServiceName}</b>`;

@@ -15,7 +15,7 @@ export const addServiceVR = async (
     key=${apiKeyVR}&url=${url}&
     type=${id}&count=${count}&
     posts=${posts}&speed=${speed}`);
-  return { data: response.data, siteId: 1, siteServiceId: id };
+  return response.data;
 };
 
 export const addExtraServiceVR = async (
