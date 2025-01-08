@@ -18,11 +18,8 @@ export const sendExtraComments = tryCatch(
 
       return await sendCommentsServiceJP(link, setting.serviceId, comments)
         .then(async (response) => {
-          if (response?.error)
-            return res
-              .status(400)
-              .json({ message: "Comments not sent", error: response.error });
-
+          console.log(response, "resp Extra Comments JP");
+          if (!response.order) throw new Error("Order not created");
           return await updateSiteOrderIdForExtraService(
             Number(id),
             setting.siteId,

@@ -67,7 +67,7 @@ export const purchaseExtra = async (
           siteId: setting.siteId,
           siteServiceId: setting.serviceId,
           nickname: socNickname,
-          quantity: quantityJP,
+          count: quantityJP,
         };
         return await saveRejectedService(extSettExtraJP);
       });

@@ -1,5 +1,6 @@
 import { db } from "@src/main";
 import { Request, Response } from "express";
+import { logger } from "@src/utils/logger/logger";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
 import { purchaseTestService } from "@src/controllers/Purchase/PurchaseTestService";
 
@@ -7,26 +8,28 @@ export const sendTestServices = tryCatch(
   async (req: Request, res: Response) => {
     const { testServiceId, employeeId, link, speed, comments } = req.body;
     if (!employeeId || !link || !testServiceId || !speed) return;
-    const boughtPack = await purchaseTestService(
-      testServiceId,
-      speed,
-      link,
-      comments,
-    );
-    console.log(boughtPack);
 
-    db.query(
-      `INSERT INTO Test (id,
-        testServiceId, employeeId, link)
-        VALUES(null, ${testServiceId},
-          ${employeeId}, '${link}')`,
-      (err, _) => {
-        if (err) return dbError(err, res);
-        return res.status(200).json({
-          message: "Test package has been sent",
-        });
-      },
-    );
+    return await purchaseTestService(testServiceId, speed, link, comments)
+      .then(async (response) => {
+        console.log(response, "resp Test Serv");
+
+        const isErrorSentComments =
+          (response as PromiseFulfilledResult<object | null>[])?.[0].value ===
+          null;
+
+        if (isErrorSentComments)
+          return res.status(400).json({ message: "Comments not sent" });
+
+        return await addInfoAboutTest(testServiceId, employeeId, link).then(
+          () => {
+            return res.status(200).json({ message: "Test sent" });
+          },
+        );
+      })
+      .catch((err) => {
+        logger.error((err as Error).stack);
+        return res.status(400).json({ message: "Test not sent" });
+      });
   },
 );
 
@@ -46,3 +49,22 @@ export const getTestServicesSent = tryCatch(
     );
   },
 );
+
+//--------------------------------------------------
+
+export const addInfoAboutTest = async (
+  testServiceId: number,
+  employeeId: number,
+  link: string,
+) => {
+  return await db
+    .promise()
+    .query(
+      `INSERT INTO Test (testServiceId, employeeId, link)
+        VALUES(${testServiceId}, ${employeeId}, '${link}')`,
+    )
+    .then(([result]) => {
+      return result;
+    })
+    .catch((err) => logger.error(err.stack));
+};

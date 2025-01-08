@@ -2,12 +2,12 @@ import { addServicesOrder } from "./PurchasePack";
 import { getRandomPercentage } from "@src/utils/utils";
 import { addServiceVR } from "@controllers/Services/Venro";
 import { addServiceJP } from "@controllers/Services/JustPanel";
+import { saveRejectedService } from "./Entity/SaveRejectExternal";
 import {
   getCustomPackageDetailsById,
   getSocialNicknameById,
   packageSettings,
 } from "@src/utils/intermediateReq";
-import { saveRejectedService } from "./Entity/SaveRejectExternal";
 
 export const purchaseCustomPackage = async (
   insertId: number,
