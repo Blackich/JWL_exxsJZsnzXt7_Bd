@@ -4,12 +4,15 @@ import { tryCatch } from "@src/middleware/errorHandler";
 
 export const checkAuth = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const token = (req.headers.authorization || "").replace(/Bearer\s?/, "");
+    const token = (req.headers.authorization as string).replace(
+      /Bearer\s?/,
+      "",
+    );
 
     if (!token) return res.status(401).json({ message: "Token is required" });
 
     try {
-      jwt.verify(token, process.env.JWT_SECRET_ACCESS_KEY || "", (err) => {
+      jwt.verify(token, process.env.JWT_ADMIN_ACCESS_KEY || "", (err) => {
         if (err)
           return res
             .status(404)
@@ -35,7 +38,7 @@ export const verifyRefreshToken = tryCatch(
     try {
       jwt.verify(
         refreshToken,
-        process.env.JWT_SECRET_REFRESH_KEY || "",
+        process.env.JWT_ADMIN_REFRESH_KEY as string,
         (err: VerifyErrors | null) => {
           if (err)
             return res.status(404).json({

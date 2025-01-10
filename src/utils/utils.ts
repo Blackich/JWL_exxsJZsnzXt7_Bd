@@ -10,12 +10,12 @@ export const refreshTokenExpiresIn = 60 * 60 * 24 * 7; // 7 day;
 export const getTokens = (employeeId: number, login: string, role: string) => ({
   accessToken: jwt.sign(
     { employeeId, login, role },
-    process.env.JWT_SECRET_ACCESS_KEY || "",
+    process.env.JWT_ADMIN_ACCESS_KEY || "",
     { expiresIn: accessTokenExpiresIn },
   ),
   refreshToken: jwt.sign(
     { employeeId, login, role },
-    process.env.JWT_SECRET_REFRESH_KEY || "",
+    process.env.JWT_ADMIN_REFRESH_KEY || "",
     { expiresIn: refreshTokenExpiresIn },
   ),
 });
