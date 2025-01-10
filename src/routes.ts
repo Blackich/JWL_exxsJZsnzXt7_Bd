@@ -59,9 +59,10 @@ r.get("/api/extra/:id/check", i.checkAuth, i.checkStatusForExtra);
 r.post("/api/extra/:id/send-comment", i.checkAuth, i.sendExtraComments);
 
 // User Auth
-r.post("/login", i.authUser);
+r.post("/login", i.loginUser);
 r.get("/logout", i.logoutUser);
-r.get("/check", i.checkAuthUser, i.takeCredentialUser);
+r.post("/register", i.registerUser);
+r.get("/check", i.checkAuthUser, i.takeUserCredentials);
 
 // User Social account
 r.get("/social/:id", i.checkAuthUser, i.getSocialList);

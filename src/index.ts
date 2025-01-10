@@ -67,12 +67,11 @@ import {
   getExtraDetails,
 } from "@controllers/Admin/Extra";
 
-import {
-  authUser,
-  logoutUser,
-  checkAuthUser,
-  takeCredentialUser,
-} from "@controllers/User/Auth/UserAuth";
+import { loginUser } from "@src/controllers/User/Auth/UserLogin";
+import { checkAuthUser } from "@src/controllers/User/Auth/UserAuthCheck";
+import { takeUserCredentials } from "@src/controllers/User/Auth/UserAuthCheck";
+import { registerUser } from "@src/controllers/User/Auth/UserRegister";
+import { logoutUser } from "@src/controllers/User/Auth/UserLogout";
 
 import {
   addInstAccount,
@@ -168,10 +167,11 @@ export default {
   getExtraDetails,
 
   // User Auth
-  authUser,
+  loginUser,
+  registerUser,
   logoutUser,
   checkAuthUser,
-  takeCredentialUser,
+  takeUserCredentials,
 
   // User Social account
   getSocialList,
