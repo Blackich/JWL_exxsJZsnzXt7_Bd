@@ -3,7 +3,26 @@ import { db } from "@src/main";
 import { ResultSetHeader } from "mysql2";
 import { logger } from "@src/utils/logger/logger";
 
-export const getUserCredentials = async (email: string) => {
+export const getUserCredentialsById = async (id: number) => {
+  return await db
+    .promise()
+    .query(
+      `SELECT id, email
+        FROM Users WHERE id = '${id}'`,
+    )
+    .then(([result]) => {
+      const userCred = result as {
+        id: number;
+        email: string;
+      }[];
+      return userCred[0]?.id ? userCred[0] : null;
+    })
+    .catch(() => {
+      return null;
+    });
+};
+
+export const getUserCredentialsByEmail = async (email: string) => {
   return await db
     .promise()
     .query(
@@ -22,7 +41,7 @@ export const getUserCredentials = async (email: string) => {
     });
 };
 
-export const getFullUserCredentials = async (email: string) => {
+export const getFullUserCredentialsByEmail = async (email: string) => {
   return await db
     .promise()
     .query(
@@ -80,5 +99,9 @@ export const checkRecaptchaToken = async (reCaptchaToken: string) => {
       },
     },
   );
-  return response.data;
+  return response.data as {
+    success: boolean;
+    challenge_ts: string;
+    hostname: string;
+  };
 };

@@ -1,10 +1,11 @@
 import { serialize } from "cookie";
 import { Request, Response } from "express";
 import { tryCatch } from "@src/middleware/errorHandler";
-import { getFullUserCredentials } from "./Entity/queries";
-import { comparePassword, hashPassword } from "./Entity/bcrypt";
+import { getFullUserCredentialsByEmail } from "./Entity/queries";
 import {
   getTokens,
+  hashPassword,
+  comparePassword,
   preValidationUserData,
   refreshTokenExpiresIn,
 } from "./Entity/utils";
@@ -17,7 +18,7 @@ export const loginUser = tryCatch(async (req: Request, res: Response) => {
       .status(400)
       .json({ codeErr: 1, message: "Email or password are invalid" });
 
-  const userCred = await getFullUserCredentials(email);
+  const userCred = await getFullUserCredentialsByEmail(email);
   if (userCred === null)
     return res
       .status(400)
