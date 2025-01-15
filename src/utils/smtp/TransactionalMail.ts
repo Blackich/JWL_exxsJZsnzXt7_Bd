@@ -13,7 +13,7 @@ export const transporter = nodemailer.createTransport({
 export const sendEmailSmtp = async (message: string) => {
   const mailOptions = {
     from: "info@gram.top",
-    to: process.env.TIMEWEB_MAIL,
+    to: "king000007@yandex.ru",
     subject: "Подтверждение регистрации",
     text: `Текст письма: ${message}`,
   };

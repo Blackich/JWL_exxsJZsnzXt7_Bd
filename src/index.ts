@@ -77,7 +77,7 @@ import {
   addInstAccount,
   deleteInstAccount,
   getSocialList,
-} from "@controllers/User/SocialAccount";
+} from "@src/controllers/User/SocialAccount/SocialAccount";
 
 import {
   getPackageDetailsUser,
