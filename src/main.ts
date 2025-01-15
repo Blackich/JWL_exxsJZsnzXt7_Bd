@@ -52,9 +52,7 @@ app.all("*", (req: Request, res: Response) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  errorHandler(err, req, res, next);
-});
+app.use(errorHandler);
 
 db.addListener("error", () => console.log("error"));
 
