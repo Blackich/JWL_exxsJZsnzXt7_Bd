@@ -5,9 +5,11 @@ import { getUserCredentialsById } from "./Entity/queries";
 import { NextFunction, Request, Response } from "express";
 import { getTokens, getUnixTime, refreshTokenExpiresIn } from "./Entity/utils";
 
+type CustomRequest = Request & { auth: { isExipredAccess: boolean } };
+
 export const checkAuthUser = tryCatch(
-  async (req: Request, res: Response, next: NextFunction) => {
-    req.body = { isExipredAccess: false };
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    req.auth = { isExipredAccess: false };
     const accessToken = (req.headers.authorization || "").replace(
       /Bearer\s?/,
       "",
@@ -34,7 +36,7 @@ export const checkAuthUser = tryCatch(
                 .json({ message: "(1) Invalid refresh-Token" });
             }
 
-            req.body = { isExipredAccess: true };
+            req.auth.isExipredAccess = true;
           }
 
           if (err && err?.name !== "TokenExpiredError") {
@@ -53,8 +55,8 @@ export const checkAuthUser = tryCatch(
 );
 
 export const takeUserCredentials = tryCatch(
-  async (req: Request, res: Response) => {
-    const { isExipredAccess } = req.body;
+  async (req: CustomRequest, res: Response) => {
+    const { isExipredAccess } = req.auth;
 
     const refreshTokenCookie = req.cookies["refresh-Token"];
     if (!refreshTokenCookie)
