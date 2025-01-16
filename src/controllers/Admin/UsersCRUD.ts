@@ -7,8 +7,8 @@ import { dbError, tryCatch } from "@src/middleware/errorHandler";
 export const getUserById = tryCatch(async (req: Request, res: Response) => {
   const { id } = req.params;
   db.query(
-    `SELECT u.*, e.fullName FROM Users u, Employees e
-      WHERE u.invitedEmployeeId = e.id AND u.id = ${id}`,
+    `SELECT id, email, status, createdAt FROM Users
+      WHERE id = ${id}`,
     (err, result: RowDataPacket[]) => {
       if (err) return dbError(err, res);
       const data = result[0];
@@ -18,29 +18,11 @@ export const getUserById = tryCatch(async (req: Request, res: Response) => {
 });
 
 export const getUsers = tryCatch(async (req: Request, res: Response) => {
-  db.query(
-    `SELECT u.*, e.fullName FROM Users u, Employees e
-      WHERE u.invitedEmployeeId = e.id`,
-    (err, result) => {
-      if (err) return dbError(err, res);
-      const data = result;
-      return res.status(200).json(data);
-    },
-  );
-});
-
-export const createUser = tryCatch(async (req: Request, res: Response) => {
-  const { employeeId } = req.body;
-  const token = fastRandString(16);
-
-  db.query(
-    `INSERT INTO Users (id, token, invitedEmployeeId) 
-      VALUES (null, '${token}', ${Number(employeeId)})`,
-    async (err, _) => {
-      if (err) return dbError(err, res);
-      return res.status(200).json({ message: "User has been created" });
-    },
-  );
+  db.query(`SELECT id, email, createdAt FROM Users`, (err, result) => {
+    if (err) return dbError(err, res);
+    const data = result;
+    return res.status(200).json(data);
+  });
 });
 
 export const updateUserStatus = tryCatch(
@@ -70,23 +52,23 @@ export const updateUserStatus = tryCatch(
   },
 );
 
-export const updateUserRemark = tryCatch(
-  async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const { remark } = req.body;
+// export const updateUserRemark = tryCatch(
+//   async (req: Request, res: Response) => {
+//     const { id } = req.params;
+//     const { remark } = req.body;
 
-    db.query(
-      `UPDATE Users SET remark = '${remark}' 
-        WHERE id = ${id}`,
-      (err, _) => {
-        if (err) return dbError(err, res);
-        return res.status(200).json({
-          message: "User remark has been updated",
-        });
-      },
-    );
-  },
-);
+//     db.query(
+//       `UPDATE Users SET remark = '${remark}' 
+//         WHERE id = ${id}`,
+//       (err, _) => {
+//         if (err) return dbError(err, res);
+//         return res.status(200).json({
+//           message: "User remark has been updated",
+//         });
+//       },
+//     );
+//   },
+// );
 
 export const getUserSocialAccounts = tryCatch(
   async (req: Request, res: Response) => {
