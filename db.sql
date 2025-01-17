@@ -8,6 +8,15 @@ CREATE TABLE
   ) AUTO_INCREMENT = 35247;
 
 CREATE TABLE
+  User_remark (
+    userId INT UNSIGNED NOT NULL,
+    remark VARCHAR(255) NOT NULL,
+    --
+    PRIMARY KEY (userId),
+    FOREIGN KEY (userId) REFERENCES Users (id)
+  );
+
+CREATE TABLE
   Messanger (
     id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     messangerName VARCHAR(50) NOT NULL

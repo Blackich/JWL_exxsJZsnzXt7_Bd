@@ -1,7 +1,5 @@
 import { db } from "@src/main";
-import { RowDataPacket } from "mysql2";
 import { Request, Response } from "express";
-import { fastRandString } from "@src/utils/utils";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
 
 export const getUserById = tryCatch(async (req: Request, res: Response) => {
@@ -9,9 +7,16 @@ export const getUserById = tryCatch(async (req: Request, res: Response) => {
   db.query(
     `SELECT id, email, status, createdAt FROM Users
       WHERE id = ${id}`,
-    (err, result: RowDataPacket[]) => {
+    (err, result) => {
       if (err) return dbError(err, res);
-      const data = result[0];
+      const data = (
+        result as {
+          id: number;
+          email: string;
+          status: string;
+          createdAt: string;
+        }[]
+      )[0];
       return res.status(200).json(data);
     },
   );
@@ -32,13 +37,13 @@ export const updateUserStatus = tryCatch(
     db.query(
       `SELECT status FROM Users 
       WHERE id = ${id}`,
-      (err, result: RowDataPacket[]) => {
+      (err, result) => {
         if (err) return dbError(err, res);
-        const status = result[0].status;
+        const status = (result as { status: number }[])[0]?.status;
 
         db.query(
           `UPDATE Users 
-            SET status = '${status === "active" ? "inactive" : "active"}' 
+            SET status = '${status === 1 ? 0 : 1}' 
             WHERE id = ${id}`,
           (err, _) => {
             if (err) return dbError(err, res);
@@ -51,24 +56,6 @@ export const updateUserStatus = tryCatch(
     );
   },
 );
-
-// export const updateUserRemark = tryCatch(
-//   async (req: Request, res: Response) => {
-//     const { id } = req.params;
-//     const { remark } = req.body;
-
-//     db.query(
-//       `UPDATE Users SET remark = '${remark}' 
-//         WHERE id = ${id}`,
-//       (err, _) => {
-//         if (err) return dbError(err, res);
-//         return res.status(200).json({
-//           message: "User remark has been updated",
-//         });
-//       },
-//     );
-//   },
-// );
 
 export const getUserSocialAccounts = tryCatch(
   async (req: Request, res: Response) => {

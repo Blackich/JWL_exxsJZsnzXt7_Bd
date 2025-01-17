@@ -11,9 +11,9 @@ r.get("/auth/refresh", i.verifyRefreshToken, i.authEmployeesRefresh);
 
 // Admin Users CRUD
 r.get("/api/users", i.checkAuth, i.getUsers);
-r.post("/api/users", i.checkAuth, i.createUser);
 r.get("/api/users/:id", i.checkAuth, i.getUserById);
 r.patch("/api/users/:id/status", i.checkAuth, i.updateUserStatus);
+r.get("/api/users/:id/remark", i.checkAuth, i.getRemarkByUserId);
 r.patch("/api/users/:id/remark", i.checkAuth, i.updateUserRemark);
 r.get("/api/users/:id/social", i.checkAuth, i.getUserSocialAccounts);
 r.get("/api/users/:id/custom", i.checkAuth, i.getCustomPackageByUserId);

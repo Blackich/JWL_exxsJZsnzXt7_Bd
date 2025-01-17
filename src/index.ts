@@ -11,16 +11,18 @@ import {
 
 import {
   getUsers,
-  createUser,
   getUserById,
   updateUserStatus,
   getExtraByUserId,
-  updateUserRemark,
   getServicesByUserId,
   getUserSocialAccounts,
   getCustomPackageByUserId,
   deleteCustomPackageByUserId,
-} from "@controllers/Admin/UsersCRUD";
+} from "@src/controllers/Admin/UsersCRUD/UsersCRUD";
+import {
+  getRemarkByUserId,
+  updateUserRemark,
+} from "@src/controllers/Admin/UsersCRUD/UserRemark";
 
 import {
   getTotalSpent,
@@ -120,10 +122,10 @@ export default {
 
   // Admin Users CRUD
   getUsers,
-  createUser,
   getUserById,
   getExtraByUserId,
   updateUserStatus,
+  getRemarkByUserId,
   updateUserRemark,
   getServicesByUserId,
   getUserSocialAccounts,

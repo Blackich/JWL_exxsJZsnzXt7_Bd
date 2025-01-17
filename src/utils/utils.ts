@@ -20,13 +20,6 @@ export const getTokens = (employeeId: number, login: string, role: string) => ({
   ),
 });
 
-export const fastRandString = (n: number) => {
-  return [...Array(n)]
-    .map(() => (~~(Math.random() * 36)).toString(36))
-    .map((im) => (typeof im === "string" ? im.toUpperCase() : im))
-    .join("");
-};
-
 export const formatDatePlus30Days = () => {
   const date = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30); // +30 days
   return Intl.DateTimeFormat("en-GB", {
