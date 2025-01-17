@@ -25,7 +25,7 @@ export const expServices = cron.schedule("*/5 * * * *", async () => {
       console.log(`${expServ.id} service has been expired`);
     });
   } catch (err) {
-    logger.error((err as Error).stack);
+    logger.error("expServices", { err });
   }
 });
 

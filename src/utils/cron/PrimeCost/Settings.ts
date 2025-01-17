@@ -43,7 +43,7 @@ export const getAllSettings = async () => {
       testServiceSettings,
     };
   } catch (err) {
-    logger.error((err as Error).stack);
+    logger.error("PrimeCost/getAllSettings", { err });
   }
 };
 

@@ -36,6 +36,6 @@ export const sendTGMessageCostChanges = async ({
       text: message,
     });
   } catch (err) {
-    logger.error((err as Error).stack);
+    logger.error("sendTGMessageCostChanges", { err });
   }
 };

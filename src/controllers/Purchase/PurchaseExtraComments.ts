@@ -28,11 +28,11 @@ export const sendExtraComments = tryCatch(
           ).then(() => res.status(200).json({ message: "Comments sent" }));
         })
         .catch((err) => {
-          logger.error(err.stack);
+          logger.error("sendCommentsServiceJP", { err });
           return res.status(400).json({ message: "Comments not sent" });
         });
     } catch (err) {
-      logger.error((err as Error).stack);
+      logger.error("sendExtraComments", { err });
     }
   },
 );

@@ -19,7 +19,7 @@ export const expExtraComments = cron.schedule("0 * * * *", async () => {
       console.log(`${expComm.id} comments has been expired`);
     });
   } catch (err) {
-    logger.error((err as Error).stack);
+    logger.error("expExtraComments", { err });
   }
 });
 

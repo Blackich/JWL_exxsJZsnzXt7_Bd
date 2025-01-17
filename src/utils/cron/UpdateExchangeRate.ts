@@ -17,7 +17,7 @@ export const updExchangeRate = cron.schedule("0 */4 * * *", async () => {
 
     return await updateDatabaseValue(externalRate);
   } catch (err) {
-    logger.error((err as Error).stack);
+    logger.error("updExchangeRate", { err });
   }
 });
 

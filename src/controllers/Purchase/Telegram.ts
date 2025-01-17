@@ -43,7 +43,7 @@ ${commentsColumn}`;
       text: message,
     });
   } catch (err) {
-    logger.error((err as Error).stack);
+    logger.error("sendTGMessageComment", { err });
   }
 };
 

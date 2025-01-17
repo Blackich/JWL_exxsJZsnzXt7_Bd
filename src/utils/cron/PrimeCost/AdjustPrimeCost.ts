@@ -6,6 +6,6 @@ export const adjustPrimeCost = cron.schedule("0 * * * *", async () => {
   try {
     await primeCostChangeControl();
   } catch (err) {
-    logger.error((err as Error).stack);
+    logger.error("adjustPrimeCost", { err });
   }
 });

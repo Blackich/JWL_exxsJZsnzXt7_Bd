@@ -11,17 +11,17 @@ export const errorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  logger.error(err.message);
+  logger.error("ErrorHandler", { err });
   if (err.code && err.code.startsWith("ER_")) {
-    res.status(450).json({ message: "Database error", error: dev ? err : "" });
+    res.status(450).json({ message: "Incorrect query", error: dev ? err : "" });
   } else {
     res.status(502).json({ message: "Smth went wrong", error: dev ? err : "" });
   }
 };
 
 export const dbError = (err: QueryError, res: Response) => {
-  logger.error(err.message);
-  res.status(404).json({ message: "Incorrect query", error: err });
+  logger.error("Database error", { err });
+  res.status(450).json({ message: "Incorrect query", error: dev ? err : "" });
 };
 
 export const tryCatch =
@@ -34,6 +34,10 @@ export const tryCatch =
     }
   };
 
-export const isNum = (environment: unknown) => {
-  return typeof environment === "number";
+export const isNum = (variable: unknown) => {
+  return typeof variable === "number";
+};
+
+export const isStr = (variable: unknown) => {
+  return typeof variable === "string";
 };

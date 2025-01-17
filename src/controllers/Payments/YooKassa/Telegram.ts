@@ -47,7 +47,7 @@ export const sendTelegramMessagePack = async ({
       text: message,
     });
   } catch (err) {
-    logger.error((err as Error).stack);
+    logger.error("sendTelegramMessagePack", { err });
   }
 };
 
@@ -60,22 +60,27 @@ export const sendTelegramMessageExtra = async ({
   socialNicknameId,
   paymentServiceName,
 }: TGSenderExtraInfo) => {
-  const socNick = await getSocialNicknameById(socialNicknameId);
-  const serviceName = await getExtraServiceNameByExtraId(extraServiceId);
+  try {
+    const socNick = await getSocialNicknameById(socialNicknameId);
+    const serviceName = await getExtraServiceNameByExtraId(extraServiceId);
 
-  if (typeof socNick !== "string") return;
+    if (typeof socNick !== "string") return;
 
-  const message = `Куплены: <b>${serviceName}</b> 🤑
-    🔢 Кол-во: <b>${count}</b>
-    🆔 UserId: <b>${userId}</b>
-    👤 Nickname: <b>${socNick}</b>
-    📋 ExtraId: <a href="https://www.gram.top/panel/extra/${extraId}"><b>${extraId}</b></a>
-    🇷🇺 Сумма: <b>${Number(cost).toFixed(0)} RUB</b>
-    🏦 Сервис: <b>${paymentServiceName}</b>`;
+    const message = `
+    Куплены: <b>${serviceName}</b> 🤑
+      🔢 Кол-во: <b>${count}</b>
+      🆔 UserId: <b>${userId}</b>
+      👤 Nickname: <b>${socNick}</b>
+      📋 ExtraId: <a href="https://www.gram.top/panel/extra/${extraId}"><b>${extraId}</b></a>
+      🇷🇺 Сумма: <b>${Number(cost).toFixed(0)} RUB</b>
+      🏦 Сервис: <b>${paymentServiceName}</b>`;
 
-  await axios.post(url, {
-    chat_id: chat_id,
-    parse_mode: "HTML",
-    text: message,
-  });
+    await axios.post(url, {
+      chat_id: chat_id,
+      parse_mode: "HTML",
+      text: message,
+    });
+  } catch (err) {
+    logger.error("sendTelegramMessageExtra", { err });
+  }
 };

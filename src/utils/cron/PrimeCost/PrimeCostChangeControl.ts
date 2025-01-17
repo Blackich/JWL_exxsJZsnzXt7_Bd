@@ -30,7 +30,7 @@ export const primeCostChangeControl = async () => {
 
     return;
   } catch (err) {
-    logger.error((err as Error).stack);
+    logger.error("primeCostChangeControl", { err });
   }
 };
 
