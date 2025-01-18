@@ -10,7 +10,7 @@ export const cancelAllSubs = tryCatch(async (req: Request, res: Response) => {
   const { id } = req.params;
   const allSubsByServiceId = await getAllPackageSubsByServiceId(Number(id));
   if (Array.isArray(allSubsByServiceId) && allSubsByServiceId.length === 0)
-    return;
+    return res.status(400).json({ message: "Services not found" });
 
   return await Promise.allSettled(
     allSubsByServiceId.map(async (subscription: PurchasePackage) => {
@@ -28,7 +28,7 @@ export const cancelAllSubs = tryCatch(async (req: Request, res: Response) => {
       });
     })
     .catch((err) => {
-      logger.error(err.stack);
+      logger.error("cancelAllSubs", { err });
       return res.status(400).json({
         message: "Something went wrong",
         error: err.message,

@@ -7,7 +7,8 @@ import { purchaseTestService } from "@src/controllers/Purchase/PurchaseTestServi
 export const sendTestServices = tryCatch(
   async (req: Request, res: Response) => {
     const { testServiceId, employeeId, link, speed, comments } = req.body;
-    if (!employeeId || !link || !testServiceId || !speed) return;
+    if (!employeeId || !link || !testServiceId || !speed)
+      return res.sendStatus(400).json({ message: "Missing required fields" });
 
     return await purchaseTestService(testServiceId, speed, link, comments)
       .then(async (response) => {
@@ -20,14 +21,11 @@ export const sendTestServices = tryCatch(
         if (isErrorSentComments)
           return res.status(400).json({ message: "Comments not sent" });
 
-        return await addInfoAboutTest(testServiceId, employeeId, link).then(
-          () => {
-            return res.status(200).json({ message: "Test sent" });
-          },
-        );
+        await addInfoAboutTest(testServiceId, employeeId, link);
+        return res.status(200).json({ message: "Test sent" });
       })
       .catch((err) => {
-        logger.error((err as Error).stack);
+        logger.error("sendTestServices", { err });
         return res.status(400).json({ message: "Test not sent" });
       });
   },
@@ -63,8 +61,5 @@ export const addInfoAboutTest = async (
       `INSERT INTO Test (testServiceId, employeeId, link)
         VALUES(${testServiceId}, ${employeeId}, '${link}')`,
     )
-    .then(([result]) => {
-      return result;
-    })
-    .catch((err) => logger.error(err.stack));
+    .then(([result]) => result);
 };

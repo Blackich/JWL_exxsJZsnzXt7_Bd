@@ -1,7 +1,6 @@
 import { db } from "@src/main";
 import { RowDataPacket } from "mysql2";
 import { Request, Response } from "express";
-import { logger } from "@src/utils/logger/logger";
 import { PurchasePackage } from "@src/utils/types";
 import { tryCatch } from "@src/middleware/errorHandler";
 import { checkServiceWQ } from "@src/controllers/Services/Wiq";
@@ -13,7 +12,7 @@ export const checkStatusAllSubs = tryCatch(
     const { id } = req.params;
     const allSubsByServiceId = await getAllPackageSubsByServiceId(Number(id));
     if (Array.isArray(allSubsByServiceId) && allSubsByServiceId.length === 0)
-      return;
+      return res.status(400).json({ message: "Services not found" });
 
     const result = await Promise.all(
       allSubsByServiceId.map(async (subscription: PurchasePackage) => {
@@ -59,29 +58,21 @@ export const checkStatusForExtra = tryCatch(
 //--------------------------------------------------
 
 export const getAllPackageSubsByServiceId = async (serviceId: number) => {
-  const data = await db
+  return await db
     .promise()
     .query(
       `SELECT * FROM Purchase_package
         WHERE serviceId = ${serviceId}`,
     )
-    .then(([result]) => {
-      return result as RowDataPacket;
-    })
-    .catch((err) => logger.error(err.stack));
-  return data;
+    .then(([result]) => result as PurchasePackage[]);
 };
 
 export const getSiteServiceInfoIdByExtraId = async (extraId: number) => {
-  const data = await db
+  return await db
     .promise()
     .query(
       `SELECT siteServiceInfo FROM Extra
         WHERE id = ${extraId}`,
     )
-    .then(([result]) => {
-      return (result as RowDataPacket)[0];
-    })
-    .catch((err) => logger.error(err.stack));
-  return data;
+    .then(([result]) => (result as RowDataPacket)[0]);
 };
