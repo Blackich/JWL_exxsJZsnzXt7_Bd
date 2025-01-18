@@ -1,11 +1,11 @@
 import { db } from "@src/main";
+import { RowDataPacket } from "mysql2";
 import { Request, Response } from "express";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
-import { RowDataPacket } from "mysql2";
 
 export const getServiceList = tryCatch(async (req: Request, res: Response) => {
   db.query(
-    `SELECT s.id, s.userId, em.fullName, sn.nickname, 
+    `SELECT s.id, s.userId, sn.nickname, 
 		    s.packageId, pd.likes as packageLikes,
         s.customPackageId, cpd.likes as customLikes,
 		    s.countPosts, s.orderId, s.status, s.createdAt,
@@ -14,8 +14,7 @@ export const getServiceList = tryCatch(async (req: Request, res: Response) => {
           LEFT JOIN Package_detail pd ON pd.id = s.packageId
           LEFT JOIN Custom_package_detail cpd ON cpd.id = s.customPackageId
           LEFT JOIN Social_nickname sn ON sn.id = s.socialNicknameId
-          LEFT JOIN Users u ON u.id = s.userId
-          LEFT JOIN Employees em ON em.id = u.invitedEmployeeId`,
+          LEFT JOIN Users u ON u.id = s.userId`,
     (err, result) => {
       if (err) return dbError(err, res);
       const data = result;
@@ -27,7 +26,7 @@ export const getServiceList = tryCatch(async (req: Request, res: Response) => {
 export const getServiceById = tryCatch(async (req: Request, res: Response) => {
   const { id } = req.params;
   db.query(
-    `SELECT s.id, s.userId, em.fullName, sn.nickname, 
+    `SELECT s.id, s.userId, sn.nickname, 
 		    s.packageId, pd.likes as packageLikes,
         s.customPackageId, cpd.likes as customLikes,
 		    s.countPosts, s.orderId, s.status, s.createdAt,
@@ -37,7 +36,6 @@ export const getServiceById = tryCatch(async (req: Request, res: Response) => {
           LEFT JOIN Custom_package_detail cpd ON cpd.id = s.customPackageId
           LEFT JOIN Social_nickname sn ON sn.id = s.socialNicknameId
           LEFT JOIN Users u ON u.id = s.userId
-          LEFT JOIN Employees em ON em.id = u.invitedEmployeeId
           WHERE s.id = ${id}`,
     (err, result: RowDataPacket[]) => {
       if (err) return dbError(err, res);

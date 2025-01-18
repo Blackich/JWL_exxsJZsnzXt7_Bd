@@ -5,12 +5,11 @@ import { dbError, tryCatch } from "@src/middleware/errorHandler";
 
 export const getExtraList = tryCatch(async (req: Request, res: Response) => {
   db.query(
-    `SELECT ex.id, ex.userId, em.fullName as invitedName, sn.nickname,
-      exs.serviceName as extraServiceName, ex.count, ex.priceRUB,
+    `SELECT ex.id, ex.userId, sn.nickname, ex.count,
+      exs.serviceName as extraServiceName, ex.priceRUB,
       ex.siteServiceInfo, ex.createdAt, ex.paymentServiceName
           FROM Extra ex
           LEFT JOIN Users u ON u.id = ex.userId
-          LEFT JOIN Employees em ON em.id = u.invitedEmployeeId
           LEFT JOIN Extra_service exs ON exs.id = ex.extraServiceId
           LEFT JOIN Social_nickname sn ON sn.id = ex.socialNicknameId`,
     (err, result) => {
@@ -24,13 +23,12 @@ export const getExtraList = tryCatch(async (req: Request, res: Response) => {
 export const getExtraById = tryCatch(async (req: Request, res: Response) => {
   const { id } = req.params;
   db.query(
-    `SELECT ex.id, ex.userId, em.fullName as invitedName, sn.nickname,
-      ex.extraServiceId, exs.serviceName as extraServiceName, ex.count,
+    `SELECT ex.id, ex.userId, sn.nickname, ex.count,
+      ex.extraServiceId, exs.serviceName as extraServiceName,
       ex.priceRUB, ex.priceUSD, ex.siteServiceInfo,
       ex.paymentOrderId, ex.createdAt, ex.paymentServiceName
           FROM Extra ex
           LEFT JOIN Users u ON u.id = ex.userId
-          LEFT JOIN Employees em ON em.id = u.invitedEmployeeId
           LEFT JOIN Extra_service exs ON exs.id = ex.extraServiceId
           LEFT JOIN Social_nickname sn ON sn.id = ex.socialNicknameId
           WHERE ex.id = ${id}`,
