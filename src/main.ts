@@ -8,7 +8,7 @@ import { errorHandler } from "@src/middleware/errorHandler";
 import { updExchangeRate } from "./utils/cron/UpdateExchangeRate";
 import { expExtraComments } from "./utils/cron/ExpiredExtraComments";
 import { adjustPrimeCost } from "./utils/cron/PrimeCost/AdjustPrimeCost";
-import express, { Application, NextFunction, Request, Response } from "express";
+import express, { Application, Request, Response } from "express";
 
 export const db = mysql.createConnection({
   host: process.env.MYSQL_HOST,

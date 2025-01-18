@@ -33,6 +33,7 @@ r.get("/api/info/service/count", i.checkAuth, i.getPurchasedPackagesCount);
 r.get("/api/package/details", i.checkAuth, i.getPackageDetails);
 r.get("/api/custom-package/details", i.checkAuth, i.getCustomPackageDetails);
 r.post("/api/custom-package", i.checkAuth, i.createCustomPackage);
+r.get("/api/custom-package/users", i.checkAuth, i.getAllUsersForCustomPackage);
 r.post("/api/custom-package/add-user", i.addCustomPackToUser);
 r.get("/api/custom-package/:id", i.checkAuth, i.getCustomPackageDetailsById);
 r.get("/api/test", i.checkAuth, i.getTestServicesSent);

@@ -36,6 +36,7 @@ import {
 import {
   createCustomPackage,
   getCustomPackageDetailsById,
+  getAllUsersForCustomPackage,
   getCustomPackageDetails,
   addCustomPackToUser,
 } from "@controllers/Admin/CustomPackage";
@@ -144,6 +145,7 @@ export default {
   getPackageDetails,
   createCustomPackage,
   getCustomPackageDetailsById,
+  getAllUsersForCustomPackage,
   getCustomPackageDetails,
   addCustomPackToUser,
   getTestServicesSent,
