@@ -1,7 +1,6 @@
 import { db } from "@src/main";
 import { RowDataPacket } from "mysql2";
 import { Request, Response } from "express";
-import { logger } from "@src/utils/logger/logger";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
 
 export const getCustomPackageDetailsById = tryCatch(
@@ -62,7 +61,7 @@ export const createCustomPackage = tryCatch(
 export const addCustomPackToUser = tryCatch(
   async (req: Request, res: Response) => {
     const { userId, customPackageId } = req.body;
-    const status = await checkUserId(userId);
+    const status = await checkСustomPackExistAndUserStatus(userId);
 
     if (!status) {
       db.query(
@@ -83,19 +82,31 @@ export const addCustomPackToUser = tryCatch(
   },
 );
 
-const checkUserId = async (id: number) => {
-  const data = await db
+export const getAllUsersForCustomPackage = tryCatch(
+  async (req: Request, res: Response) => {
+    const users = await getUsersForCustomPackage();
+    return res.status(200).json(users);
+  },
+);
+
+//--------------------------------------------------
+
+const checkСustomPackExistAndUserStatus = async (id: number) => {
+  return await db
     .promise()
     .query(
       `SELECT u.id, cpu.customPackageId
         FROM Users u, Custom_package_user cpu
         WHERE u.id = cpu.userId
         AND u.id = ${id}
-        AND u.status = 'active'`,
+        AND u.status = 1`,
     )
-    .then(([result]) => {
-      return (result as RowDataPacket[])[0];
-    })
-    .catch((err) => logger.error(err.stack));
-  return data;
+    .then(([result]) => (result as RowDataPacket[])[0]);
+};
+
+const getUsersForCustomPackage = async () => {
+  return await db
+    .promise()
+    .query(`SELECT id FROM Users`)
+    .then(([result]) => (result as { id: number }[]).map((user) => user.id));
 };
