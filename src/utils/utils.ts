@@ -36,3 +36,26 @@ export const getRandomPercentage = (
   const max = num * maxPercent;
   return Math.round(Math.random() * (max - min) + min);
 };
+
+export const isNumber = (variable: unknown): variable is number => {
+  return typeof variable === "number";
+};
+
+export const isString = (variable: unknown): variable is string => {
+  return typeof variable === "string";
+};
+
+export const isArray = (variable: unknown): variable is unknown[] => {
+  return Array.isArray(variable) && variable.length > 0;
+};
+
+export const isObject = (
+  variable: unknown,
+): variable is Record<string, unknown> => {
+  return (
+    typeof variable === "object" &&
+    variable !== null &&
+    !Array.isArray(variable) &&
+    Object.keys(variable).length > 0
+  );
+};
