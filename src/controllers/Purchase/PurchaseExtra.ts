@@ -1,6 +1,7 @@
 import { db } from "@src/main";
 import { ExtraSettings } from "./type";
-import { logger } from "@src/utils/logger/logger";
+import { isObject, isString } from "@src/utils/utils";
+import { logErr } from "@src/middleware/errorHandler";
 import { addExtraServiceWQ } from "@controllers/Services/Wiq";
 import { addExtraServiceVR } from "@controllers/Services/Venro";
 import { saveRejectedService } from "./Entity/SaveRejectExternal";
@@ -15,7 +16,9 @@ export const purchaseExtra = async (
 ) => {
   const socNickname = await getSocialNicknameById(nicknameId);
   const setting = await getSettingsByExtraServiceId(extraServiceId);
-  if (!("serviceId" in setting) || !(typeof socNickname === "string")) return;
+  if (!isString(socNickname)) return;
+  if (!isObject(setting)) return;
+
   const speedVR = Math.round(count / 24);
   const quantityJP = Math.round(count / 10);
 
@@ -44,6 +47,7 @@ export const purchaseExtra = async (
           nickname: socNickname,
           speed: speedVR,
           count: count,
+          tableExtraId: extraId,
         };
         return await saveRejectedService(extSettExtraVR);
       });
@@ -68,6 +72,7 @@ export const purchaseExtra = async (
           siteServiceId: setting.serviceId,
           nickname: socNickname,
           count: quantityJP,
+          tableExtraId: extraId,
         };
         return await saveRejectedService(extSettExtraJP);
       });
@@ -92,6 +97,7 @@ export const purchaseExtra = async (
           siteServiceId: setting.serviceId,
           nickname: socNickname,
           count: count,
+          tableExtraId: extraId,
         };
         return await saveRejectedService(extSettExtraWQ);
       });
@@ -101,7 +107,7 @@ export const purchaseExtra = async (
 //--------------------------------------------------
 
 export const getSettingsByExtraServiceId = async (extraServiceId: number) => {
-  const data = await db
+  return await db
     .promise()
     .query(
       `SELECT serviceId, siteId
@@ -109,11 +115,8 @@ export const getSettingsByExtraServiceId = async (extraServiceId: number) => {
         WHERE extraServiceId = ${extraServiceId}
         AND status = 1`,
     )
-    .then(([result]) => {
-      return (result as ExtraSettings[])[0];
-    })
-    .catch((err) => logger.error(err.stack));
-  return data;
+    .then(([result]) => (result as ExtraSettings[])[0])
+    .catch((err) => logErr(err, "getSettingsByExtraServiceId"));
 };
 
 export const updateSiteOrderIdForExtraService = async (
@@ -122,17 +125,14 @@ export const updateSiteOrderIdForExtraService = async (
   siteServiceId: number,
   siteOrderId: number,
 ) => {
-  const data = await db
+  const siteServiceInfo = JSON.stringify([siteId, siteServiceId, siteOrderId]);
+  return await db
     .promise()
     .query(
       `UPDATE Extra
-        SET siteServiceInfo = JSON_ARRAY(${siteId},
-          ${siteServiceId}, ${siteOrderId})
-          WHERE id = ${extraId}`,
+        SET siteServiceInfo = '${siteServiceInfo}'
+        WHERE id = ${extraId}`,
     )
-    .then(([result]) => {
-      return result;
-    })
-    .catch((err) => logger.error(err.stack));
-  return data;
+    .then(([result]) => result)
+    .catch((err) => logErr(err, "updateSiteOrderIdForExtraService"));
 };
