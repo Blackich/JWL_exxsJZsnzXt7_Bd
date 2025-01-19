@@ -3,11 +3,8 @@ import mysql from "mysql2";
 import cookieParser from "cookie-parser";
 import { r as router } from "@src/routes";
 import { testRouter } from "./testRouter";
-import { expServices } from "./utils/cron/ExpiredServices";
+import { startCronJobs } from "./utils/cron/z";
 import { errorHandler } from "@src/middleware/errorHandler";
-import { updExchangeRate } from "./utils/cron/UpdateExchangeRate";
-import { expExtraComments } from "./utils/cron/ExpiredExtraComments";
-import { adjustPrimeCost } from "./utils/cron/PrimeCost/AdjustPrimeCost";
 import express, { Application, Request, Response } from "express";
 
 export const db = mysql.createConnection({
@@ -39,10 +36,7 @@ app.use(
 app.use(router);
 app.use(testRouter);
 
-expServices.start();
-expExtraComments.start();
-adjustPrimeCost.start();
-updExchangeRate.start();
+startCronJobs();
 
 app.get("/", async (req: Request, res: Response) => {
   res.status(200).json({ message: "OK" });
