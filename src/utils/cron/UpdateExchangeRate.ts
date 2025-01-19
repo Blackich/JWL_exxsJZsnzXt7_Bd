@@ -1,18 +1,23 @@
 import axios from "axios";
 import cron from "node-cron";
 import { db } from "@src/main";
+import { isNumber } from "@src/utils/utils";
 import { logger } from "@src/utils/logger/logger";
+import { logErr } from "@src/middleware/errorHandler";
 import { getExchangeRate } from "@src/utils/intermediateReq";
 
-export const updExchangeRate = cron.schedule("0 */4 * * *", async () => {
+const apiKeyExchRate = process.env.API_KEY_EXCH_RATE;
+
+export const updExchangeRate = cron.schedule("0 */2 * * *", async () => {
   try {
     const response = await axios.get(
-      "https://v6.exchangerate-api.com/v6/f022fd18e6240e451b1f9fbd/latest/USD",
+      `https://openexchangerates.org/api/latest.json?app_id=${apiKeyExchRate}`,
     );
     if (response.status !== 200) return;
 
-    const externalRate = response.data.conversion_rates.RUB;
+    const externalRate = response.data.rates.RUB;
     const databaseRate = await getExchangeRate();
+    if (!isNumber(databaseRate)) return;
     if (Number(externalRate) === Number(databaseRate)) return;
 
     return await updateDatabaseValue(externalRate);
@@ -23,16 +28,14 @@ export const updExchangeRate = cron.schedule("0 */4 * * *", async () => {
 
 //--------------------------------------------------
 
-const updateDatabaseValue = async (exchange: number) => {
+const updateDatabaseValue = async (exchangeRate: number) => {
   return await db
     .promise()
     .query(
       `UPDATE Exchange_rate
-        SET value = ${exchange}
+        SET value = ${exchangeRate}
         WHERE typeRate = 'external'`,
     )
-    .then(([result]) => {
-      return result;
-    })
-    .catch((err) => logger.error(err.stack));
+    .then(([result]) => result)
+    .catch((err) => logErr(err, "updateDatabaseValue"));
 };
