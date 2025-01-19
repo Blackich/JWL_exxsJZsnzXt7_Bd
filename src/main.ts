@@ -3,6 +3,7 @@ import mysql from "mysql2";
 import cookieParser from "cookie-parser";
 import { r as router } from "@src/routes";
 import { testRouter } from "./testRouter";
+import { logger } from "./utils/logger/logger";
 import { startCronJobs } from "./utils/cron/z";
 import { errorHandler } from "@src/middleware/errorHandler";
 import express, { Application, Request, Response } from "express";
@@ -47,6 +48,10 @@ app.all("*", (req: Request, res: Response) => {
 });
 
 app.use(errorHandler);
+
+process.on("unhandledRejection", (reason) => {
+  logger.error("Unhandled Rejection at:", { reason });
+});
 
 db.addListener("error", () => console.log("error"));
 
