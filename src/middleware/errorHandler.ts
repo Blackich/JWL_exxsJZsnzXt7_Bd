@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { logger } from "../utils/logger/logger";
 import { QueryError } from "mysql2";
+import { logger } from "@src/utils/logger/logger";
+import { NextFunction, Request, Response } from "express";
 
 const dev = process.env.NODE_ENV === "dev" ? true : false;
 
@@ -34,10 +34,9 @@ export const tryCatch =
     }
   };
 
-export const isNum = (variable: unknown) => {
-  return typeof variable === "number";
-};
-
-export const isStr = (variable: unknown) => {
-  return typeof variable === "string";
+export const logErr = (err: CustomError, where?: string) => {
+  logger.error(
+    `${where ? `\x1b[34m Where - ${where}.\n` : ""}\x1b[33m${err.message}`,
+  );
+  return;
 };
