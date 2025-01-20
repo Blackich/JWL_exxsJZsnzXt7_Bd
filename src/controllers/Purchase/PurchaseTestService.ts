@@ -1,7 +1,6 @@
 import { db } from "@src/main";
-import { Logger } from "winston";
 import { TestSettings } from "./type";
-import { logger } from "@src/utils/logger/logger";
+import { isArray } from "@src/utils/utils";
 import { addTestServiceWQ } from "@controllers/Services/Wiq";
 import { addTestServiceVR } from "@controllers/Services/Venro";
 import { saveRejectedService } from "./Entity/SaveRejectExternal";
@@ -11,12 +10,6 @@ import {
   sendCommentsServiceJP,
 } from "@controllers/Services/JustPanel";
 
-const isSettingsArray = (
-  arg: TestSettings[] | Logger,
-): arg is TestSettings[] => {
-  return Array.isArray(arg) && arg.every((item) => "serviceId" in item);
-};
-
 export const purchaseTestService = async (
   testServiceId: number,
   speed: number,
@@ -24,11 +17,11 @@ export const purchaseTestService = async (
   comments: string[],
 ) => {
   const settings = await getTestSettingsByServiceId(testServiceId);
-  if (!isSettingsArray(settings)) return;
+  if (!isArray(settings)) return;
 
   const promises = settings.map(async (setting) => {
     if (setting.typeService === "comments") {
-      if (Array.isArray(comments) && comments && comments.length === 0) return;
+      if (!isArray(comments)) return;
       return await sendCommentsServiceJP(link, setting.serviceId, comments)
         .then(async (res) => {
           console.log(res, "resp Test Comments JP");
@@ -140,8 +133,8 @@ export const purchaseTestService = async (
 
 //--------------------------------------------------
 
-export const getTestSettingsByServiceId = async (testServiceId: number) => {
-  const data = await db
+const getTestSettingsByServiceId = async (testServiceId: number) => {
+  return await db
     .promise()
     .query(
       `SELECT typeService, serviceId,
@@ -149,11 +142,7 @@ export const getTestSettingsByServiceId = async (testServiceId: number) => {
         FROM Test_service_setting
         WHERE testServiceId  = ${testServiceId}`,
     )
-    .then(([result]) => {
-      return result as TestSettings[];
-    })
-    .catch((err) => logger.error(err.stack));
-  return data;
+    .then(([result]) => result as TestSettings[])
 };
 
 const setSpeedForVR = (speed: number, count: number) => {

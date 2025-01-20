@@ -1,6 +1,5 @@
 import { db } from "@src/main";
 import { Request, Response } from "express";
-import { logger } from "@src/utils/logger/logger";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
 
 export const getGeneralSettings = tryCatch(
@@ -17,7 +16,6 @@ export const changeStatusGenSettingById = tryCatch(
   async (req: Request, res: Response) => {
     const { settingId } = req.body;
     const status = await getGenSettingStatusById(settingId);
-    if (typeof status !== "number") return;
 
     db.query(
       `UPDATE General_setting
@@ -78,10 +76,7 @@ const getGenSettingStatusById = async (id: number) => {
         FROM General_setting
         WHERE id = ${id}`,
     )
-    .then(([result]) => {
-      return (result as { status: number }[])[0].status;
-    })
-    .catch((err) => logger.error(err.stack));
+    .then(([result]) => (result as { status: number }[])[0]?.status);
 };
 
 const getExtraServiceStatusById = async (id: number) => {
@@ -92,8 +87,5 @@ const getExtraServiceStatusById = async (id: number) => {
         FROM Extra_service_detail
         WHERE extraServiceId = ${id}`,
     )
-    .then(([result]) => {
-      return (result as { status: number }[])[0].status;
-    })
-    .catch((err) => logger.error(err.stack));
+    .then(([result]) => (result as { status: number }[])[0].status);
 };

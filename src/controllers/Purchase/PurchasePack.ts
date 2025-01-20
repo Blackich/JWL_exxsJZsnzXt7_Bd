@@ -1,7 +1,8 @@
 import { db } from "@src/main";
-import { logger } from "@src/utils/logger/logger";
+import { logErr } from "@src/middleware/errorHandler";
 import { getRandomPercentage } from "@src/utils/utils";
 import { addServiceVR } from "@controllers/Services/Venro";
+import { isArray, isObject, isString } from "@src/utils/utils";
 import { addServiceJP } from "@controllers/Services/JustPanel";
 import { saveRejectedService } from "./Entity/SaveRejectExternal";
 import {
@@ -19,12 +20,9 @@ export const purchasePackage = async (
   const packSettings = await packageSettings();
   const socNickname = await getSocialNicknameById(nicknameId);
   const packDetails = await getPackageDetailsById(packageId);
-  if (
-    !Array.isArray(packSettings) ||
-    !(typeof socNickname === "string") ||
-    !("likes" in packDetails)
-  )
-    return;
+  if (!isArray(packSettings)) return;
+  if (!isString(socNickname)) return;
+  if (!isObject(packDetails)) return;
 
   const purchaseSettings = packSettings.map((setting) => {
     const quantity = setting.ratio * packDetails.likes;
@@ -81,6 +79,7 @@ export const purchasePackage = async (
             countPosts: countPosts,
             count: setting.count as number,
             speed: setting.speed as number,
+            tableServiceId: insertId,
           };
           return await saveRejectedService(extSettPackVR);
         });
@@ -113,6 +112,7 @@ export const purchasePackage = async (
             countPosts: countPosts,
             min: setting.min as number,
             max: setting.max as number,
+            tableServiceId: insertId,
           };
           return await saveRejectedService(extSettPackJP);
         });
@@ -136,5 +136,5 @@ export const addServicesOrder = async (
         VALUES(${serviceId}, ${siteId},
           ${siteServiceId}, ${orderId})`,
     )
-    .catch((err) => logger.error(err.stack));
+    .catch((err) => logErr(err, "addServicesOrder"));
 };

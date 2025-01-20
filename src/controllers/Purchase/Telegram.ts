@@ -1,7 +1,9 @@
 import axios from "axios";
 import { db } from "@src/main";
+import { isString } from "@src/utils/utils";
 import { TGSenderCommentInfo } from "./type";
 import { logger } from "@src/utils/logger/logger";
+import { logErr } from "@src/middleware/errorHandler";
 import {
   getExtraServiceNameByExtraId,
   getSocialNicknameById,
@@ -22,10 +24,11 @@ export const sendTGMessageComment = async ({
     const socNick = await getSocialNicknameById(socialNicknameId);
     const serviceName = await getExtraServiceNameByExtraId(extraServiceId);
     const comments = await getLastCommentsByUserId(userId, socialNicknameId);
-    if (typeof socNick !== "string") return;
+    if (!isString(socNick)) return;
+    if (!isString(serviceName)) return;
 
     const commentsColumn =
-      extraServiceId === 4 && typeof comments === "string"
+      extraServiceId === 4 && isString(comments)
         ? comments.split("x1Ejf7\n").join("\n")
         : "";
 
@@ -49,11 +52,11 @@ ${commentsColumn}`;
 
 //--------------------------------------------------
 
-export const getLastCommentsByUserId = async (
+const getLastCommentsByUserId = async (
   userId: number,
   socialNicknameId: number,
 ) => {
-  const data = await db
+  return await db
     .promise()
     .query(
       `SELECT comments FROM Extra_service_comment
@@ -64,6 +67,5 @@ export const getLastCommentsByUserId = async (
       const res = result as { comments: string }[];
       return res[res.length - 1].comments;
     })
-    .catch((err) => logger.error(err.stack));
-  return data;
+    .catch((err) => logErr(err, "getLastCommentsByUserId"));
 };

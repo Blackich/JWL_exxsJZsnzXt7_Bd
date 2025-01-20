@@ -2,16 +2,16 @@ import { db } from "@src/main";
 import { ResultSetHeader } from "mysql2";
 import { Request, Response } from "express";
 import { logger } from "@src/utils/logger/logger";
-import { tryCatch } from "@src/middleware/errorHandler";
+import { logErr, tryCatch } from "@src/middleware/errorHandler";
 import { AddServiceExtra, AddServicePack, Metadata } from "./type";
 import { purchaseExtra } from "@src/controllers/Purchase/PurchaseExtra";
 import { purchasePackage } from "@src/controllers/Purchase/PurchasePack";
+import { sendTGMessageComment } from "@src/controllers/Purchase/Telegram";
+import { purchaseCustomPackage } from "@src/controllers/Purchase/PurchaseCustomPack";
 import {
   sendTelegramMessageExtra,
   sendTelegramMessagePack,
 } from "@src/controllers/Payments/YooKassa/Telegram";
-import { purchaseCustomPackage } from "@src/controllers/Purchase/PurchaseCustomPack";
-import { sendTGMessageComment } from "@src/controllers/Purchase/Telegram";
 
 export const paymenStatusCatch = tryCatch(
   async (req: Request, res: Response) => {
@@ -93,7 +93,7 @@ export const addInfoAboutBoughtPack = async ({
         );
       }
     })
-    .catch((err) => logger.error(err.stack));
+    .catch((err) => logErr(err, "addInfoAboutBoughtPack"));
 };
 
 export const addInfoAboutBoughtExtra = async ({
@@ -151,5 +151,5 @@ export const addInfoAboutBoughtExtra = async ({
         });
       }
     })
-    .catch((err) => logger.error(err.stack));
+    .catch((err) => logErr(err, "addInfoAboutBoughtExtra"));
 };

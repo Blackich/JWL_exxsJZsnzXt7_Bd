@@ -1,6 +1,7 @@
 import { db } from "@src/main";
 import { Request, Response } from "express";
-import { dbError, isNum, tryCatch } from "@src/middleware/errorHandler";
+import { isNumber } from "@src/utils/utils";
+import { dbError, tryCatch } from "@src/middleware/errorHandler";
 import {
   addInstAccountToUser,
   checkCountInstAccByUserId,
@@ -44,7 +45,7 @@ export const addInstAccount = tryCatch(async (req: Request, res: Response) => {
   }
 
   const countInstAccounts = await checkCountInstAccByUserId(id);
-  if (isNum(countInstAccounts)) {
+  if (isNumber(countInstAccounts)) {
     if (countInstAccounts <= 10) {
       await addInstAccountToUser(id, username);
       return res.status(201).json({ message: "Account has been added" });

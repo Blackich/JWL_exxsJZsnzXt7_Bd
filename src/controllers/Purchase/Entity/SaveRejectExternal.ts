@@ -1,14 +1,16 @@
 import { db } from "@src/main";
-import { logger } from "@src/utils/logger/logger";
+import { logErr } from "@src/middleware/errorHandler";
 
 export const saveRejectedService = async (
   externalSetting: Record<string, string | number>,
 ) => {
+  const externalSettingJSON = JSON.stringify(externalSetting);
   return await db
     .promise()
     .query(
       `INSERT INTO Reject_external (externalSetting)
-        VALUES ('${JSON.stringify(externalSetting)}')`,
+        VALUES ('${externalSettingJSON}')`,
     )
-    .catch((err) => logger.error(err.stack));
+    .then(([result]) => result)
+    .catch((err) => logErr(err, "saveRejectedService"));
 };

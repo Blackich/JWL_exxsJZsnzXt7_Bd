@@ -50,7 +50,7 @@ export const getTestServicesSent = tryCatch(
 
 //--------------------------------------------------
 
-export const addInfoAboutTest = async (
+const addInfoAboutTest = async (
   testServiceId: number,
   employeeId: number,
   link: string,

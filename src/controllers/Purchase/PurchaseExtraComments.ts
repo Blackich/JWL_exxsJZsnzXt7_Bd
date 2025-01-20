@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { isObject } from "@src/utils/utils";
 import { logger } from "@src/utils/logger/logger";
 import { tryCatch } from "@src/middleware/errorHandler";
 import { sendCommentsServiceJP } from "@controllers/Services/JustPanel";
@@ -14,7 +15,7 @@ export const sendExtraComments = tryCatch(
 
     try {
       const setting = await getSettingsByExtraServiceId(extraServiceId);
-      if (!("serviceId" in setting)) return;
+      if (!isObject(setting)) return;
 
       return await sendCommentsServiceJP(link, setting.serviceId, comments)
         .then(async (response) => {

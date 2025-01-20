@@ -1,5 +1,6 @@
 import { db } from "@src/main";
 import { Request, Response } from "express";
+import { isNumber } from "@src/utils/utils";
 import { logger } from "@src/utils/logger/logger";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
 import { checkServiceVR, checkStatusSites } from "@controllers/Services/Venro";
@@ -18,14 +19,16 @@ export const checkStatusExternalServices = tryCatch(
 export const checkPostsRemaining = tryCatch(
   async (req: Request, res: Response) => {
     const { serviceId } = req.body;
-    if (!serviceId || typeof serviceId !== "number")
+    if (!isNumber(serviceId))
       return res.status(400).json({ message: "Service not found" });
 
     const orderId = await getLikesOrderIdByServiceId(serviceId);
-    if (typeof orderId !== "number")
+    if (!isNumber(orderId))
       return res.status(200).json({ message: "Order not found" });
 
-    const serviceResp = await checkServiceVR(orderId);
+    const serviceResp = await checkServiceVR(orderId).catch(() =>
+      res.status(200).json({ message: "Service not connected" }),
+    );
     if (!serviceResp || !("status" in serviceResp))
       return res.status(200).json({ message: "Service not connected" });
 
@@ -91,7 +94,7 @@ export const checkExtraPurchaseOption = tryCatch(
 //--------------------------------------------------
 
 const getLikesOrderIdByServiceId = async (serviceId: number) => {
-  const data = await db
+  return await db
     .promise()
     .query(
       `SELECT pp.orderId 
@@ -100,26 +103,16 @@ const getLikesOrderIdByServiceId = async (serviceId: number) => {
         AND pp.serviceId = ${serviceId}
         AND ps.typeService = 'likes'`,
     )
-    .then(([result]) => {
-      const dbResult = result as { orderId: number }[];
-      if (!dbResult || dbResult.length === 0) return;
-      return dbResult[0].orderId;
-    })
-    .catch((err) => logger.error(err.stack));
-  return data;
+    .then(([result]) => (result as { orderId: number }[])[0]?.orderId);
 };
 
 const serviceStatusChange = async (serviceId: number) => {
-  const data = await db
+  return await db
     .promise()
     .query(
       `UPDATE Service
         SET status = 0
         WHERE id = ${serviceId}`,
     )
-    .then(([result]) => {
-      return result;
-    })
-    .catch((err) => logger.error(err.stack));
-  return data;
+    .then(([result]) => result);
 };

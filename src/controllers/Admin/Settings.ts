@@ -1,4 +1,5 @@
 import { db } from "@src/main";
+import { isNumber } from "@src/utils/utils";
 import { Request, Response } from "express";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
 import { getExchangeRate } from "@src/utils/intermediateReq";
@@ -45,11 +46,9 @@ export const getExternalExchangeRate = tryCatch(
   async (req: Request, res: Response) => {
     const rate = await getExchangeRate();
 
-    if (typeof rate !== "number")
+    if (!isNumber(rate))
       return res.status(404).json({ message: "Rate not found" });
 
     return res.status(200).json(rate);
   },
 );
-
-//--------------------------------------------------

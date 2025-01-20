@@ -1,5 +1,4 @@
 import { addServicesOrder } from "./PurchasePack";
-import { getRandomPercentage } from "@src/utils/utils";
 import { addServiceVR } from "@controllers/Services/Venro";
 import { addServiceJP } from "@controllers/Services/JustPanel";
 import { saveRejectedService } from "./Entity/SaveRejectExternal";
@@ -8,6 +7,12 @@ import {
   getSocialNicknameById,
   packageSettings,
 } from "@src/utils/intermediateReq";
+import {
+  getRandomPercentage,
+  isArray,
+  isObject,
+  isString,
+} from "@src/utils/utils";
 
 export const purchaseCustomPackage = async (
   insertId: number,
@@ -18,12 +23,9 @@ export const purchaseCustomPackage = async (
   const packSettings = await packageSettings();
   const socNickname = await getSocialNicknameById(nicknameId);
   const customPackDeatils = await getCustomPackageDetailsById(customPackageId);
-  if (
-    !Array.isArray(packSettings) ||
-    !(typeof socNickname === "string") ||
-    !("likes" in customPackDeatils)
-  )
-    return;
+  if (!isArray(packSettings)) return;
+  if (!isString(socNickname)) return;
+  if (!isObject(customPackDeatils)) return;
 
   const correlationPack = packSettings.map((setting) => {
     const nameService = setting.typeService;
@@ -90,6 +92,7 @@ export const purchaseCustomPackage = async (
             countPosts: countPosts,
             count: setting.count as number,
             speed: setting.speed as number,
+            tableServiceId: insertId,
           };
           return await saveRejectedService(extSettCustomPackVR);
         });
@@ -121,6 +124,7 @@ export const purchaseCustomPackage = async (
             countPosts: countPosts,
             min: setting.min as number,
             max: setting.max as number,
+            tableServiceId: insertId,
           };
           return await saveRejectedService(extSettCustomPackJP);
         });

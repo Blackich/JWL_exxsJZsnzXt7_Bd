@@ -1,5 +1,6 @@
 import axios from "axios";
 import { logger } from "@src/utils/logger/logger";
+import { isObject, isString } from "@src/utils/utils";
 import { TGSenderExtraInfo, TGSenderPackInfo } from "./type";
 import {
   getCustomPackageDetailsById,
@@ -28,7 +29,8 @@ export const sendTelegramMessagePack = async ({
         ? await getPackageDetailsById(packageId)
         : await getCustomPackageDetailsById(packageId);
     const socNick = await getSocialNicknameById(socialNicknameId);
-    if (!("likes" in pack) || !(typeof socNick === "string")) return;
+    if (!isObject(pack)) return;
+    if (!isString(socNick)) return;
 
     const message = `Куплен пакет: <b>${pack.likes}</b> ❤️ ${
       Number(customPackage) === 0 ? "" : "(custom)"
@@ -63,8 +65,8 @@ export const sendTelegramMessageExtra = async ({
   try {
     const socNick = await getSocialNicknameById(socialNicknameId);
     const serviceName = await getExtraServiceNameByExtraId(extraServiceId);
-
-    if (typeof socNick !== "string") return;
+    if (!isString(socNick)) return;
+    if (!isString(serviceName)) return;
 
     const message = `
     Куплены: <b>${serviceName}</b> 🤑
