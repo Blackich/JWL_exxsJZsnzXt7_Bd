@@ -1,24 +1,19 @@
 import cron from "node-cron";
 import { db } from "@src/main";
-import { Logger } from "winston";
 import { RowDataPacket } from "mysql2";
+import { isArray } from "@src/utils/utils";
 import { logger } from "@src/utils/logger/logger";
 import { PurchasePackage } from "@src/utils/types";
+import { logErr } from "@src/middleware/errorHandler";
 import { cancelServiceVR } from "@src/controllers/Services/Venro";
 import { cancelServiceJP } from "@src/controllers/Services/JustPanel";
 import { getAllPackageSubsByServiceId } from "@controllers/Purchase/Entity/CheckStatusSubs";
 
-const isServiceArray = (
-  arg: { id: number }[] | Logger,
-): arg is { id: number }[] => {
-  return Array.isArray(arg) && arg.every((item) => "id" in item);
-};
-
 export const expServices = cron.schedule("*/5 * * * *", async () => {
   try {
     const expServs = await expiredServicesCheck();
-    if (Array.isArray(expServs) && expServs.length === 0) return;
-    if (!isServiceArray(expServs)) return;
+    if (!isArray(expServs)) return;
+
     return expServs.map(async (expServ) => {
       await serviceStatusChange(expServ.id);
       await cancelAllSubs(expServ.id);
@@ -32,7 +27,7 @@ export const expServices = cron.schedule("*/5 * * * *", async () => {
 //--------------------------------------------------
 
 const expiredServicesCheck = async () => {
-  const data = await db
+  return await db
     .promise()
     .query(
       `SELECT id FROM Service
@@ -40,14 +35,13 @@ const expiredServicesCheck = async () => {
         AND DATE_ADD(createdAt, INTERVAL 30 DAY) < NOW()`,
     )
     .then(([result]) => {
-      return result as { id: number }[] | [];
+      return result as { id: number }[];
     })
-    .catch((err) => logger.error(err.stack));
-  return data;
+    .catch((err) => logErr(err, "expiredServicesCheck"));
 };
 
 const serviceStatusChange = async (expServId: number) => {
-  const data = await db
+  return await db
     .promise()
     .query(
       `UPDATE Service
@@ -57,24 +51,26 @@ const serviceStatusChange = async (expServId: number) => {
     .then(([result]) => {
       return result as RowDataPacket[];
     })
-    .catch((err) => logger.error(err.stack));
-  return data;
+    .catch((err) => logErr(err, "serviceStatusChange"));
 };
 
 const cancelAllSubs = async (serviceId: number) => {
   const allSubsByServiceId = await getAllPackageSubsByServiceId(
     Number(serviceId),
   );
-  if (Array.isArray(allSubsByServiceId) && allSubsByServiceId.length === 0)
-    return;
+  if (!isArray(allSubsByServiceId)) return;
 
   return await Promise.allSettled(
     allSubsByServiceId.map(async (subscription: PurchasePackage) => {
       if (subscription.siteId === 1) {
-        return cancelServiceVR(subscription.orderId);
+        return cancelServiceVR(subscription.orderId).catch((err) => {
+          logErr(err, "ExpServices/cancelServiceVR");
+        });
       }
       if (subscription.siteId === 2) {
-        return cancelServiceJP(subscription.orderId);
+        return cancelServiceJP(subscription.orderId).catch((err) => {
+          logErr(err, "ExpServices/cancelServiceJP");
+        });
       }
     }),
   );

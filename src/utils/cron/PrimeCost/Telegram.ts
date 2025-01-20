@@ -1,7 +1,8 @@
 import axios from "axios";
-import { logger } from "@src/utils/logger/logger";
+import { db } from "@src/main";
 import { TGMessageProps } from "./type";
-import { getSiteResNameById } from "@src/utils/intermediateReq";
+import { logger } from "@src/utils/logger/logger";
+import { logErr } from "@src/middleware/errorHandler";
 
 const token = process.env.TG_BOT_TOKEN_COMMENT;
 const chat_id = process.env.TG_CHAT_ID_COMMENT;
@@ -38,4 +39,15 @@ export const sendTGMessageCostChanges = async ({
   } catch (err) {
     logger.error("sendTGMessageCostChanges", { err });
   }
+};
+
+const getSiteResNameById = async (id: number) => {
+  return await db
+    .promise()
+    .query(
+      `SELECT siteName FROM Site_res
+        WHERE id = ${id}`,
+    )
+    .then(([result]) => (result as { siteName: string }[])[0].siteName)
+    .catch((err) => logErr(err, "getSiteResNameById"));
 };

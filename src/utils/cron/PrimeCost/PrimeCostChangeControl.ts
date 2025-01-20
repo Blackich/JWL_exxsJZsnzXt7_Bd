@@ -2,6 +2,7 @@ import { db } from "@src/main";
 import { getAllSettings } from "./Settings";
 import { logger } from "@src/utils/logger/logger";
 import { sendTGMessageCostChanges } from "./Telegram";
+import { logErr } from "@src/middleware/errorHandler";
 import {
   AllServiceSettings,
   DatabaseServiceSettings,
@@ -52,6 +53,7 @@ const searchBySiteId = async (
   if (setting.siteId === 3) {
     return await findExternalService(servicesWQ, setting, tableKey);
   }
+  return;
 };
 
 const findExternalService = async (
@@ -86,8 +88,8 @@ const updateCost = async (tableKey: TableNameKey, id: number, cost: number) => {
     .promise()
     .query(
       `UPDATE ${
-        TableName[`${tableKey}` as keyof typeof TableName]
+        TableName[tableKey as keyof typeof TableName]
       } SET cost = ${cost} WHERE id = ${id}`,
     )
-    .catch((err) => logger.error(err.stack));
+    .catch((err) => logErr(err, "updateCost"));
 };
