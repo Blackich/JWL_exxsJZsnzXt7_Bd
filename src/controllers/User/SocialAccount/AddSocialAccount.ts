@@ -1,7 +1,6 @@
-import { db } from "@src/main";
 import { Request, Response } from "express";
 import { isNumber } from "@src/utils/utils";
-import { dbError, tryCatch } from "@src/middleware/errorHandler";
+import { tryCatch } from "@src/middleware/errorHandler";
 import {
   addInstAccountToUser,
   checkCountInstAccByUserId,
@@ -9,25 +8,8 @@ import {
   setActiveStatusInstAcc,
 } from "./Entity/queries";
 
-export const getSocialList = tryCatch(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  if (!id) return res.status(400).json({ message: "Missing required fields" });
-
-  db.query(
-    `SELECT id, nickname FROM Social_nickname 
-      WHERE userId = ${id}
-      AND messangerId = 1
-      AND status = 1`,
-    (err, result) => {
-      if (err) return dbError(err, res);
-      const data = result;
-      return res.status(200).json(data);
-    },
-  );
-});
-
 export const addInstAccount = tryCatch(async (req: Request, res: Response) => {
-  const { id, username } = req.body;
+  const { id, username, instProfileId } = req.body;
   if (!id || !username)
     return res.status(400).json({ message: "Missing required fields" });
 
@@ -47,7 +29,7 @@ export const addInstAccount = tryCatch(async (req: Request, res: Response) => {
   const countInstAccounts = await checkCountInstAccByUserId(id);
   if (isNumber(countInstAccounts)) {
     if (countInstAccounts <= 10) {
-      await addInstAccountToUser(id, username);
+      await addInstAccountToUser(id, username, instProfileId);
       return res.status(201).json({ message: "Account has been added" });
     }
     return res
@@ -57,23 +39,3 @@ export const addInstAccount = tryCatch(async (req: Request, res: Response) => {
 
   return res.status(400).json({ message: "Smth went wrong" });
 });
-
-export const deleteInstAccount = tryCatch(
-  async (req: Request, res: Response) => {
-    const { id, username } = req.body;
-    if (!id || !username)
-      return res.status(400).json({ message: "Missing required fields" });
-
-    db.query(
-      `UPDATE Social_nickname
-        SET status = 0
-        WHERE userId = ${id}
-          AND messangerId = 1 
-          AND nickname = '${username}'`,
-      (err, _) => {
-        if (err) return dbError(err, res);
-        return res.status(200).json({ message: "Account has been deleted" });
-      },
-    );
-  },
-);

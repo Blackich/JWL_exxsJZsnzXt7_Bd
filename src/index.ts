@@ -76,11 +76,13 @@ import { takeUserCredentials } from "@src/controllers/User/Auth/UserAuthCheck";
 import { registerUser } from "@src/controllers/User/Auth/UserRegister";
 import { logoutUser } from "@src/controllers/User/Auth/UserLogout";
 
+import { deleteInstAccount } from "@src/controllers/User/SocialAccount/DeleteSocialAccount";
+import { addInstAccount } from "@src/controllers/User/SocialAccount/AddSocialAccount";
 import {
-  addInstAccount,
-  deleteInstAccount,
   getSocialList,
-} from "@src/controllers/User/SocialAccount/SocialAccount";
+  getProfilePhotoByUserName,
+} from "@src/controllers/User/SocialAccount/GetSocialAccount";
+import { searchSocAccByQueryNick } from "@src/controllers/User/SocialAccount/SearchSocialAccount";
 
 import {
   getPackageDetailsUser,
@@ -181,6 +183,8 @@ export default {
   getSocialList,
   addInstAccount,
   deleteInstAccount,
+  searchSocAccByQueryNick,
+  getProfilePhotoByUserName,
 
   // User Package, Services, Extra
   getPackageDetailsUser,

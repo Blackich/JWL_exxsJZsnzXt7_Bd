@@ -1,7 +1,6 @@
 import { db } from "@src/main";
 import { Request, Response } from "express";
 import { isNumber } from "@src/utils/utils";
-import { logger } from "@src/utils/logger/logger";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
 import { checkServiceVR, checkStatusSites } from "@controllers/Services/Venro";
 

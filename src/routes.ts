@@ -69,6 +69,8 @@ r.get("/check", i.checkAuthUser, i.takeUserCredentials);
 r.get("/social/:id", i.checkAuthUser, i.getSocialList);
 r.post("/social", i.checkAuthUser, i.addInstAccount);
 r.delete("/social", i.checkAuthUser, i.deleteInstAccount);
+r.post("/profile-photo", i.checkAuthUser, i.getProfilePhotoByUserName);
+r.post("/search-nickname", i.checkAuthUser, i.searchSocAccByQueryNick);
 
 // User Package, Services, Extra
 r.get("/package/details", i.checkAuthUser, i.getPackageDetailsUser);
