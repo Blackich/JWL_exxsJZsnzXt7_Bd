@@ -44,7 +44,7 @@ export const getPurchasedExtraByUserId = tryCatch(
     const { id } = req.params;
 
     db.query(
-      `SELECT ex.id, sn.nickname, exs.serviceName as extraServiceName,
+      `SELECT ex.id, sn.nickname, exs.id as extraServiceId,
         ex.count, ex.priceRUB, ex.priceUSD, ex.createdAt  
         FROM Extra ex, Social_nickname sn, Extra_service exs
           WHERE ex.socialNicknameId = sn.id
