@@ -4,10 +4,9 @@ import i from "@src/index";
 export const r = Router();
 
 // Admin Auth
-r.post("/auth/login", i.authEmployees);
-r.get("/auth/logout", i.logoutEmployees);
-r.get("/auth/check", i.checkAuth, i.authEmployeesCheck);
-r.get("/auth/refresh", i.verifyRefreshToken, i.authEmployeesRefresh);
+r.post("/api/auth/login", i.loginAdmin);
+r.get("/api/auth/logout", i.logoutAdmin);
+r.get("/api/auth/check", i.checkAuth, i.takeAdminCredentials);
 
 // Admin Users CRUD
 r.get("/api/users", i.checkAuth, i.getUsers);

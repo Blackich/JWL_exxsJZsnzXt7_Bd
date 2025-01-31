@@ -1,13 +1,10 @@
+import { loginAdmin } from "@controllers/Admin/Auth/AdminLogin";
+import { logoutAdmin } from "@controllers/Admin/Auth/AdminLogout";
 import {
   checkAuth,
-  verifyRefreshToken,
-} from "@controllers/Admin/Auth/CheckAuth";
-import {
-  authEmployees,
-  logoutEmployees,
-  authEmployeesCheck,
-  authEmployeesRefresh,
-} from "@controllers/Admin/Auth/AdminAuth";
+  takeAdminCredentials,
+} from "@controllers/Admin/Auth/AdminAuthCheck";
+
 
 import {
   getUsers,
@@ -71,8 +68,10 @@ import {
 } from "@controllers/Admin/Extra";
 
 import { loginUser } from "@src/controllers/User/Auth/UserLogin";
-import { checkAuthUser } from "@src/controllers/User/Auth/UserAuthCheck";
-import { takeUserCredentials } from "@src/controllers/User/Auth/UserAuthCheck";
+import {
+  checkAuthUser,
+  takeUserCredentials,
+} from "@src/controllers/User/Auth/UserAuthCheck";
 import { registerUser } from "@src/controllers/User/Auth/UserRegister";
 import { logoutUser } from "@src/controllers/User/Auth/UserLogout";
 
@@ -116,12 +115,10 @@ import {
 
 export default {
   // Admin Auth
+  loginAdmin,
+  logoutAdmin,
   checkAuth,
-  verifyRefreshToken,
-  authEmployees,
-  logoutEmployees,
-  authEmployeesCheck,
-  authEmployeesRefresh,
+  takeAdminCredentials,
 
   // Admin Users CRUD
   getUsers,
