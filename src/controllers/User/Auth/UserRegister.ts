@@ -1,23 +1,24 @@
 import { serialize } from "cookie";
+import { isString } from "@src/utils/utils";
 import { Request, Response } from "express";
 import { tryCatch } from "@src/middleware/errorHandler";
+import {
+  getUserTokens,
+  hashPassword,
+  preValidationUserData,
+  refreshTokenExpiresIn,
+} from "./Entity/utils";
 import {
   addNewUser,
   checkRecaptchaToken,
   checkUserEmail,
   getUserCredentialsByEmail,
 } from "./Entity/queries";
-import {
-  getTokens,
-  hashPassword,
-  preValidationUserData,
-  refreshTokenExpiresIn,
-} from "./Entity/utils";
 
 export const registerUser = tryCatch(async (req: Request, res: Response) => {
   const { email, password, reCaptcha } = req.body;
 
-  if (!reCaptcha || typeof reCaptcha !== "string")
+  if (!reCaptcha || !isString(reCaptcha))
     return res
       .status(400)
       .json({ codeErr: 4, message: "reCaptcha is required" });
@@ -55,13 +56,17 @@ export const registerUser = tryCatch(async (req: Request, res: Response) => {
   if (userCred === null)
     return res.status(400).json({ codeErr: 99, message: "User not found" });
 
-  const { accessToken, refreshToken } = getTokens(userCred.id, userCred.email);
+  const { accessToken, refreshToken } = getUserTokens(
+    userCred.id,
+    userCred.email,
+  );
 
   res.setHeader(
     "Set-Cookie",
     serialize("refresh-Token", refreshToken, {
       httpOnly: true,
       maxAge: refreshTokenExpiresIn,
+      path: "/",
     }),
   );
 

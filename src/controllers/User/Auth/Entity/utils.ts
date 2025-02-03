@@ -3,8 +3,9 @@ import jwt from "jsonwebtoken";
 
 export const accessTokenExpiresIn = 60 * 60 * 3; // 3 hours
 export const refreshTokenExpiresIn = 60 * 60 * 24 * 7; // 7 day;
+export const resetPassTokenExpiresIn = 60 * 15; // 15 minutes;
 
-export const getTokens = (id: number, email: string) => ({
+export const getUserTokens = (id: number, email: string) => ({
   accessToken: jwt.sign(
     { id, email },
     process.env.JWT_USER_ACCESS_KEY as string,
@@ -15,6 +16,10 @@ export const getTokens = (id: number, email: string) => ({
     process.env.JWT_USER_REFRESH_KEY as string,
     { expiresIn: refreshTokenExpiresIn },
   ),
+  resetPassToken: jwt.sign({ id }, process.env.JWT_USER_PASS_RESET as string, {
+    expiresIn: resetPassTokenExpiresIn,
+    noTimestamp: true,
+  }),
 });
 
 export const hashPassword = async (password: string) => {

@@ -3,7 +3,11 @@ import { serialize } from "cookie";
 import { tryCatch } from "@src/middleware/errorHandler";
 import { getUserCredentialsById } from "./Entity/queries";
 import { NextFunction, Request, Response } from "express";
-import { getTokens, getUnixTime, refreshTokenExpiresIn } from "./Entity/utils";
+import {
+  getUserTokens,
+  getUnixTime,
+  refreshTokenExpiresIn,
+} from "./Entity/utils";
 
 type CustomRequest = Request & { auth: { isExipredAccess: boolean } };
 
@@ -78,12 +82,13 @@ export const takeUserCredentials = tryCatch(
             .status(400)
             .json({ codeErr: 99, message: "(2) User not found" });
 
-        const { refreshToken } = getTokens(userCred.id, userCred.email);
+        const { refreshToken } = getUserTokens(userCred.id, userCred.email);
         res.setHeader(
           "Set-Cookie",
           serialize("refresh-Token", refreshToken, {
             httpOnly: true,
             maxAge: refreshTokenExpiresIn,
+            path: "/",
           }),
         );
       }
@@ -105,7 +110,7 @@ export const takeUserCredentials = tryCatch(
           .status(400)
           .json({ codeErr: 99, message: "(2) User not found" });
 
-      const { accessToken } = getTokens(userCred.id, userCred.email);
+      const { accessToken } = getUserTokens(userCred.id, userCred.email);
 
       return res.status(200).json({
         id: userCred.id,

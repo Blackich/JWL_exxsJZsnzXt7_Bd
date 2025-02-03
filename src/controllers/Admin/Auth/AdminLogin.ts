@@ -39,6 +39,7 @@ export const loginAdmin = tryCatch(async (req: Request, res: Response) => {
     serialize("refToken", refreshToken, {
       httpOnly: true,
       maxAge: refreshTokenExpiresIn,
+      path: "/",
     }),
   );
 

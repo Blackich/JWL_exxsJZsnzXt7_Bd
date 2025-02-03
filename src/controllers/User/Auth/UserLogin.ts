@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { tryCatch } from "@src/middleware/errorHandler";
 import { getFullUserCredentialsByEmail } from "./Entity/queries";
 import {
-  getTokens,
+  getUserTokens,
   hashPassword,
   comparePassword,
   preValidationUserData,
@@ -36,13 +36,17 @@ export const loginUser = tryCatch(async (req: Request, res: Response) => {
       .status(400)
       .json({ codeErr: 3, message: "Incorrect email/password" });
 
-  const { accessToken, refreshToken } = getTokens(userCred.id, userCred.email);
+  const { accessToken, refreshToken } = getUserTokens(
+    userCred.id,
+    userCred.email,
+  );
 
   res.setHeader(
     "Set-Cookie",
     serialize("refresh-Token", refreshToken, {
       httpOnly: true,
       maxAge: refreshTokenExpiresIn,
+      path: "/",
     }),
   );
 

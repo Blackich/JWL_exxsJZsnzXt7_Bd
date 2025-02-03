@@ -89,6 +89,7 @@ export const takeAdminCredentials = tryCatch(
           serialize("refToken", refreshToken, {
             httpOnly: true,
             maxAge: refreshTokenExpiresIn,
+            path: "/",
           }),
         );
       }

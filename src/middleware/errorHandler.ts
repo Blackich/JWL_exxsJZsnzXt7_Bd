@@ -11,7 +11,7 @@ export const errorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  logger.error("ErrorHandler", { err });
+  logger.error("ErrorHandler", err);
   if (err.code && err.code.startsWith("ER_")) {
     res.status(450).json({ message: "Incorrect query", error: dev ? err : "" });
   } else {
@@ -34,7 +34,7 @@ export const tryCatch =
     }
   };
 
-export const logErr = (err: CustomError, where?: string) => {
+export const logErr = (err: Error | QueryError, where?: string) => {
   logger.error(
     `${where ? `\x1b[34m Where - ${where}.\n` : ""}\x1b[33m${err.message}`,
   );
