@@ -5,7 +5,6 @@ import {
   takeAdminCredentials,
 } from "@controllers/Admin/Auth/AdminAuthCheck";
 
-
 import {
   getUsers,
   getUserById,
@@ -15,11 +14,11 @@ import {
   getUserSocialAccounts,
   getCustomPackageByUserId,
   deleteCustomPackageByUserId,
-} from "@src/controllers/Admin/UsersCRUD/UsersCRUD";
+} from "@controllers/Admin/UsersCRUD/UsersCRUD";
 import {
   getRemarkByUserId,
   updateUserRemark,
-} from "@src/controllers/Admin/UsersCRUD/UserRemark";
+} from "@controllers/Admin/UsersCRUD/UserRemark";
 
 import {
   getTotalSpent,
@@ -37,11 +36,11 @@ import {
   getCustomPackageDetails,
   addCustomPackToUser,
 } from "@controllers/Admin/CustomPackage";
-import { getPackageDetails } from "@src/controllers/Admin/PackageDetails";
+import { getPackageDetails } from "@controllers/Admin/PackageDetails";
 import {
   sendTestServices,
   getTestServicesSent,
-} from "@src/controllers/Admin/TestServices";
+} from "@controllers/Admin/TestServices";
 
 import {
   getExtraServiceSettings,
@@ -67,21 +66,25 @@ import {
   getExtraDetails,
 } from "@controllers/Admin/Extra";
 
-import { loginUser } from "@src/controllers/User/Auth/UserLogin";
+import { loginUser } from "@controllers/User/Auth/UserLogin";
 import {
   checkAuthUser,
   takeUserCredentials,
-} from "@src/controllers/User/Auth/UserAuthCheck";
-import { registerUser } from "@src/controllers/User/Auth/UserRegister";
-import { logoutUser } from "@src/controllers/User/Auth/UserLogout";
+} from "@controllers/User/Auth/UserAuthCheck";
+import { registerUser } from "@controllers/User/Auth/UserRegister";
+import { logoutUser } from "@controllers/User/Auth/UserLogout";
+import { changePasswordUser } from "@controllers/User/Auth/UserResetPassword/ChangePassword";
+import { getUserEmail } from "@controllers/User/Auth/UserResetPassword/GetUserEmail";
+import { checkTokenResetPass } from "@controllers/User/Auth/UserResetPassword/middleware";
+import { sendPasswordResetEmail } from "@controllers/User/Auth/UserResetPassword/SendEmail";
 
-import { deleteInstAccount } from "@src/controllers/User/SocialAccount/DeleteSocialAccount";
-import { addInstAccount } from "@src/controllers/User/SocialAccount/AddSocialAccount";
+import { deleteInstAccount } from "@controllers/User/SocialAccount/DeleteSocialAccount";
+import { addInstAccount } from "@controllers/User/SocialAccount/AddSocialAccount";
 import {
   getSocialList,
   getProfilePhotoByUserName,
-} from "@src/controllers/User/SocialAccount/GetSocialAccount";
-import { searchSocAccByQueryNick } from "@src/controllers/User/SocialAccount/SearchSocialAccount";
+} from "@controllers/User/SocialAccount/GetSocialAccount";
+import { searchSocAccByQueryNick } from "@controllers/User/SocialAccount/SearchSocialAccount";
 
 import {
   getPackageDetailsUser,
@@ -100,7 +103,7 @@ import {
   checkStatusExternalServices,
   checkPackPurchaseOption,
   checkExtraPurchaseOption,
-} from "@src/controllers/User/Checks";
+} from "@controllers/User/Checks";
 
 import { paymenStatusCatch } from "@controllers/Payments/YooKassa/_webhook";
 import { paymentPackage } from "@controllers/Payments/YooKassa/Package";
@@ -175,6 +178,11 @@ export default {
   logoutUser,
   checkAuthUser,
   takeUserCredentials,
+
+  getUserEmail,
+  changePasswordUser,
+  checkTokenResetPass,
+  sendPasswordResetEmail,
 
   // User Social account
   getSocialList,

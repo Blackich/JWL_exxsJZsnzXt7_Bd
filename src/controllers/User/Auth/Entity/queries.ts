@@ -88,6 +88,61 @@ export const checkUserEmail = async (email: string) => {
     });
 };
 
+export const insertRequestResetPassByUserId = async (userId: number) => {
+  return await db
+    .promise()
+    .query(`INSERT INTO Reset_password (userId) VALUES (${userId})`)
+    .then(([result]) => result)
+    .catch(() => {
+      return null;
+    });
+};
+
+export const checkTimeForResetPass = async (userId: number) => {
+  return await db
+    .promise()
+    .query(
+      `SELECT id FROM Reset_password
+        WHERE userId = 35247 
+        AND DATE_ADD(createdAt, INTERVAL 30 MINUTE) > NOW()
+        ORDER BY createdAt DESC 
+        LIMIT 1`,
+    )
+    .then(([result]) => (result as { id: number }[])[0]?.id)
+    .catch(() => {
+      return null;
+    });
+};
+
+export const updateUserPassword = async (userId: number, hash: string) => {
+  return await db
+    .promise()
+    .query(`UPDATE Users SET password = '${hash}' WHERE id = ${userId}`)
+    .then(([result]) => {
+      const affectedRows = (result as ResultSetHeader)?.affectedRows;
+      return affectedRows ? affectedRows : null;
+    })
+    .catch(() => {
+      return null;
+    });
+};
+
+export const updateStatusPassChangeByUserId = async (userId: number) => {
+  return await db
+    .promise()
+    .query(
+      `UPDATE Reset_password
+        SET status = 1
+        WHERE userId = ${userId}
+        ORDER BY createdAt DESC 
+        LIMIT 1`,
+    )
+    .then(([result]) => result)
+    .catch(() => {
+      return null;
+    });
+};
+
 export const checkRecaptchaToken = async (reCaptchaToken: string) => {
   const response = await axios.get(
     "https://www.google.com/recaptcha/api/siteverify",

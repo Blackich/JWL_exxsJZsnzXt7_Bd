@@ -63,6 +63,9 @@ r.post("/login", i.loginUser);
 r.get("/logout", i.logoutUser);
 r.post("/register", i.registerUser);
 r.get("/check", i.checkAuthUser, i.takeUserCredentials);
+r.post("/reset-password/send", i.sendPasswordResetEmail);
+r.post("/reset-password/email", i.checkTokenResetPass, i.getUserEmail);
+r.post("/reset-password/change", i.checkTokenResetPass, i.changePasswordUser);
 
 // User Social account
 r.get("/social/:id", i.checkAuthUser, i.getSocialList);
