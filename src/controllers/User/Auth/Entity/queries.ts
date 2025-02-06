@@ -103,7 +103,7 @@ export const checkTimeForResetPass = async (userId: number) => {
     .promise()
     .query(
       `SELECT id FROM Reset_password
-        WHERE userId = 35247 
+        WHERE userId = ${userId} 
         AND DATE_ADD(createdAt, INTERVAL 30 MINUTE) > NOW()
         ORDER BY createdAt DESC 
         LIMIT 1`,

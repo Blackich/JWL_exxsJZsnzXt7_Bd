@@ -87,6 +87,7 @@ r.get("/check/external-status", i.checkAuthUser, i.checkStatusExternalServices);
 r.post("/check/remaining-posts", i.checkAuthUser, i.checkPostsRemaining);
 r.get("/check/available/package", i.checkAuthUser, i.checkPackPurchaseOption);
 r.get("/check/available/extra", i.checkAuthUser, i.checkExtraPurchaseOption);
+r.get("/check/available/registration", i.checkRegisterPosibility);
 
 // Payments
 r.post("/payment/yookassa/webhook", i.paymenStatusCatch);

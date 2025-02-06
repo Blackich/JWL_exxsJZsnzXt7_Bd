@@ -90,6 +90,23 @@ export const checkExtraPurchaseOption = tryCatch(
   },
 );
 
+export const checkRegisterPosibility = tryCatch(
+  async (req: Request, res: Response) => {
+    db.query(
+      `SELECT status
+        FROM General_setting
+        WHERE id = 3`,
+      (err, result) => {
+        if (err) return dbError(err, res);
+        const status = (result as { status: number }[])[0].status;
+        if (status === 1)
+          return res.status(200).json({ message: "Register Ok", status: true });
+        return res.status(200).json({ message: "Registration is unavailable" });
+      },
+    );
+  },
+);
+
 //--------------------------------------------------
 
 const getLikesOrderIdByServiceId = async (serviceId: number) => {

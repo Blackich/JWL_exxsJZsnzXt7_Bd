@@ -103,6 +103,7 @@ import {
   checkStatusExternalServices,
   checkPackPurchaseOption,
   checkExtraPurchaseOption,
+  checkRegisterPosibility,
 } from "@controllers/User/Checks";
 
 import { paymenStatusCatch } from "@controllers/Payments/YooKassa/_webhook";
@@ -205,6 +206,7 @@ export default {
   checkStatusExternalServices,
   checkPackPurchaseOption,
   checkExtraPurchaseOption,
+  checkRegisterPosibility,
 
   // Payments
   paymenStatusCatch,
