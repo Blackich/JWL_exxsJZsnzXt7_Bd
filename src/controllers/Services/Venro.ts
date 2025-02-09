@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { siteVenro } from "@src/utils/utils";
 
 const apiKeyVR = process.env.API_KEY_VR;
@@ -50,9 +50,10 @@ export const checkServiceVR = async (id: number) => {
 };
 
 export const cancelServiceVR = async (id: number) => {
-  const response = await axios.get(`${siteVenro}?action=cancel&
-    key=${apiKeyVR}&id=${id}`);
-  return response.data;
+  const response = await axios
+    .get(`${siteVenro}?action=cancel&key=${apiKeyVR}&id=${id}`)
+    .catch(() => ({ status: 400 }));
+  return response.status;
 };
 
 export const getServiceDetailsVR = async () => {
