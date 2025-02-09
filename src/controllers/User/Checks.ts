@@ -1,7 +1,8 @@
 import { db } from "@src/main";
 import { Request, Response } from "express";
-import { isNumber } from "@src/utils/utils";
+import { isNumber, isString } from "@src/utils/utils";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
+import { cancelAllSubsByServiceId } from "@src/utils/cron/ExpiredServices";
 import { checkServiceVR, checkStatusSites } from "@controllers/Services/Venro";
 
 export const checkStatusExternalServices = tryCatch(
@@ -25,18 +26,17 @@ export const checkPostsRemaining = tryCatch(
     if (!isNumber(orderId))
       return res.status(200).json({ message: "Order not found" });
 
-    const serviceResp = await checkServiceVR(orderId).catch(() =>
-      res.status(200).json({ message: "Service not connected" }),
-    );
+    const serviceResp = await checkServiceVR(orderId).catch(() => null);
     if (!serviceResp || !("status" in serviceResp))
       return res.status(200).json({ message: "Service not connected" });
 
     if (
       serviceResp.remains &&
-      typeof serviceResp.remains === "string" &&
+      isString(serviceResp.remains) &&
       serviceResp.remains === "0"
     ) {
       await serviceStatusChange(serviceId);
+      await cancelAllSubsByServiceId(serviceId).catch(() => null);
       return res.status(200).json({ message: "Service canceled", count: 0 });
     }
 

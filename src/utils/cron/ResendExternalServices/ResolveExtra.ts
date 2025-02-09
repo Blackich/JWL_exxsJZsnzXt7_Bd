@@ -9,7 +9,7 @@ import {
   ExtraSettingsJP,
   ExtraSettingsVR,
   ExtraSettingsWQ,
-} from "./type";
+} from "./types";
 
 export const resolveExtra = async (
   settings: ExtraSettings,

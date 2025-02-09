@@ -16,10 +16,10 @@ export const cancelAllSubs = tryCatch(async (req: Request, res: Response) => {
   return await Promise.allSettled(
     allSubsByServiceId.map(async (subscription: PurchasePackage) => {
       if (subscription.siteId === 1) {
-        return cancelServiceVR(subscription.orderId);
+        return await cancelServiceVR(subscription.orderId);
       }
       if (subscription.siteId === 2) {
-        return cancelServiceJP(subscription.orderId);
+        return await cancelServiceJP(subscription.orderId);
       }
     }),
   )

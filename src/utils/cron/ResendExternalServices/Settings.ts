@@ -1,9 +1,10 @@
 import { db } from "@src/main";
 import { resolveTest } from "./ResolveTest";
 import { resolveExtra } from "./ResolveExtra";
+import { resolveCancel } from "./ResolveCancel";
 import { resolvePackage } from "./ResolvePackage";
 import { logErr } from "@src/middleware/errorHandler";
-import { СommonSettings, RejectExternal } from "./type";
+import { СommonSettings, RejectExternal } from "./types";
 
 export const customizeRejectServices = async () => {
   const rejectedServices = await getRejectedServices();
@@ -23,6 +24,10 @@ export const customizeRejectServices = async () => {
 
     if (serviceName === "Test") {
       await resolveTest(externalSetting, service.id);
+    }
+
+    if (serviceName === "Cancel") {
+      await resolveCancel(externalSetting, service.id);
     }
 
     return;

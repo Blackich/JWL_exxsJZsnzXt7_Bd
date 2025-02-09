@@ -5,7 +5,11 @@ export type RejectExternal = {
   externalSetting: СommonSettings | string;
 };
 
-export type СommonSettings = PackageSettings | ExtraSettings | TestSettings;
+export type СommonSettings =
+  | PackageSettings
+  | ExtraSettings
+  | TestSettings
+  | CancelSettings;
 
 export type PackageSettings = PackageSettingsVR | PackageSettingsJP;
 export type ExtraSettings = ExtraSettingsVR | ExtraSettingsJP | ExtraSettingsWQ;
@@ -14,6 +18,11 @@ export type TestSettings =
   | TestSettingsJPNoDrip
   | TestSettingsJPDrip
   | TestSettingsWQ;
+export type CancelSettings = {
+  serviceName: "Cancel";
+  siteId: number;
+  orderId: number;
+};
 
 export type PackageSettingsVR = {
   serviceName: "Pack";

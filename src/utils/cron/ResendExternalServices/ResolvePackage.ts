@@ -3,7 +3,7 @@ import { updateRejectedServiceStatus } from "./Settings";
 import { addServiceVR } from "@src/controllers/Services/Venro";
 import { addServiceJP } from "@src/controllers/Services/JustPanel";
 import { addServicesOrder } from "@src/controllers/Purchase/PurchasePack";
-import { PackageSettings, PackageSettingsJP, PackageSettingsVR } from "./type";
+import { PackageSettings, PackageSettingsJP, PackageSettingsVR } from "./types";
 
 export const resolvePackage = async (
   settings: PackageSettings,

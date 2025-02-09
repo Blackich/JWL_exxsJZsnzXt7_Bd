@@ -12,7 +12,7 @@ import {
   TestSettingsJPNoDrip,
   TestSettingsVR,
   TestSettingsWQ,
-} from "./type";
+} from "./types";
 
 export const resolveTest = async (
   settings: TestSettings,

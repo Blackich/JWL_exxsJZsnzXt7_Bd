@@ -7,6 +7,7 @@ import { PurchasePackage } from "@src/utils/types";
 import { logErr } from "@src/middleware/errorHandler";
 import { cancelServiceVR } from "@src/controllers/Services/Venro";
 import { cancelServiceJP } from "@src/controllers/Services/JustPanel";
+import { saveRejectedService } from "@src/controllers/Purchase/Entity/SaveRejectExternal";
 import { getAllPackageSubsByServiceId } from "@controllers/Purchase/Entity/CheckStatusSubs";
 
 export const expServices = cron.schedule("*/5 * * * *", async () => {
@@ -16,7 +17,7 @@ export const expServices = cron.schedule("*/5 * * * *", async () => {
 
     return expServs.map(async (expServ) => {
       await serviceStatusChange(expServ.id);
-      await cancelAllSubs(expServ.id);
+      await cancelAllSubsByServiceId(expServ.id);
       console.log(`${expServ.id} service has been expired`);
     });
   } catch (err) {
@@ -54,7 +55,7 @@ const serviceStatusChange = async (expServId: number) => {
     .catch((err) => logErr(err, "serviceStatusChange"));
 };
 
-const cancelAllSubs = async (serviceId: number) => {
+export const cancelAllSubsByServiceId = async (serviceId: number) => {
   const allSubsByServiceId = await getAllPackageSubsByServiceId(
     Number(serviceId),
   );
@@ -63,15 +64,30 @@ const cancelAllSubs = async (serviceId: number) => {
   return await Promise.allSettled(
     allSubsByServiceId.map(async (subscription: PurchasePackage) => {
       if (subscription.siteId === 1) {
-        return cancelServiceVR(subscription.orderId).catch((err) => {
-          logErr(err, "ExpServices/cancelServiceVR");
-        });
+        const status = await cancelServiceVR(subscription.orderId);
+        if (!status || status !== 200) {
+          const rejectCancelVR = {
+            serviceName: "Cancel",
+            siteId: 1,
+            orderId: subscription.orderId,
+          };
+          return await saveRejectedService(rejectCancelVR);
+        }
       }
       if (subscription.siteId === 2) {
-        return cancelServiceJP(subscription.orderId).catch((err) => {
-          logErr(err, "ExpServices/cancelServiceJP");
-        });
+        const status = await cancelServiceJP(subscription.orderId);
+        if (!status || status !== 200) {
+          const rejectCancelJP = {
+            serviceName: "Cancel",
+            siteId: 2,
+            orderId: subscription.orderId,
+          };
+          return await saveRejectedService(rejectCancelJP);
+        }
       }
     }),
-  );
+  ).catch((err) => {
+    logErr(err, "expServs/cancelAllSubsByServiceId");
+    return;
+  });
 };

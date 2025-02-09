@@ -1,6 +1,6 @@
 import { db } from "@src/main";
 import { isString } from "@src/utils/utils";
-import { JustSetting } from "./Entity/type";
+import { JustSetting } from "./Entity/types";
 import { Request, Response } from "express";
 import { updateJustHashNTime } from "./Entity/queries";
 import { dbError, tryCatch } from "@src/middleware/errorHandler";
