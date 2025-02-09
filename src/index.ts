@@ -106,16 +106,23 @@ import {
   checkRegisterPosibility,
 } from "@controllers/User/Checks";
 
-import { paymenStatusCatch } from "@controllers/Payments/YooKassa/_webhook";
+import { verifyYooKassa } from "@src/middleware/Payments/YooKassa";
+import { paymentStatusCatch } from "@controllers/Payments/YooKassa/_webhook";
 import { paymentPackage } from "@controllers/Payments/YooKassa/Package";
 import { paymentExtra } from "@controllers/Payments/YooKassa/Extra";
 
 import {
+  getMainSettings,
+  changeStatusMainSettingById,
+} from "@controllers/Admin/GeneralSettings/MainSettings";
+import {
   getExtraServicesStatus,
-  getGeneralSettings,
-  changeStatusGenSettingById,
   changeStatusExtraServiceById,
-} from "@controllers/Admin/GeneralSettings";
+} from "@controllers/Admin/GeneralSettings/ExtraServiceSettings";
+import {
+  getJustSettings,
+  updateJustHash,
+} from "@controllers/Admin/GeneralSettings/JustSettings";
 
 export default {
   // Admin Auth
@@ -209,13 +216,16 @@ export default {
   checkRegisterPosibility,
 
   // Payments
-  paymenStatusCatch,
+  verifyYooKassa,
+  paymentStatusCatch,
   paymentPackage,
   paymentExtra,
 
   // GeneralSettings
-  getGeneralSettings,
-  changeStatusGenSettingById,
+  getMainSettings,
+  changeStatusMainSettingById,
   getExtraServicesStatus,
   changeStatusExtraServiceById,
+  getJustSettings,
+  updateJustHash,
 };

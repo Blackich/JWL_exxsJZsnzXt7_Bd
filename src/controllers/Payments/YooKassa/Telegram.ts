@@ -1,7 +1,7 @@
 import axios from "axios";
 import { logger } from "@src/utils/logger/logger";
 import { isObject, isString } from "@src/utils/utils";
-import { TGSenderExtraInfo, TGSenderPackInfo } from "./type";
+import { TGSenderExtraInfo, TGSenderPackInfo } from "./types";
 import {
   getCustomPackageDetailsById,
   getExtraServiceNameByExtraId,

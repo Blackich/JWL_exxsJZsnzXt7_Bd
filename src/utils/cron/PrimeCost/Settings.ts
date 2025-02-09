@@ -5,7 +5,7 @@ import { logErr } from "@src/middleware/errorHandler";
 import { getServiceDetailsWQ } from "@src/controllers/Services/Wiq";
 import { getServiceDetailsVR } from "@src/controllers/Services/Venro";
 import { getServiceDetailsJP } from "@src/controllers/Services/JustPanel";
-import { DatabaseServiceSettings, ExternalServiceSettings } from "./type";
+import { DatabaseServiceSettings, ExternalServiceSettings } from "./types";
 
 export const getAllSettings = async () => {
   try {

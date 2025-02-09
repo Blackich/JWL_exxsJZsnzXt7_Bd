@@ -90,12 +90,14 @@ r.get("/check/available/extra", i.checkAuthUser, i.checkExtraPurchaseOption);
 r.get("/check/available/registration", i.checkRegisterPosibility);
 
 // Payments
-r.post("/payment/yookassa/webhook", i.paymenStatusCatch);
+r.post("/payment/yookassa/webhook", i.verifyYooKassa, i.paymentStatusCatch);
 r.post("/payment/yookassa/package", i.paymentPackage);
 r.post("/payment/yookassa/extra", i.paymentExtra);
 
 // GeneralSettings
-r.get("/api/general-settings", i.getGeneralSettings);
-r.post("/api/general-settings", i.changeStatusGenSettingById);
-r.get("/api/general-settings/extra", i.getExtraServicesStatus);
-r.post("/api/general-settings/extra", i.changeStatusExtraServiceById);
+r.get("/api/general/main-setup", i.checkAuth, i.getMainSettings);
+r.post("/api/general/main-setup", i.checkAuth, i.changeStatusMainSettingById);
+r.get("/api/general/extra-setup", i.checkAuth, i.getExtraServicesStatus);
+r.post("/api/general/extra-setup", i.checkAuth, i.changeStatusExtraServiceById);
+r.get("/api/general/just-setup", i.checkAuth, i.getJustSettings);
+r.patch("/api/general/just-hash", i.checkAuth, i.updateJustHash);

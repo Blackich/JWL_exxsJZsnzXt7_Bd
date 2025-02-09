@@ -9,7 +9,7 @@ import {
   ExternalServiceSettings,
   TableName,
   TableNameKey,
-} from "./type";
+} from "./types";
 
 export const primeCostChangeControl = async () => {
   try {

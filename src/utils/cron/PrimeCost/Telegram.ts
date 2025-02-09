@@ -1,6 +1,6 @@
 import axios from "axios";
 import { db } from "@src/main";
-import { TGMessageProps } from "./type";
+import { TGMessageProps } from "./types";
 import { logger } from "@src/utils/logger/logger";
 import { logErr } from "@src/middleware/errorHandler";
 

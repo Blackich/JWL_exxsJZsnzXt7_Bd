@@ -1,5 +1,5 @@
 import { db } from "@src/main";
-import { InstSetting } from "./type";
+import { InstSetting } from "./types";
 import { logErr } from "@src/middleware/errorHandler";
 
 export const getSocialAccListByUserId = async (id: number) => {

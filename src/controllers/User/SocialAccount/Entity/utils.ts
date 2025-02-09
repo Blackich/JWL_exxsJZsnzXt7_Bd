@@ -1,5 +1,5 @@
 import axios from "axios";
-import { RespAxiosInstAcc } from "./type";
+import { RespAxiosInstAcc } from "./types";
 
 export const getInstAccList = async (
   queryNickname: string,

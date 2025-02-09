@@ -1,9 +1,8 @@
 import { db } from "@src/main";
 import { ResultSetHeader } from "mysql2";
 import { Request, Response } from "express";
-import { logger } from "@src/utils/logger/logger";
 import { logErr, tryCatch } from "@src/middleware/errorHandler";
-import { AddServiceExtra, AddServicePack, Metadata } from "./type";
+import { AddServiceExtra, AddServicePack, Metadata } from "./types";
 import { purchaseExtra } from "@src/controllers/Purchase/PurchaseExtra";
 import { purchasePackage } from "@src/controllers/Purchase/PurchasePack";
 import { sendTGMessageComment } from "@src/controllers/Purchase/Telegram";
@@ -13,7 +12,7 @@ import {
   sendTelegramMessagePack,
 } from "@src/controllers/Payments/YooKassa/Telegram";
 
-export const paymenStatusCatch = tryCatch(
+export const paymentStatusCatch = tryCatch(
   async (req: Request, res: Response) => {
     const responseYooKassaPay = req.body;
     if (responseYooKassaPay.event !== "payment.succeeded") return;
