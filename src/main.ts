@@ -3,23 +3,34 @@ import mysql from "mysql2";
 import cookieParser from "cookie-parser";
 import { r as router } from "@src/routes";
 import { testRouter } from "./testRouter";
-import { logger } from "./utils/logger/logger";
 import { startCronJobs } from "./utils/cron/z";
-import { errorHandler } from "@src/middleware/errorHandler";
 import express, { Application, Request, Response } from "express";
+import { errorHandler, logErr } from "@src/middleware/errorHandler";
 
-export const db = mysql.createConnection({
+export const db = mysql.createPool({
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USERNAME,
   database: process.env.MYSQL_DATABASE,
   password: process.env.MYSQL_DB_PASSWORD,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
-db.connect((err) => {
+process.on("SIGINT", () => {
+  console.log("Closing database connection...");
+  db.end((err) => {
+    if (err) console.error("Error closing database connection:", err);
+    process.exit(0);
+  });
+});
+
+db.getConnection((err, connection) => {
   if (err) {
-    console.log(err);
+    console.error("Database connection failed:", err);
   } else {
     console.log("DB Connected");
+    connection.release();
   }
 });
 
@@ -49,16 +60,13 @@ app.all("*", (req: Request, res: Response) => {
 
 app.use(errorHandler);
 
-process.on("unhandledRejection", (reason) => {
-  logger.error("Unhandled Rejection at:", { reason });
+process.on("unhandledRejection", (err) => {
+  logErr(err as Error, "unhandled Rejection");
 });
 
-db.addListener("error", () => console.log("error"));
-
-app.listen(4444, () => {
-  try {
-    console.log("Server started on port 4444");
-  } catch (err) {
-    console.error(err);
-  }
+process.on("uncaughtException", (err) => {
+  logErr(err as Error, "Uncaught Exception");
+  process.exit(1);
 });
+
+app.listen(4444, () => console.log("Server started on port 4444"));
